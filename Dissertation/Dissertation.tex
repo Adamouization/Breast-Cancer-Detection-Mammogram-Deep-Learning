@@ -1,0 +1,85 @@
+\documentclass[11pt,openright,twoside,a4paper]{report}
+\include{DissertationDefs}
+
+% title page
+\title{Breast Cancer Detection and Segmentation in Mammograms using Deep Learning Techniques}
+\author{Adam Jaamour}
+\date{Masters of Science in Artificial Intelligence\\The University of St Andrews\\August 2020}
+
+\begin{document}
+
+\setcounter{page}{0}
+\pagenumbering{roman}
+
+\maketitle
+\newpage
+
+\declaration{Breast Cancer Detection and Segmentation in Mammograms using Deep Learning Techniques}{Adam Jaamour}
+\newpage
+
+% Abstract
+\abstract
+\input{chapters-content/abstract.tex}
+\newpage
+
+% Tables of Content/Figures/Tables
+\setcounter{tocdepth}{3}
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+% Acknowledgements
+\chapter*{Acknowledgements}
+\input{chapters-content/acknowledgments.tex}
+\newpage
+
+% Begin main body
+
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\label{ch:chapter1}
+\input{chapters-content/introduction.tex}
+
+\chapter{Context Survey}
+\label{ch:chapter2}
+\input{chapters-content/litsurvey.tex}
+
+\chapter{Requirements}
+\label{ch:chapter3}
+\input{chapters-content/requirements.tex}
+
+\chapter{Ethics}
+\label{ch:chapter4}
+\input{chapters-content/ethics.tex}
+
+\chapter{Design}
+\label{ch:chapter5}
+\input{chapters-content/design.tex}
+
+\chapter{Implementation}
+\label{ch:chapter6}
+\input{chapters-content/implementation.tex}
+
+\chapter{Evaluation \& Critical Appraisal}
+\label{ch:chapter7}
+\input{chapters-content/evaluation.tex}
+
+\chapter{Conclusions}
+\label{ch:chapter8}
+\input{chapters-content/conclusions.tex}
+
+\bibliography{Bibliography}
+
+\let\cleardoublepage\clearpage % don't automatically start appendix chapters on odd pages
+\appendix
+
+\chapter{Ethics Approval Document}
+\label{ch:appendix-comparison-programming-languages}
+\input{chapters-content/appendix/ethics-approval-document.tex}
+
+\end{document}

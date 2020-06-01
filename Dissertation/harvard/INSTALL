@@ -1,0 +1,19 @@
+# harvard family of bibliographic styles
+# Copyright 1994 - Peter Williams peterw@archsci.arch.su.edu.au
+
+1. edit 'Makefile' setting 'bstdir', 'stydir', 'htmldir' and 'docdir' to values
+   appropriate to your LaTeX installation
+
+2. type 'make install'
+
+3. make sure 'bstdir' is in the paths for BST input (probably environment
+   variable BSTINPUTS on the latest web2c installation)
+
+4. make sure 'stydir' is in the paths for TeX input (probably environment
+   variable TEXINPUTS on the latest web2c installation)
+
+5. type 'make install_doc' to install documentation
+
+6. cd to $docdir and type 'make' to create postscript version of documentation.
+   If necessary edit 'Makefile' in $docdir to produce output other than
+   postscript.

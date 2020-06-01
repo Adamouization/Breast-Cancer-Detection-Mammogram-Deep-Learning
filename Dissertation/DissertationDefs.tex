@@ -1,0 +1,105 @@
+%% Package to includes to provide additional functionality to the dissertation document
+\usepackage{harvard}        	% Uses harvard style referencing
+\usepackage{graphicx}       	% Permits import of various graphics formats
+\usepackage{multicol}   	    % Provides ability to split output into columns
+\usepackage{listings}       	% Provides styled code listings
+\usepackage{color}              % Set background colours for code listings
+\usepackage{float}      	    % Suppresses floating for tables and figures when using "H"
+\usepackage{etoolbox}   	    % enable bibliography to be added to the table of contents
+\usepackage{comment}    	    % enable block of comments
+\usepackage{enumitem}           % resume enumerations
+\usepackage{amsmath}            % align equations
+\usepackage{breakurl}           % used to break long url links
+\usepackage{pdfpages}           % include pdfs in the document (used for console output)
+\usepackage{multirow}           % cell merging in tables
+\usepackage{longtable}          % span tables through multiple pages. Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
+\usepackage[export]{adjustbox}  % allows figures to be positioned (left-center-right)
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[inner=4cm,outer=4cm]{geometry}  % Set some page size changes from the standard article class
+\usepackage[breaklinks]{hyperref}   % Provides hyperlinks to sections automatically
+
+%% Offset the thermal binding on odd pages
+% \geometry{bindingoffset=1cm}    
+
+%% Format definitions for the style
+\bibliographystyle{agsm} %{alpha}
+\citationstyle{dcu}
+\pagestyle{headings}
+\fussy
+
+%% Break long urls with the following characters
+\def\UrlBreaks{\do\/\do-\do.\do0}
+
+%% New colours defined for the code listings (https://latexcolor.com/)
+\definecolor{backcolour}{gray}{0.9}
+\definecolor{palatinateblue}{rgb}{0.15, 0.23, 0.89}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{dartmouthgreen}{rgb}{0.05, 0.5, 0.06}
+\definecolor{davysgrey}{rgb}{0.33, 0.33, 0.33}
+\definecolor{cornellred}{rgb}{0.7, 0.11, 0.11}
+\definecolor{deepmagenta}{rgb}{0.8, 0.0, 0.8}
+
+%% Custom listing style for Python code
+\lstloadlanguages{Python}
+\lstdefinestyle{myPythonStyle}{
+  language=Python,
+  backgroundcolor=\color{backcolour},   
+  commentstyle=\color{airforceblue},
+  basicstyle=\footnotesize,
+  keywordstyle=[1]\color{dartmouthgreen}\bfseries,  % Python keywords in bold and blue
+  keywordstyle=[2]\color{deepmagenta},              % Python functions in magenta
+  keywordstyle=[3]\color{blue}\bfseries\underbar,   % User functions bold/underlined and blue
+  morekeywords=[1]{self},
+  morekeywords=[2]{@make_spin},
+  morekeywords=[3]{main,off_line_colour_based_feature_extraction_phase,on_line_retrieval_phase,database_preprocessing_phase,HistogramGenerator,__init__,generate_video_rgb_histogram,generate_video_greyscale_histogram,generate_video_hsv_histogram,generate_and_store_average_rgb_histogram,generate_and_store_average_greyscale_histogram,generate_and_store_average_hsv_histogram,match_histograms,rgb_histogram_shot_boundary_detection,check_video_capture,destroy_video_capture,get_video_capture,get_current_reference_points,get_results_array,_normalise_histogram,_get_frames_to_process,_get_chosen_model_string,ClickAndDrop,click_and_crop,get_roi,get_reference_points,VideoStabiliser,stabilise_video,get_video_filenames,print_terminal_table,print_finished_training_message,get_video_first_frame,show_final_match,display_results_histogram,get_number_of_frames,get_video_fps,terminal_yes_no_question,video_file_already_stabilised},
+  numberstyle=\tiny\color{davysgrey},
+  stringstyle=\color{cornellred}\bfseries,
+  showspaces=false,   
+  showstringspaces=false,
+  showtabs=true,
+  numbers=left,  
+  captionpos=b,  
+  frame=single,
+  breakatwhitespace=true,         
+  breaklines=true,                 
+  keepspaces=true,                 
+  numbersep=5pt,                  
+  tabsize=4,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+\lstset{style=myPythonStyle}
+
+%% Definitions to provide layout in the dissertation title pages
+\newenvironment{spaced}[1]
+  {\begin{minipage}[c]{\textwidth}\vspace{#1}}
+  {\end{minipage}}
+\newenvironment{centrespaced}[2]
+  {\begin{center}\begin{minipage}[c]{#1}\vspace{#2}}
+  {\end{minipage}\end{center}}
+
+%% Declaration page
+\newcommand{\declaration}[2]{
+  \thispagestyle{empty}
+  \begin{spaced}{4em}
+    \begin{center}
+      \LARGE\textbf{#1}
+    \end{center}
+  \end{spaced}
+  \begin{spaced}{3em}
+    \begin{center}
+      Submitted by: #2
+    \end{center}
+  \end{spaced}
+  \begin{spaced}{5em}
+  I declare that the material submitted for assessment is my own work except where credit is explicitly given to others by citation or acknowledgement. This work was performed during the current academic year except where otherwise stated.\\
+
+The main text of this project report is NN,NNN* words long, including project specification and plan.\\
+
+In submitting this project report to the University of St Andrews, I give permission for it to be made available for use in accordance with the regulations of the University Library. I also give permission for the title and abstract to be published and for copies of the report to be made and supplied at cost to any bona fide library or research worker, and to be made available on the World Wide Web. I retain the copyright in this work.
+  \end{spaced}
+
+  \begin{spaced}{5em}
+    Signed:
+  \end{spaced}
+}
