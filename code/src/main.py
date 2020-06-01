@@ -6,10 +6,12 @@ import torch
 
 
 def main() -> None:
-    basic_import_test()
-
+    print("Running sanity checks for GPU through PyTorch and Tensorflow")
     if socket.gethostname() == "pc5-026-l":
         test_gpu()
+    else:
+        print("Running sanity checks for PyTorch & Tensorflow")
+        basic_import_test()
 
 
 def basic_import_test() -> None:
