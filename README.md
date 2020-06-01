@@ -10,7 +10,29 @@ You can visit the [project] here: [text](url)
 
 ## Usage
 
-instructions
+`cd` into the `code` directory and create a new virtual environment:
+
+```
+python3 -m venv ~/Environments/Breast-Cancer-Detection-and-Segmentation
+```
+
+Activate the virtual environment:
+
+```
+source ~/Environments/Content-Based-Video-Retrieval-Code/bin/activate
+```
+
+Install project dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+`cd` into the `src` directory and run the code:
+
+```
+python3 main.py
+```
 
 ## To Do
 * see [TODO](path) file.
