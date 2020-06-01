@@ -49,90 +49,107 @@
 \begin{document}
 
 \title{
-    (Main Title) Machine Learning\\ (Subtitle) Report\\
+    Breast Cancer Detection and Segmentation in Mammograms using Deep Learning Techniques\\
+    \vspace*{1cm}
+    \begin{Large}
+    Description, Objectives, Ethics \& Resources\\
+    \end{Large}
+    \vspace*{1cm}
     \begin{large}
-    (Organisation) University of St Andrews - School of Computer Science
+    University of St Andrews - School of Computer Science\\
     \end{large}
+    \begin{large}
+    Supervisor: Dr David Harris-Birtill
+    \end{large}
+    \vspace*{0.5cm}
 }
-\titlepic{\includegraphics[width=0.3\linewidth]{figures/st-andrews-logo.jpeg}}
+\titlepic{\includegraphics[width=0.35\linewidth]{figures/st-andrews-logo.jpeg}}
 \author{Adam Jaamour} % Student ID: 150014151
-\date{7th May, 2020}
+\date{5th June, 2020}
 \maketitle
 \newpage
 
-\tableofcontents
-\newpage
+% ------------------- Description --------------------
 
-% ------------------- INTRODUCTION --------------------
+\section{Description}
+\label{sec:description}
 
-\section{Introduction}
-\label{sec:introduction}
+Breast cancer is one of the most common forms of cancer amongst women in the UK, with statistics indicating that 1 in 7 females will be diagnosed with breast cancer in their lifetime. Indeed, 55,200 new breast cancer cases are reported every year in the UK, of which an average of 11,400 lead to death (20\% mortality rate) \cite{BreastCancerResearchUK}. However, many other types of cancer types exist, ranging from lung and prostate cancers to colon and bladder cancers to name a few \cite{cokkinides2005american}.\\
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\
+The goal of this project is to design a deep learning model that can learn how to detect cases of breast cancer in mammograms by detecting the presence of tumours, whether they are benign or malignant, and their their location in the mammogram.
 
-Content-Based Video Retrieval for Pattern Matching Video Clips \cite{Jaamour2019}.
+% ------------------- Objectives --------------------
 
-% ------------------- PART 2: XXXX --------------------
+\section{Objectives}
+\label{sec:objectives}
 
-\section{Section A}
-\label{sec:section-A}
+Objectives are divided into primary and secondary objectives, where primary objectives corresponds to essential milestones (organised as a linear timeline to follow during the 11-week duration of the project), while secondary objectives complement these essential milestones.
 
-\subsection{Subsection i}
+\paragraph{Primary objectives}  (estimated dissertation timeline)
 
-Egestas egestas fringilla phasellus faucibus scelerisque eleifend. Egestas sed sed risus pretium quam. Gravida neque convallis a cras semper auctor neque vitae. Posuere urna nec tincidunt praesent. Viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis. Nisi est sit amet facilisis magna etiam tempor. Risus feugiat in ante metus. Velit egestas dui id ornare. Porttitor lacus luctus accumsan tortor posuere ac ut consequat.\\
+\begin{itemize}
+    \item The first primary objective consists of writing a complete and extensive literature review by the end of the 3rd week, which will:
+    \begin{itemize}
+        \item cover the background of the deep learning techniques that will be explored throughout the duration of this dissertation;
+        \item and review state of the art methods for breast cancer (and general cancers) detection and segmentation. 
+    \end{itemize}
+    \item The second objective relies on achieving a prototype implementation of a machine learning pipeline by the end of the 6th week, including:
+    \begin{itemize}
+        \item selecting a machine learning model that is proven to work on breast cancer detection and segmentation based on the explored literature;
+        \item implementing a basic machine learning/deep learning pipeline using Python machine learning software (e.g. Tensorflow, Keras or PyTorch) capable of running on the GPUs using a subset the cleaned and pre-processed data into the selected model.
+    \end{itemize}
+    \item Next, the third primary objective consists of using more advanced algorithms in a fully functional deep learning pipeline by the end of the 8th week, consisting of:
+    \begin{itemize}
+        \item extending and optimising existing deep learning algorithms and models, or developing a novel method/algorithm  for the task of breast cancer detection and segmentation;
+        \item designing a full deep learning pipeline capable of running on the entire dataset in batches using efficient memory allocation optimisation methods due to the large size of the dataset (see Section~\ref{sec:resources}).
+    \end{itemize}
+    \item Finally, the fourth primary objective involves the results' evaluation  and finishing the dissertation write-up by the end of the 11th week (although parts will be written during the previous objectives as well):
+    \begin{itemize}
+        \item evaluating the final deep learning pipeline's results (from the third objective) by employing common evaluation metrics and output formats used in other papers. This will allow direct comparisons of the final results with:
+        \begin{itemize}
+            \item the basic pipeline's results (from the second objective);
+            \item the results from other student dissertations working on the same dataset;
+            \item the results from papers researching breast cancer detection and segmentation.
+        \end{itemize}
+        \item writing-up the dissertation paper;
+        \item polishing the pipeline.
+    \end{itemize}
+\end{itemize}
 
-Semper risus in hendrerit gravida rutrum quisque non tellus. Quis vel eros donec ac. Nulla at volutpat diam ut venenatis tellus in metus vulputate. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Tellus at urna condimentum mattis pellentesque id nibh tortor. Dignissim enim sit amet venenatis urna. Cras semper auctor neque vitae tempus quam pellentesque. Egestas erat imperdiet sed euismod nisi porta lorem mollis.
+\paragraph{Secondary objectives}  
 
-\subsection{Subsection ii}
+These secondary objectives serve as additions to the primary objectives that are hard to achieve, but will be attempted if time permits it.
 
-Vestibulum rhoncus est pellentesque elit ullamcorper. Eleifend donec pretium vulputate sapien nec. Risus quis varius quam quisque id diam vel quam elementum. Commodo sed egestas egestas fringilla phasellus. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend. Non curabitur gravida arcu ac tortor dignissim. Eu consequat ac felis donec. Aliquet lectus proin nibh nisl condimentum id venenatis a. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Commodo nulla facilisi nullam vehicula ipsum.
+\begin{itemize}
+    \item Equalling or improving state of the art breast cancer detection systems, such as Google's breast cancer detection paper ``Artificial Intelligence Based Breast Cancer Nodal Metastasis Detection: Insights into the Black Box for Pathologists'', with 1 false positive per patient \cite{Liu2018}.
+    \item Achieving results that are at least as good as the ones produced on the original dataset (see Section~\ref{sec:resources}) on new datasets used  by other papers (will require an amended Ethics Application).
+    \item The second objective consists of achieving a high-level quality of code by following professional coding guidelines (e.g. PEP8 coding guidelines for Python \cite{pep8}), completed with detailed documentation and useful comments. This includes following software-engineering practices of version controlling the code with git and covering vital code sections with a testing suite (if time permits it).
+\end{itemize}
 
-% ------------------- PART 3: XXXX --------------------
 
-\section{Section B}
-\label{sec:section-B}
+% ------------------- Ethics --------------------
 
-In mollis nunc sed id. Ligula ullamcorper malesuada proin libero nunc consequat interdum varius sit. Consequat id porta nibh venenatis cras sed felis. Sed adipiscing diam donec adipiscing tristique risus. Elit duis tristique sollicitudin nibh sit amet. In tellus integer feugiat scelerisque varius morbi enim nunc. Habitant morbi tristique senectus et. Tincidunt tortor aliquam nulla facilisi cras fermentum odio. Id volutpat lacus laoreet non. Sapien et ligula ullamcorper malesuada proin libero nunc consequat interdum. Quisque id diam vel quam elementum. Nulla facilisi cras fermentum odio eu feugiat. Eget felis eget nunc lobortis mattis aliquam faucibus purus. Elit eget gravida cum sociis.
+\section{Ethics}
+\label{sec:ethics}
 
-% ------------------- CONCLUSION --------------------
+The deep learning model will require real-life human data (described in Section~\ref{sec:resources}) to learn its underlying patterns in order to detect and segment cases of breast cancer in mammograms, and to evaluate its performance. After filling out the Preliminary Ethics Self-Assessment Form, it is determined that a full Ethics Application needs to be submitted and approved by the Ethics Committee.
 
-\section{Conclusion}
-\label{sec:conclusion}
+% ------------------- Resources --------------------
 
-Cum sociis natoque penatibus et magnis dis. Odio aenean sed adipiscing diam donec. Bibendum enim facilisis gravida neque convallis a cras. Ligula ullamcorper malesuada proin libero. Libero nunc consequat interdum varius sit amet. Vitae auctor eu augue ut lectus. Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Cursus eget nunc scelerisque viverra mauris in aliquam. Pulvinar sapien et ligula ullamcorper malesuada proin libero nunc consequat.\\
+\section{Resources}
+\label{sec:resources}
 
-Leo urna molestie at elementum. Aliquam sem et tortor consequat id porta. Ac turpis egestas sed tempus urna. At erat pellentesque adipiscing commodo elit at imperdiet dui accumsan. Bibendum at varius vel pharetra vel turpis. Nec feugiat nisl pretium fusce id velit ut tortor pretium. Leo urna molestie at elementum eu facilisis. Enim ut tellus elementum sagittis vitae. Scelerisque eleifend donec pretium vulputate sapien.
+This project will make use of the ``Curated Breast Imaging Subset of DDSM'' dataset \cite{Lee2017}, a published open-source dataset, available online from The Cancer Imaging Archive \cite{Clark2013}. The dataset contains a total of 10,239 images gathered from 1,566 patients across 6,775 studies \cite{Lee2017}.\\
 
+Due to the complex nature of the dataset and the project's aims to explore deep learning techniques using dedicated machine learning software (e.g. Tensorflow, Keras or PyTorch), powerful computing resources will be required in the form of Graphical Processing Units (GPU) provided by the School of Computer Science and remotely accessed via SSH. A lab machine GPU running on CentOS has already been assigned for the duration of the project. In case of further computing power or memory being required, Dr David Harris-Birtill's (dissertation supervisor) machine (CASE) could be used, providing a total of 256 Gb of RAM and 2 GPUs.
 
 % -------------------- APPENDIX --------------------
 
 \begin{appendices}
 
 \clearpage
-
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}
 \bibliography{bibliography}
-
-% --------------------
-
-\clearpage
-\section{Demo Figure}
-\label{sec:appendix-demo-figure}
-
-\begin{figure}[h]
-\centerline{\includegraphics[width=0.95\textwidth]{figures/demo_figure.jpg}}
-\caption{\label{fig:demo_figure}Potential points of interest for dynamic features (blue = flat, green = edges, red = corners).}
-\end{figure}
-
-% --------------------
-
-\clearpage
-\section{Demo Table}
-\label{sec:appendix-demo-table}
-
-\input{tables/demo_table}
-
-% ------------------------
 
 \end{appendices}
 \end{document}
