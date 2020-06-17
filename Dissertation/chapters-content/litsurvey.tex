@@ -13,13 +13,18 @@ Breast cancer detection (BCD) using mammograms, and any form of cancer using med
 
 To assist radiologists in their interpretations of mammograms, Computer-Assisted Detection/Diagnosis (CAD) software have been employed since the 1970s. However, pre-1990s CAD systems were very primitive and did not offer much more knowledge than the expert radiologists' knowledge. These unsophisticated ``expert'' systems consisted of manually processing and modelling pixels to construct rule-based systems that mainly used \textit{if-else-then} statements \cite{Litjens2017}, highlighting their inadequacy to learn how to recognise patterns that can be used to detect breast cancer.
 
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/bcd_timeline.png}}
+\caption{\label{fig:litsurvey-bcd-timeline}Timeline of the evolution of breast cancer detection systems.}
+\end{figure}
+
 \subsection{Towards Supervised Machine Learning-based Systems}
 
 Towards the late 1990s, supervised machine learning techniques started replacing these expert systems, allowing hidden patterns in the mammograms' data that could not be perceived by radiologists to now be recognised by these new algorithms. Machine learning-based approaches were selected over statistical approaches as they were more performant when dealing with large, complex and high-dimensional datasets \cite{Yue2018}, which is the case of datasets of mammograms. Additionally, machine learning methods were proven to be more suitable to the task of classification than traditional statistics-based approaches such as regression \cite{Paliwal2009}. This marked the shift from CAD systems that were fully designed by humans to systems that were trained on datasets of medical imagery \cite{Litjens2017}.\\
 
 However, these machine learning models could not accurately operate on purely raw data such as the full-sized mammogram images. Indeed, all of the machine learning models tested against the task of breast cancer detection required relevant bits of information to be extracted first in order to solve the given task, such as k-Nearest Neighbour [kNN], Support Vector Machines [SVM], Decision Trees [DT], Naive Bayes [NB] and Artificial Neural Networks [ANN] \cite{Yue2018} \cite{Asri2016}. These important pieces of information pulled from the mammograms data correspond to features, and need to be extracted by humans before being fed to the aforementioned models for training. These features can range from colours, edges and corners to shapes and textures \cite{Geron2019}.\\
 
-Logically, the next step in the evolution of breast cancer detection systems is for the model to learn these features on its own directly from the data rather than being fed hand-extracted features \cite{Yala2019}. Deep learning models, which corresponds to neural networks with hundreds of hidden layers, are based on this concept and are covered in Section~\ref{sec:litsurvey-DLtechniques-CNN}. However, these models have not been successfully implemented until recent years as they require powerful computers (usually equipped with Graphical Processing Units) to be efficiently trained, causing the machine learning models discussed in Section~\ref{sec:litreview-MLmodel-BCDapplications} to lead the field of breast cancer detection until recent years \cite{Litjens2017}.
+Logically, the next step in the evolution of breast cancer detection systems is for the model to learn these features on its own directly from the data rather than being fed hand-extracted features \cite{Yala2019}. Deep learning models, which corresponds to neural networks with hundreds of hidden layers, are based on this concept and are covered in Section~\ref{sec:litsurvey-DLtechniques-CNN}. However, these models have not been successfully implemented until recent years as they require powerful computers (usually equipped with Graphical Processing Units) to be efficiently trained. This means that nowadays, the machine learning models discussed in Section~\ref{sec:litreview-MLmodel-BCDapplications} still lead the field of breast cancer detection, with some manual mammogram interpretations still being carried out by radiologists \cite{Litjens2017}, as depicted in Figure~\ref{fig:litsurvey-bcd-timeline}.
 
 % History of breast cancer detection (leads to)\\
 % Motivation of using ML/DL for breast detection\\
@@ -57,7 +62,12 @@ A rich array of machine learning algorithms have been applied and tested in the 
 \subsubsection{k-Nearest Neighbours}
 \label{sec:litreview-knn}
 
-\textit{TODO: briefly describe kNN.}\\
+\textit{TODO: briefly describe kNN.}
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=0.4\textwidth]{Dissertation/figures/litsurvey/knn.png}}
+\caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for the test sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure created by T. Srivastava (\url{https://www.analyticsvidhya.com/blog/2018/03/introduction-k-neighbours-algorithm-clustering/}).}
+\end{figure}
 
 The k-Nearest Neighbours algorithm has recently been tested on different datasets, including the ``Wisconsin Breast Cancer Wisconsin Dataset (WBCD)'' \cite{Wolberg1995} and the ``Digital Database for Screening Mammography (DDSM)'' \cite{DDSMdataset2001} datasets. Despite all papers finding that a value of $k=1$ seemed to yield the most accuracy, a 1-NN classifiers often underperforms compared to other classifiers mentioned below, especially SVMs and ANNs. Indeed, final model accuracies are roughly 1-2\% lower than the most accurate solution found \cite{Yue2018} \cite{Asri2016} \cite{Montazeri2016}.
 
@@ -69,13 +79,23 @@ In a similar fashion to the k-Nearest Neighbours in Section~\ref{sec:litreview-k
 
 \subsubsection{Decision Trees}
 
-\textit{TODO: briefly describe DT and the C4.5 DT algorithm.}\\
+\textit{TODO: briefly describe DT and the C4.5 DT algorithm.}
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=0.65\textwidth]{Dissertation/figures/litsurvey/dt.png}}
+\caption{\label{fig:litsurvey-dt-example}Example of a decision tree classifier distinguishing between benign and malignant tumours based on three extracted features from a dataset of mammograms: the size of the bare nuclei, the thickness of the clump and the uniformity of the cell size. Figure created by Yue et al. (2018).}
+\end{figure}
 
 C4.5 decision tree classifiers on their own did not offer better performances than kNN and NB classifiers, still falling short of the performance achieved by SVMs and ANNs \cite{Yue2018} \cite{Asri2016}. However, using C4.5 decision trees in hybrid systems that include SVMs and NBs produces accuracies akin to SVMs and ANNs \cite{Yue2018}.
 
 \subsubsection{Support Vector Machines}
 
 \textit{TODO: briefly describe SVM.}\\
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=0.6\textwidth]{Dissertation/figures/litsurvey/svm.png}}
+\caption{\label{fig:litsurvey-svm-example}Example of a SVM classifier distinguishing between benign and malignant tumours based on two extracted features from a dataset of mammograms: the size of the bare nuclei and the uniformity of the cell size. Figure created by Yue et al. (2018).}
+\end{figure}
 
 SVMs with RBF kernels outperformed polynomial kernels \cite{Osareh2010}.
 
