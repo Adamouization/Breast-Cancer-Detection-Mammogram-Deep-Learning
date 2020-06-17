@@ -1,7 +1,3 @@
-Lit review introduction.\\
-
-\textit{\underline{Note}: According to the dissertation time plan, the context survey will be finished by the end of week 3 (19/06/2020). Consequently, this context survey is still in a draft format. The majority of time has been invested in researching and taking notes on state-of-the-art papers (over 20 papers so far) and coming up with a detailed and logical plan. Sections with bullet points still need to be properly written while further information/references will be added to the existing parts.}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -13,15 +9,17 @@ Lit review introduction.\\
 % todo: explain what are mammograms -> support for why it's hard for radiologists alone to make decisions based on mammograms
 % limitations of radiologists
 
-The detection of breast cancer using mammograms, and any form of cancer using medical imagery, relies on the conventional diagnoses of expert radiologists \cite{Osareh2010}. These diagnoses rest on the correct interpretation of the mammograms, which may be subject to errors due to the difficulty of correctly interpreting them \cite{Elter2009}. Indeed, mammograms are 2D images of 3D breasts that correspond to the superposition of breast tissue, which increases the difficulty for a radiologist to correctly analyse patterns as masses often naturally form due to this superposition \cite{Elter2009}.\\
+Breast cancer detection (BCD) using mammograms, and any form of cancer using medical imagery, relies on the conventional diagnoses of expert radiologists \cite{Osareh2010}. These diagnoses rest on the correct interpretation of the mammograms, which may be subject to errors due to the difficulty of correctly interpreting them \cite{Elter2009}. Indeed, mammograms are 2D images of 3D breasts that correspond to the superposition of breast tissue, which increases the difficulty for a radiologist to correctly analyse patterns as masses often naturally form due to this superposition \cite{Elter2009}.\\
 
-To assist radiologists in their interpretations of mammograms, Computer-Assisted Detection/Diagnosis (CAD) software have been employed since the 1970s. However, pre-1990s CAD systems were very primitive and did not offer much more knowledge than the expert radiologists'. These unsophisticated ``expert'' systems consisted of manually processing and modelling pixels to construct rule-based systems that mainly used \textit{if-else-then} statements \cite{Litjens2017}.
+To assist radiologists in their interpretations of mammograms, Computer-Assisted Detection/Diagnosis (CAD) software have been employed since the 1970s. However, pre-1990s CAD systems were very primitive and did not offer much more knowledge than the expert radiologists' knowledge. These unsophisticated ``expert'' systems consisted of manually processing and modelling pixels to construct rule-based systems that mainly used \textit{if-else-then} statements \cite{Litjens2017}, highlighting their inadequacy to learn how to recognise patterns that can be used to detect breast cancer.
 
-\subsection{Evolution towards Supervised Machine Learning-based Systems}
+\subsection{Towards Supervised Machine Learning-based Systems}
 
-Supervised machine learning models have been applied to the problem of breast cancer detection since XXXX. However, these models could not accurately operate on purely raw data such as the full-sized mammogram images. Indeed, of the many machine learning models tested against the task of breast cancer detection such as k-Nearest Neighbour (kNN), Support Vector Machines (SVM), Decision Trees (DT), Random Forests (RF), Naive Bayes (NB) and Multi-Layer Perceptrons (MLP), these all require relevant bits of information to be extracted first in order to solve the given task. These important pieces of information correspond to features, and need to be extracted by humans before being fed to the aforementioned models for training. These features can range from colours, edges and corners to shapes and textures.\\
+Towards the late 1990s, supervised machine learning techniques started replacing these expert systems, allowing hidden patterns in the mammograms' data that could not be perceived by radiologists to now be recognised by these new algorithms. Machine learning-based approaches were selected over statistical approaches as they were more performant when dealing with large, complex and high-dimensional datasets \cite{Yue2018}, which is the case of datasets of mammograms. Additionally, machine learning methods were proven to be more suitable to the task of classification than traditional statistics-based approaches such as regression \cite{Paliwal2009}. This marked the shift from CAD systems that were fully designed by humans to systems that were trained on datasets of medical imagery \cite{Litjens2017}.\\
 
-The next logical step in the evolution of breast cancer detection systems is for the selected model to learn these features on its own directly from the data rather than being fed hand-extracted features \cite{Yala2019}. Deep learning models, which corresponds to neural networks with hundreds of hidden layers, are based on this concept. However, these models have not been successfully implemented until recent years as they require powerful computers (usually equipped with Graphical Processing Units) to be efficiently trained. 
+However, these machine learning models could not accurately operate on purely raw data such as the full-sized mammogram images. Indeed, all of the machine learning models tested against the task of breast cancer detection required relevant bits of information to be extracted first in order to solve the given task, such as k-Nearest Neighbour [kNN], Support Vector Machines [SVM], Decision Trees [DT], Naive Bayes [NB] and Artificial Neural Networks [ANN] \cite{Yue2018} \cite{Asri2016}. These important pieces of information pulled from the mammograms data correspond to features, and need to be extracted by humans before being fed to the aforementioned models for training. These features can range from colours, edges and corners to shapes and textures \cite{Geron2019}.\\
+
+Logically, the next step in the evolution of breast cancer detection systems is for the model to learn these features on its own directly from the data rather than being fed hand-extracted features \cite{Yala2019}. Deep learning models, which corresponds to neural networks with hundreds of hidden layers, are based on this concept and are covered in Section~\ref{sec:litsurvey-DLtechniques-CNN}. However, these models have not been successfully implemented until recent years as they require powerful computers (usually equipped with Graphical Processing Units) to be efficiently trained, causing the machine learning models discussed in Section~\ref{sec:litreview-MLmodel-BCDapplications} to lead the field of breast cancer detection until recent years \cite{Litjens2017}.
 
 % History of breast cancer detection (leads to)\\
 % Motivation of using ML/DL for breast detection\\
@@ -31,51 +29,77 @@ The next logical step in the evolution of breast cancer detection systems is for
 % 2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Machine Learning models and breast cancer detection applications}
+\section{Machine Learning Models \& BCD Application}
+\label{sec:litreview-MLmodel-BCDapplications}
 
-\subsection{Machine Learning tasks}
+\subsection{Machine Learning algorithms \& tasks}
 
-\subsubsection{}{Supervised \& unsupervised learning algorithms}\\
+\subsubsection{Types of learning algorithms}
 
-Machine learning algorithms come in many flavours, ranging from supervised and unsupervised learning to reinforcement learning. The two main types correspond to supervised and unsupervised learning \cite{Geron2019}. In supervised learning, a label $y$ is predicted based on input features $x$ by using a training dataset where the labels are known. During supervised training, the models' optimal parameters are determined to best predict the label.\\
+Machine learning algorithms come in many flavours based on whether human supervision is required or not. The two main types of machine learning algorithms correspond to supervised and unsupervised learning. On the one hand in supervised learning, the dataset is labelled, meaning every sample in the dataset includes a solution \cite{Geron2019}. This label, often noted $y$, is used to make a prediction $\hat{y}$ by fitting the input features $\textbf{x}$ from a training dataset. The goal of a supervised learning algorithm is to determine the optimal parameters $\theta$ for the selected algorithm in order to minimise a loss function defined as $L(y,\hat{y})$, which corresponds to the error between the predicted algorithm's output $\hat{y}$ and the real output $y$ \cite{Litjens2017}. A large variety of loss functions can be used such as the general Mean Squared Error (MSE) and Mean Absolute Error (MAE) loss functions, or more specific loss functions such as the Hinge Loss for SVMs \cite{Geron2019}. The main applications of supervised learning are classification and regression, with the former being the most relevant to breast cancer detection.\\
 
-On the other hand in unsupervised learning, the data is unlabelled, requiring the machine learning model to find patterns in the data by using known methods such as clustering and Principal Component Analysis (PCA) \cite{Litjens2017}.
+On the other hand in unsupervised learning, the data is unlabelled, meaning only the input features $\textbf{x}$ are available while the labels $y$ are not \cite{Litjens2017}. This means the algorithm cannot optimise its hyperparameters by minimising a loss function. Instead, the algorithm needs to automatically create clusters in the dataset in order separate them into different groups. The main applications of unsupervised learning are clustering, anomaly detection, data visualisation and dimensionality reduction \cite{Geron2019}, rendering them irrelevant to the breast cancer detection. Two other types of machine learning exist, corresponding to semi-supervised learning and reinforcement learning, but are also irrelevant to the task of detecting breast cancer.\\
+
+Among the aforementioned types of machine learning algorithms, the most pertinent one for the task of breast cancer detection is supervised learning as datasets of mammograms need to contain properly labelled data for each sample, indicating the status of the mammogram i.e. no tumour, benign tumour, malignant tumour \cite{Shen2017}.
+
+\subsubsection{Machine learning tasks applications for BCD}
 
 \begin{itemize}
-    \item Different types of learning model: supervised VS unsupervised (briefly mention semi-supervised and reinforcement learning). \textit{In this thesis, supervised learning used with labelled mammograms.}
-\end{itemize}
-
-\subsubsection{Machine learning tasks applied to medical imagery analysis}
-
-\begin{itemize}
-    \item Classification
-    \item Detection
+    \item Detection \& Classification
     \item Segmentation
-    \item Out-of-scope Machine Learning tasks in medical imagery analysis: registration, CBIR, image generation, image enhancement.
+    \item Other tasks: Briefly mention registration, CBIR, image generation, image enhancement. Regression?
 \end{itemize}
 
-\subsection{Machine Learning models}
+\subsection{BCD Classification Models Comparison}
+
+A rich array of machine learning algorithms have been applied and tested in the task of breast cancer detection since the 1990s, with some being more accurate and efficient than others.
+
+\subsubsection{k-Nearest Neighbours}
+\label{sec:litreview-knn}
+
+\textit{TODO: briefly describe kNN.}\\
+
+The k-Nearest Neighbours algorithm has recently been tested on different datasets, including the ``Wisconsin Breast Cancer Wisconsin Dataset (WBCD)'' \cite{Wolberg1995} and the ``Digital Database for Screening Mammography (DDSM)'' \cite{DDSMdataset2001} datasets. Despite all papers finding that a value of $k=1$ seemed to yield the most accuracy, a 1-NN classifiers often underperforms compared to other classifiers mentioned below, especially SVMs and ANNs. Indeed, final model accuracies are roughly 1-2\% lower than the most accurate solution found \cite{Yue2018} \cite{Asri2016} \cite{Montazeri2016}.
+
+\subsubsection{Naive Bayes}
+
+\textit{TODO: briefly describe NB.}\\
+
+In a similar fashion to the k-Nearest Neighbours in Section~\ref{sec:litreview-knn}, Naive Bayes achieves comparable accuracy levels to 1-NN classifiers, obtaining lower accuracies then the optimal algorithms found \cite{Yue2018} \cite{Montazeri2016}.
+
+\subsubsection{Decision Trees}
+
+\textit{TODO: briefly describe DT and the C4.5 DT algorithm.}\\
+
+C4.5 decision tree classifiers on their own did not offer better performances than kNN and NB classifiers, still falling short of the performance achieved by SVMs and ANNs \cite{Yue2018} \cite{Asri2016}. However, using C4.5 decision trees in hybrid systems that include SVMs and NBs produces accuracies akin to SVMs and ANNs \cite{Yue2018}.
+
+\subsubsection{Support Vector Machines}
+
+\textit{TODO: briefly describe SVM.}\\
+
+SVMs with RBF kernels outperformed polynomial kernels \cite{Osareh2010}.
+
+\subsubsection{Artificial Neural Networks}
+
+\textit{TODO: briefly describe ANN.}\\
 
 \begin{itemize}
-    \item k-Nearest Neighbours
-    \item Naive Bayes
-    \item Support Vector Machines
-    \item Decision Trees
-    \item Random Forest
-    \item Artificial Neural Networks
-    \begin{itemize}
-        \item Multi-Layer Perceptrons (shallow artificial neural networks)
-        \item Deep neural networks
-    \end{itemize}
+    \item Multi-Layer Perceptrons (shallow artificial neural networks)
+    \item Deep neural networks
 \end{itemize}
 
-For each, mention pros and cons based on existing papers and compare different approaches. Naturally lead towards deep neural networks (e.g. CNNs) for the final section.
+\textit{For each, mention pros and cons based on existing papers and compare different approaches. Naturally lead towards deep neural networks (e.g. CNNs) for the final section.}
+
+\subsubsection{Machine learning algorithm comparison}
+
+These algorithms heavily rely on the features extracted from the mammograms for classification. On their own, each algorithm's limitations prevent it from performing well on known datasets. However, combining them in hybrid systems increases the accuracy achieved, but greatly increases the algorithm's complexity.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{}{Deep Learning techniques \& Convolutional Neural Networks}
+\section{Deep Learning techniques \& CNNs}
+\label{sec:litsurvey-DLtechniques-CNN}
 
 \subsection{Convolution Neural Networks}
 
@@ -91,9 +115,14 @@ Explore the deep learning model that will be explored by each dissertation
 
 \begin{itemize}
     \item Evolution of CNNs (first CNN used, first CNN applied to medical imagery analysis, famous architectures e.g. LeNet, AlexNet, GoogLeNet, ResNet, etc.)
+    \item Transfer learning
     \item Hardware advances (GPUs)
     \item Software advanced (libraries)
 \end{itemize}
+
+\subsection{Current Limitations}
+
+todo
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4 - CHAPTER SUMMARY
