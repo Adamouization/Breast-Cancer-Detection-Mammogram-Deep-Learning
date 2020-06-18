@@ -47,7 +47,7 @@ On the other hand in unsupervised learning, the data is unlabelled, meaning only
 
 Among the aforementioned types of machine learning algorithms, the most pertinent one for the task of breast cancer detection is supervised learning as datasets of mammograms need to contain properly labelled data for each sample, indicating the status of the mammogram i.e. no tumour, benign tumour, malignant tumour \cite{Shen2017}.
 
-\subsubsection{Machine learning tasks applications for BCD}
+\subsubsection{Machine learning BCD task}
 
 \begin{itemize}
     \item Detection \& Classification
@@ -57,25 +57,35 @@ Among the aforementioned types of machine learning algorithms, the most pertinen
 
 \subsection{BCD Classification Models Comparison}
 
-A rich array of machine learning algorithms have been applied and tested in the task of breast cancer detection since the 1990s, with some being more accurate and efficient than others.
+Since the late 1990s, a rich array of supervised machine learning algorithms have been applied and tested against the task of breast cancer detection, yielding varying results but ultimately contributing to improving accuracies for detecting breast cancer. The main types of algorithms used in breast cancer detection, which consist of k-Nearest Neighbour, Naive Bayes, Support Vector Machines, Decision Trees and Artificial Neural Networks, are briefly explained in the following sections before comparing their results to draw a picture of the advantages and disadvantages of each method.
 
 \subsubsection{k-Nearest Neighbours}
 \label{sec:litreview-knn}
 
-\textit{TODO: briefly describe kNN.}
+kNN is one of the simplest machine learning algorithms and is often used as an initial benchmark when studying a dataset with no prior knowledge \cite{peterson2009k}. It is a non-parametric and lazy model, as it does not learn the data's pattern but rather classifies a test sample by looking at its $k$ nearest neighbours \cite{Yue2018}. These data point's nearest neighbours are determined by using distance metrics, with the Euclidian distance defined by Equation~\ref{eq:euclidian-distance} ($n$-dimensional space between two data points $s$ and $p$) being the preferred metric \cite{peterson2009k}. Figure~\ref{fig:litsurvey-knn-example} depicts an example of how a kNN classifier would distinguish between a benign and a malignant tumour using $k=3$.
+
+\begin{equation}
+\label{eq:euclidian-distance}
+    d(s,p)=\sqrt{\sum_{i=1}^{n}(s_i-p_i)^2}
+\end{equation}
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=0.4\textwidth]{Dissertation/figures/litsurvey/knn.png}}
-\caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for the test sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure created by T. Srivastava (\url{https://www.analyticsvidhya.com/blog/2018/03/introduction-k-neighbours-algorithm-clustering/}).}
+\caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for a test data sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure retrieved online from T. Srivastava (\url{https://www.analyticsvidhya.com/blog/2018/03/introduction-k-neighbours-algorithm-clustering}).}
 \end{figure}
 
-The k-Nearest Neighbours algorithm has recently been tested on different datasets, including the ``Wisconsin Breast Cancer Wisconsin Dataset (WBCD)'' \cite{Wolberg1995} and the ``Digital Database for Screening Mammography (DDSM)'' \cite{DDSMdataset2001} datasets. Despite all papers finding that a value of $k=1$ seemed to yield the most accuracy, a 1-NN classifiers often underperforms compared to other classifiers mentioned below, especially SVMs and ANNs. Indeed, final model accuracies are roughly 1-2\% lower than the most accurate solution found \cite{Yue2018} \cite{Asri2016} \cite{Montazeri2016}.
+Being generally used as an initial algorithm on new datasets, the kNN algorithm has often been tested on different datasets of mammograms for breast cancer detection, including the ``Wisconsin Breast Cancer Wisconsin Dataset (WBCD)'' \cite{Wolberg1995} and the ``Digital Database for Screening Mammography (DDSM)'' \cite{DDSMdataset2001} datasets. Despite all papers finding that a value of $k=1$ seemed to yield the most accuracy, a 1-NN classifiers often underperforms compared to other classifiers mentioned below, especially compared to SVMs and ANNs. Indeed, final model accuracies are on average 1-2\% lower than the most accurate solution found \cite{Yue2018} \cite{Asri2016} \cite{Montazeri2016}. Nevertheless, the results achieved by kNN are useful when used a basic benchmark against other models described below.
 
 \subsubsection{Naive Bayes}
 
-\textit{TODO: briefly describe NB.}\\
+Naive Bayes uses Bayes' theorem and the assumption that all input features are independent from one another, which can be described as the input features $\textbf{x}=(\textbf{x}_1, ..., \textbf{x}_n)$ being independent given a class label $C$ in Equation~\ref{eq:naive-bayes} \cite{rish2001empirical}.
 
-In a similar fashion to the k-Nearest Neighbours in Section~\ref{sec:litreview-knn}, Naive Bayes achieves comparable accuracy levels to 1-NN classifiers, obtaining lower accuracies then the optimal algorithms found \cite{Yue2018} \cite{Montazeri2016}.
+\begin{equation}
+\label{eq:naive-bayes}
+    P(\textbf{x}|C)=\prod_{i=1}^{n}P(\textbf{x}_i|C)
+\end{equation}
+
+This assumption leads to a naive model that despite not learning the data's underlying pattern (in a similar fashion to kNN), still offers competitive results in practice \cite{russell2002artificial}, notably in the field of medical imagery analysis \cite{rish2001empirical}. Naive Bayes achieves comparable accuracies to the aforementioned 1-NN classifiers, obtaining lower accuracies than the optimal algorithms found \cite{Yue2018} \cite{Montazeri2016}, but remaining useful for assessing basic benchmarks to compare with more advanced models discussed below.
 
 \subsubsection{Decision Trees}
 
@@ -101,7 +111,12 @@ SVMs with RBF kernels outperformed polynomial kernels \cite{Osareh2010}.
 
 \subsubsection{Artificial Neural Networks}
 
-\textit{TODO: briefly describe ANN.}\\
+\textit{TODO: briefly describe ANN.}
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/ann.png}}
+\caption{\label{fig:litsurvey-ann-example}Example of an ANN classifier distinguishing between benign and malignant tumours based on eight extracted features from a dataset of mammograms. Figure created by Yue et al. (2018).}
+\end{figure}
 
 \begin{itemize}
     \item Multi-Layer Perceptrons (shallow artificial neural networks)
