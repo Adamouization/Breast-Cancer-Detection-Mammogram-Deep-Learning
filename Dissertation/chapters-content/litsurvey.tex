@@ -4,18 +4,24 @@
 
 \section{Breast Cancer Detection}
 
+\subsection{Medical imagery screening tests \& biopsies}
+\label{sec:litreview-bcd-medical-imagery}
+
+Breast cancer screenings has been used to detect early signs of the disease before the appearance of any symptoms, such as lumps that can be felt to the touch of a hand. The main methods used for breast cancer screenings are \textit{mammograms}, which are low-dosage x-rays around the breast area usually  used as initial/regular screening tests, followed by \textit{breast ultrasounds} for analysing masses such as lumps or cysts, and finally \textit{breasts MRI} (Magnetic Resonance Imaging) for detailed imagery of the breast, usually used to when a cancer has already been diagnosed to get more information about the tumour such as its size and location, or to find additional ones \cite{americanCancerSociety2019}. If any of the aforementioned screening tests raise suspicion or reveal a potential presence of breast cancer, then biopsies can be conducted to confirm the screening tests' results. Biopsies consist of extracting cells or a small part of the breast's tissue that are sent to a lab to be analysed by pathologists in order to get definite results \cite{martin2019}.\\
+
+Due to the nature of the biopsy, it is ideal for patients to use medical imagery tools to detect early signs of breast cancer that can be treated efficiently rather than immediately conducting a biopsy. Mammograms are the primary imagery method used for early breast cancer detection (BCD) \cite{Ramos-Pollan2012}. However, breast cancer detection using mammograms, and any form of cancer using medical imagery, relies on the conventional diagnoses of expert radiologists \cite{Osareh2010}. These diagnoses rest on the correct interpretation of the mammograms, which may be subject to errors due to the difficulty of correctly interpreting them \cite{Elter2009}. Indeed, mammograms are 2D images of 3D breasts that correspond to the superposition of breast tissue, which increases the difficulty for a radiologist to correctly analyse patterns as masses often naturally form due to this superposition \cite{Elter2009}.
+
 \subsection{Early Breast Cancer Detection Systems}
+\label{sec:litreview-bcd-early-cad}
 
 % todo: explain what are mammograms -> support for why it's hard for radiologists alone to make decisions based on mammograms
 % limitations of radiologists
-
-Breast cancer detection (BCD) using mammograms, and any form of cancer using medical imagery, relies on the conventional diagnoses of expert radiologists \cite{Osareh2010}. These diagnoses rest on the correct interpretation of the mammograms, which may be subject to errors due to the difficulty of correctly interpreting them \cite{Elter2009}. Indeed, mammograms are 2D images of 3D breasts that correspond to the superposition of breast tissue, which increases the difficulty for a radiologist to correctly analyse patterns as masses often naturally form due to this superposition \cite{Elter2009}.\\
 
 To assist radiologists in their interpretations of mammograms, Computer-Assisted Detection/Diagnosis (CAD) software have been employed since the 1970s. However, pre-1990s CAD systems were very primitive and did not offer much more knowledge than the expert radiologists' knowledge. These unsophisticated ``expert'' systems consisted of manually processing and modelling pixels to construct rule-based systems that mainly used \textit{if-else-then} statements \cite{Litjens2017}, highlighting their inadequacy to learn how to recognise patterns that can be used to detect breast cancer.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/bcd_timeline.png}}
-\caption{\label{fig:litsurvey-bcd-timeline}Timeline of the evolution of breast cancer detection systems.}
+\caption{\label{fig:litsurvey-bcd-timeline}Timeline of the evolution of breast cancer detection systems synthesising the information described in Sections~\ref{sec:litreview-bcd-medical-imagery}~and~\ref{sec:litreview-bcd-early-cad}. Created using draw.io.}
 \end{figure}
 
 \subsection{Towards Supervised Machine Learning-based Systems}
@@ -34,47 +40,83 @@ Logically, the next step in the evolution of breast cancer detection systems is 
 % 2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Machine Learning Models \& BCD Application}
+\section{Machine Learning Algorithms \& BCD Applications}
 \label{sec:litreview-MLmodel-BCDapplications}
 
-\subsection{Machine Learning algorithms \& tasks}
+\subsection{Machine Learning algorithms \& tasks for BCD}
 
-\subsubsection{Types of learning algorithms}
+\subsubsection{Types of machine learning algorithms}
 
-Machine learning algorithms come in many flavours based on whether human supervision is required or not. The two main types of machine learning algorithms correspond to supervised and unsupervised learning. On the one hand in supervised learning, the dataset is labelled, meaning every sample in the dataset includes a solution \cite{Geron2019}. This label, often noted $y$, is used to make a prediction $\hat{y}$ by fitting the input features $\textbf{x}$ from a training dataset. The goal of a supervised learning algorithm is to determine the optimal parameters $\theta$ for the selected algorithm in order to minimise a loss function defined as $L(y,\hat{y})$, which corresponds to the error between the predicted algorithm's output $\hat{y}$ and the real output $y$ \cite{Litjens2017}. A large variety of loss functions can be used such as the general Mean Squared Error (MSE) and Mean Absolute Error (MAE) loss functions, or more specific loss functions such as the Hinge Loss for SVMs \cite{Geron2019}. The main applications of supervised learning are classification and regression, with the former being the most relevant to breast cancer detection.\\
+Machine learning algorithms fall in different categories based on whether human supervision is required or not. The two main types of machine learning algorithms correspond to supervised and unsupervised learning. On the one hand in supervised learning, the dataset is labelled, meaning every sample in the dataset includes a solution \cite{Geron2019}. This label, often noted $y$, is used to make a prediction $\hat{y}$ by fitting the input features $\textbf{x}$ from a training dataset. The goal of a supervised learning algorithm is to determine the optimal parameters $\theta$ for the selected algorithm in order to minimise a loss function defined as $L(y,\hat{y})$, which corresponds to the error between the predicted algorithm's output $\hat{y}$ and the real output $y$ \cite{Litjens2017}. A large variety of loss functions can be used such as the general Mean Squared Error (MSE) and Mean Absolute Error (MAE) loss functions, or more specific loss functions such as the Hinge Loss for SVMs \cite{Geron2019}. The main applications of supervised learning are classification and regression, with the former being the most relevant to breast cancer detection.\\
 
-On the other hand in unsupervised learning, the data is unlabelled, meaning only the input features $\textbf{x}$ are available while the labels $y$ are not \cite{Litjens2017}. This means the algorithm cannot optimise its hyperparameters by minimising a loss function. Instead, the algorithm needs to automatically create clusters in the dataset in order separate them into different groups. The main applications of unsupervised learning are clustering, anomaly detection, data visualisation and dimensionality reduction \cite{Geron2019}, rendering them irrelevant to the breast cancer detection. Two other types of machine learning exist, corresponding to semi-supervised learning and reinforcement learning, but are also irrelevant to the task of detecting breast cancer.\\
+On the other hand in unsupervised learning, the data is unlabelled, meaning only the input features $\textbf{x}$ are available while the labels $y$ are not \cite{Litjens2017}. This means the algorithm cannot optimise its hyperparameters by minimising a loss function. Instead, the algorithm needs to automatically create clusters in the dataset in order separate them into different groups. The main applications of unsupervised learning are clustering, anomaly detection, data visualisation and dimensionality reduction \cite{Geron2019}, rendering them irrelevant to the breast cancer detection. Two other categories of machine learning algorithms exist, corresponding to semi-supervised learning and reinforcement learning, but are also irrelevant to the task of detecting breast cancer.\\
 
 Among the aforementioned types of machine learning algorithms, the most pertinent one for the task of breast cancer detection is supervised learning as datasets of mammograms need to contain properly labelled data for each sample, indicating the status of the mammogram i.e. no tumour, benign tumour, malignant tumour \cite{Shen2017}.
 
-\subsubsection{Machine learning BCD task}
+\subsubsection{Types of machine learning tasks}
 
-\begin{itemize}
-    \item Detection \& Classification
-    \item Segmentation
-    \item Other tasks: Briefly mention registration, CBIR, image generation, image enhancement. Regression?
-\end{itemize}
+Two types of machine learning tasks are very relevant to medical imagery analysis, including mammogram analysis for breast cancer detection: \textit{detection} (classification) and \textit{segmentation} \cite{Litjens2017}. 
+
+\paragraph{Classification} corresponds to the classification of a medical image or exam, which is an interpretation that used to be fully carried out by a radiologist before the appearance of CAD systems (see Section~\ref{sec:litreview-bcd-early-cad}). Concerning the task of breast cancer detection using datasets like the ``Curated Breast Imaging Subset of DDSM'' \cite{Lee2017}, the classification is usually binary, classifying a tumour found in a mammogram as either ``benign'' or ``malignant''. However, when using more complex datasets like the ``Digital Database for Screening Mammography'' \cite{DDSMdataset2001}, the classification may become multi-class, classifying a mammogram either as ``normal'', ``benign'' or ``malignant'' \cite{Litjens2017}. An example of a classification between benign and malignant mammograms can be found in Figure~\ref{fig:classification_example}, reinforcing the complexity that interpreting mammograms brings to radiologists and the need for accurate and reliable CAD systems.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.5\textwidth]{Dissertation/figures/litsurvey/classification_benign.png}
+  \caption{A benign mammogram.}
+  \label{fig:classification_benign}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.5\textwidth]{Dissertation/figures/litsurvey/classification_malignant.png}
+  \caption{A malignant mammogram.}
+  \label{fig:classification_malignant}
+\end{subfigure}
+\caption{\label{fig:classification_example}Example of a breast mammogram classification, showing benign (left) and malignant (right) mammograms. Images retrieved from the ``mini-MIAS'' database (Suckling, 1994).}
+\end{figure}
+
+\paragraph{Segmentation} corresponds to the classification of each pixel in the image based on the class of the object the pixels belongs to, without distinguishing objects from the same class. All objects belonging to the same class will be classified in the same grouping of pixels \cite{Geron2019}. In breast cancer detection, segmentation can be used to highlight masses such as calcifications, cysts or fibroadenomas \cite{breastcancerorg2018} in mammograms, as shown in Figure~\ref{fig:segmentation_example} where mammograms are pre-processed before being segmented, revealing potential masses in the image \cite{Pereira2014}.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/original-mammogram.jpg}
+  \caption{Original mammogram images.}
+  \label{fig:original-mammogram}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/segmented-mammogram.jpg}
+  \caption{Segmented mammogram images.}
+  \label{fig:segmented-mammogram}
+\end{subfigure}
+\caption{\label{fig:segmentation_example}Example of a breast mammogram segmentation, showing the raw mammogram (left) and the segmented image (right), depicting a large mass (see inside red area). Images retrieved from Pereira et al. (2014).}
+\end{figure}
+
+Other machine learning tasks that have been used in medical imagery analysis consist of content-based image retrieval (retrieving similar images from a database) or image enhancement (erasing obstructing elements from an image and increasing quality) \cite{Litjens2017}, but will not be further explored as they are not directly relevant to the task of breast cancer detection. Indeed, the task of classification (detection) can be used to interpret whether a breast is affected by cancer through the analysis of databases of mammograms, while the task of segmentation can be used to localise a tumour within a breast by finding regions that may correspond to masses, pinpointing potential danger areas that may lead to cancerous cells.
 
 \subsection{BCD Classification Models Comparison}
 
-Since the late 1990s, a rich array of supervised machine learning algorithms have been applied and tested against the task of breast cancer detection, yielding varying results but ultimately contributing to improving accuracies for detecting breast cancer. The main types of algorithms used in breast cancer detection, which consist of k-Nearest Neighbour, Naive Bayes, Support Vector Machines, Decision Trees and Artificial Neural Networks, are briefly explained in the following sections before comparing their results to draw a picture of the advantages and disadvantages of each method.
+Since the late 1990s, a rich array of supervised machine learning algorithms have been applied and tested against the task of breast cancer detection, yielding varying results, but ultimately contributing to improving accuracies for detecting breast cancer. The main types of algorithms used in breast cancer detection, which consist of k-Nearest Neighbour, Naive Bayes, Support Vector Machines, Decision Trees and Artificial Neural Networks, are briefly explained in the ensuing sections from most simple to most complex. Their results when applied to the task of breast cancer detection are then compared to draw a picture of the advantages and disadvantages that each method brings.
 
 \subsubsection{k-Nearest Neighbours}
 \label{sec:litreview-knn}
 
-kNN is one of the simplest machine learning algorithms and is often used as an initial benchmark when studying a dataset with no prior knowledge \cite{peterson2009k}. It is a non-parametric and lazy model, as it does not learn the data's pattern but rather classifies a test sample by looking at its $k$ nearest neighbours \cite{Yue2018}. These data point's nearest neighbours are determined by using distance metrics, with the Euclidian distance defined by Equation~\ref{eq:euclidian-distance} ($n$-dimensional space between two data points $s$ and $p$) being the preferred metric \cite{peterson2009k}. Figure~\ref{fig:litsurvey-knn-example} depicts an example of how a kNN classifier would distinguish between a benign and a malignant tumour using $k=3$.
+k-Nearest Neighbours (kNN) is one of the simplest machine learning algorithms and is often used as an initial benchmark when studying a dataset with no prior knowledge \cite{peterson2009k}. It is a non-parametric and lazy model, as it does not learn the data's pattern but rather classifies a test sample by looking at its $k$ nearest neighbours \cite{Yue2018}. The sample data point's nearest neighbours are determined by using distance metrics, with the Euclidian distance, defined by Equation~\ref{eq:euclidian-distance} ($n$-dimensional space between two data points $s$ and $p$) being the preferred metric \cite{peterson2009k}. Figure~\ref{fig:litsurvey-knn-example} depicts an example of how a kNN classifier would distinguish between a benign and a malignant tumour using $k=3$.
 
 \begin{equation}
 \label{eq:euclidian-distance}
     d(s,p)=\sqrt{\sum_{i=1}^{n}(s_i-p_i)^2}
 \end{equation}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 \centerline{\includegraphics[width=0.4\textwidth]{Dissertation/figures/litsurvey/knn.png}}
 \caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for a test data sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure retrieved online from T. Srivastava (\url{https://www.analyticsvidhya.com/blog/2018/03/introduction-k-neighbours-algorithm-clustering}).}
 \end{figure}
 
-Being generally used as an initial algorithm on new datasets, the kNN algorithm has often been tested on different datasets of mammograms for breast cancer detection, including the ``Wisconsin Breast Cancer Wisconsin Dataset (WBCD)'' \cite{Wolberg1995} and the ``Digital Database for Screening Mammography (DDSM)'' \cite{DDSMdataset2001} datasets. Despite all papers finding that a value of $k=1$ seemed to yield the most accuracy, a 1-NN classifiers often underperforms compared to other classifiers mentioned below, especially compared to SVMs and ANNs. Indeed, final model accuracies are on average 1-2\% lower than the most accurate solution found \cite{Yue2018} \cite{Asri2016} \cite{Montazeri2016}. Nevertheless, the results achieved by kNN are useful when used a basic benchmark against other models described below.
+Generally used as an initial learning algorithm to experiment with new datasets, the kNN algorithm has been tested on distinctive datasets of mammograms for breast cancer detection, including the ``Wisconsin Breast Cancer Wisconsin Dataset'' \cite{Wolberg1995} and the ``Digital Database for Screening Mammography'' \cite{DDSMdataset2001} datasets. Despite all papers finding that a value of $k=1$ seemed to yield the most accuracy, the 1-NN classifiers often underperforms compared to other classifiers mentioned further below, especially compared to SVMs and ANNs. Indeed, final model accuracies are on average 1-2\% lower than the most accurate solution found \cite{Yue2018} \cite{Asri2016} \cite{Montazeri2016}. Nevertheless, the results achieved by kNN are useful when used as a basic benchmark before testing more advanced models, which are described below.
 
 \subsubsection{Naive Bayes}
 
@@ -85,49 +127,57 @@ Naive Bayes uses Bayes' theorem and the assumption that all input features are i
     P(\textbf{x}|C)=\prod_{i=1}^{n}P(\textbf{x}_i|C)
 \end{equation}
 
-This assumption leads to a naive model that despite not learning the data's underlying pattern (in a similar fashion to kNN), still offers competitive results in practice \cite{russell2002artificial}, notably in the field of medical imagery analysis \cite{rish2001empirical}. Naive Bayes achieves comparable accuracies to the aforementioned 1-NN classifiers, obtaining lower accuracies than the optimal algorithms found \cite{Yue2018} \cite{Montazeri2016}, but remaining useful for assessing basic benchmarks to compare with more advanced models discussed below.
+This assumption leads to a naive model that despite not learning the data's underlying pattern (in a similar fashion to kNN), still offers competitive results in practice \cite{russell2002artificial}, notably in the field of medical imagery analysis \cite{rish2001empirical}. Naive Bayes achieves comparable accuracies to the aforementioned 1-NN classifiers, obtaining lower accuracies than the optimal algorithms found \cite{Yue2018} \cite{Montazeri2016}, but remaining useful for assessing benchmark classification to compare with more advanced models discussed below.
 
 \subsubsection{Decision Trees}
 
-\textit{TODO: briefly describe DT and the C4.5 DT algorithm.}
+Unlike kNN and NB, the decision tree algorithm is a simple yet powerful one that fits the data. It works like a flowchart mapping samples' input feature vectors attributes and values, creating a tree made up of different types of nodes. Each non-leaf nodes tests one of the feature vectors attributes, branching out to a deeper node based on the attribute's value. Once a leaf node is reached after multiple tests, a classification decision is made \cite{quinlan2014c4}. An example of a decision tree applied to breast cancer detection can be found in Figure~\ref{fig:litsurvey-dt-example}, illustrating how attributes and their values are used to classify a tumour as benign or malignant.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=0.65\textwidth]{Dissertation/figures/litsurvey/dt.png}}
 \caption{\label{fig:litsurvey-dt-example}Example of a decision tree classifier distinguishing between benign and malignant tumours based on three extracted features from a dataset of mammograms: the size of the bare nuclei, the thickness of the clump and the uniformity of the cell size. Figure created by Yue et al. (2018).}
 \end{figure}
 
-C4.5 decision tree classifiers on their own did not offer better performances than kNN and NB classifiers, still falling short of the performance achieved by SVMs and ANNs \cite{Yue2018} \cite{Asri2016}. However, using C4.5 decision trees in hybrid systems that include SVMs and NBs produces accuracies akin to SVMs and ANNs \cite{Yue2018}.
+The most popular implementations of decision trees use entropy-based impurity metrics to generate the tree, such as the ID3, C4.5 and C5.0 decision tree algorithms \cite{Yue2018}. A node reaches an entropy value of 0 when it is ``pure'' i.e. it contains only instances of one class (either only benign or only malignant data samples) \cite{Geron2019}.\\
+
+Decision trees on their own, such as the C4.5 classifier, do not offer better results than kNN and NB classifiers, still falling short of the performance achieved by SVMs \cite{Asri2016} and ANNs \cite{Yue2018}. Nevertheless, combining C4.5 decision trees into hybrid systems with other machine learning algorithms such as SVMs and NBs produces accuracies akin to SVMs and ANNs \cite{Yue2018}. Indeed, these hybrid systems use the advantages of each method, but come at the cost of being complicated to engineer and still require handcrafted features to be fed to them as input.
 
 \subsubsection{Support Vector Machines}
 
-\textit{TODO: briefly describe SVM.}\\
+A SVM consist of a \textit{maximal margin classifier}, which aims to find the hyperplane that separates two classes the most, and the \textit{kernel trick}, used to separate non-linear data. In Figure~\ref{fig:litsurvey-svm-example}, a visual example of a maximum margin hyperplane to separate linearly separable benign and malignant tumours is shown. In the case of non-linear data, the training data is mapped to a higher dimension where they can be linearly separated. This is achieved by using the kernel trick, which maps the input feature vector to a higher dimension by using the dot product, but does not actually carry out the transformation, which would exponentially increased the size of the feature space and consequently the training time \cite{Geron2019}. This kernel trick is what allowed SVMs to become one of the most widely used machine learning models nowadays in many fields including medical imagery analysis \cite{Yue2018}.\\
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=0.6\textwidth]{Dissertation/figures/litsurvey/svm.png}}
-\caption{\label{fig:litsurvey-svm-example}Example of a SVM classifier distinguishing between benign and malignant tumours based on two extracted features from a dataset of mammograms: the size of the bare nuclei and the uniformity of the cell size. Figure created by Yue et al. (2018).}
+\caption{\label{fig:litsurvey-svm-example}Example of a SVM classifier's maximum margin hyperplane found to separate benign and malignant tumours based on two extracted features from a dataset of mammograms: the size of the bare nuclei and the uniformity of the cell size. Figure created by Yue et al. (2018).}
 \end{figure}
 
-SVMs with RBF kernels outperformed polynomial kernels \cite{Osareh2010}.
+Many kernels can be chosen for SVM classification (e.g. Polynomial kernel for image processing, Radial Basis Function (RBF) or Gaussian kernels for general tasks when there is no prior knowledge of the data), heavily influencing its performance \cite{amari1999improving}. For the task of breast cancer detection, SVMs using RBF kernels outperformed Polynomial kernels accuracies by over 1\% \cite{Osareh2010} and are chosen over other kernels \cite{Asri2016}.
 
 \subsubsection{Artificial Neural Networks}
 
-\textit{TODO: briefly describe ANN.}
+Artificial Neural Networks form the basis of contemporary deep learning and are at the heart of the techniques mentioned in Section~\ref{sec:litsurvey-DLtechniques-CNN}. Originally inspired by the neuron connections found in the human brain \cite{mcculloch1943logical}, ANNs correspond to a collection of neurons (units) that ``fire'' an output if the linear sum of its weighted inputs tops a threshold. These neurons are placed in hierarchical layers (input, hidden and output layers) which are connected via weighted links, leading to \textit{fully connected} neural network when all the neurons from one layer communicate with all the neurons in the following layer. Input layer neurons accept the feature vectors $\textbf{x}$, hidden layer neurons process the data and output layer neurons represent an outcome for the classification \cite{russell2002artificial}. Figure~\ref{fig:litsurvey-ann-example} depicts an example fully-connected ANN used to classify benign and malignant tumours using six input neurons, eight hidden neurons and one output neuron.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/ann.png}}
 \caption{\label{fig:litsurvey-ann-example}Example of an ANN classifier distinguishing between benign and malignant tumours based on eight extracted features from a dataset of mammograms. Figure created by Yue et al. (2018).}
 \end{figure}
 
+Like the previous algorithms, neural networks learn by minimising the loss between $L$ the prediction $\hat{y}$ and the labels $y$. This is done via the backpropagation algorithm, which backpropagates the error from the output layer to the hidden layers, allowing the link weights to be adjusted to minise that error \cite{russell2002artificial}. The most common way to do this is by using MLE with Stochastic Gradient Descent (SGD) \cite{Litjens2017}.
+
 \begin{itemize}
     \item Multi-Layer Perceptrons (shallow artificial neural networks)
-    \item Deep neural networks
+    \item Deep neural networks, problem with fully connected MLPs
 \end{itemize}
 
 \textit{For each, mention pros and cons based on existing papers and compare different approaches. Naturally lead towards deep neural networks (e.g. CNNs) for the final section.}
 
 \subsubsection{Machine learning algorithm comparison}
 
-These algorithms heavily rely on the features extracted from the mammograms for classification. On their own, each algorithm's limitations prevent it from performing well on known datasets. However, combining them in hybrid systems increases the accuracy achieved, but greatly increases the algorithm's complexity.
+These algorithms heavily rely on the features extracted from the mammograms for classification. On their own, each algorithm's limitations prevent it from performing well on known datasets. However, combining them in hybrid systems increases the accuracy achieved, but greatly increases the algorithm's complexity.\\
+
+An important aspect of the aforementioned supervised machine learning algorithms to note is that each of them processed an input feature vector $\textbf{x}$ rather than the raw mammogram image.
+
+\input{Dissertation/tables/ML_methods_comparison}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3
@@ -140,7 +190,7 @@ These algorithms heavily rely on the features extracted from the mammograms for 
 
 \begin{itemize}
     \item Deep Neural Networks
-    \item Convolutional Neural Networks
+    \item Convolutional Neural Networks (losing resolution for segmentation due to downsampling layers)
 \end{itemize}
 
 Explore the techniques used in deep learning (techniques, databases, processing, libraries, output metrics, etc.)\\
