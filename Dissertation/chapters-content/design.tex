@@ -1,34 +1,48 @@
-With the requirements necessary to build the system now formulated, potential solutions to fulfil the list of requirements from Chapter~\ref{ch:chapter3} for each aspect of the system can now be analysed before choosing a final solution.\\
+\section{Deep Learning Pipeline Design Analysis}
 
-Throughout this chapter, the requirements established from the previous chapter referred as ``F'' stand for functional requirements, while requirements referred as ``NF'' stand for non-functional requirements.\\
+\subsection{Data pre-processing}
 
-TODO: recap section
+todo
+
+\subsection{CNN Model}
+
+todo
+
+\subsection{Output}
+
+Output metrics chosen: a combination of numerical metrics and visual metrics.
+
+\begin{itemize}
+    \item numerical metrics:
+    \begin{itemize}
+        \item overall accuracy
+        \item precision
+        \item recall
+        \item F1 score
+    \end{itemize}
+    \item visual metrics:
+    \begin{itemize}
+        \item confusion matrix
+        \item normalised confusion matrix
+        \item Receiver Operating Characteristic (ROC) curve
+    \end{itemize}
+\end{itemize}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Programming Language}
-\label{sec:design-programming-languages}
+\section{General Design Decisions}
 
-TODO
+\subsection{Programming language}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Python 3 with the usual ML suite available.
+Tensorflow \& Keras over PyTorch. % more widely used in industry and older, so more guides online.
 
-\section{Pipeline Design Analysis}
+\subsection{Interface}
 
-TODO
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{General Project Design}
-
-TODO.
+A Command-Line Interface (CLI) is selected, allow arguments and flags to be passed to execute different sections of the code. Arguments control the dataset to use, the CNN model to use and the mode to run in (training or testing). Flags control the verbose mode to print more statements in the terminal for debugging purposed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -40,7 +54,7 @@ TODO.
 \begin{enumerate}
     \item \underline{\textbf{Programming Language}}: 
     \begin{enumerate}
-        \item Python 3.7\footnote{Version 3.7 is the latest stable release of Python, satisfying NF1.}
+        \item Python 3.7
         \item Third-party libraries:
         \begin{enumerate}
         	\item Keras
@@ -52,11 +66,3 @@ TODO.
         \end{enumerate}
     \end{enumerate}
 \end{enumerate}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Summary}
-
-Review
