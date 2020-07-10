@@ -20,5 +20,5 @@ EPOCH_2 = 50
 dataset = "mini-MIAS"   # The dataset to use.
 model = "basic"         # The model to use.
 run_mode = "training"   # The type of running mode, either training or testing.
+image_size = "small"    # Image resizing for VGG19 model.
 verbose_mode = False    # Boolean used to print additional logs for debugging purposes.
-imagesize = "small"

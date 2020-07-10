@@ -35,7 +35,7 @@ def plot_roc_curve_binary(y_true: list, y_pred: list) -> None:
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic')
     plt.legend(loc='lower right')
-    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_ROC-binary.png".format(config.dataset, config.model, config.imagesize))
+    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_ROC-binary.png".format(config.dataset, config.model, config.image_size))
     plt.show()
 
 
@@ -108,7 +108,7 @@ def plot_roc_curve_multiclass(y_true: list, y_pred: list, label_encoder) -> None
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic')
     plt.legend(loc='lower right')
-    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_ROC-multi.png".format(config.dataset, config.model, config.imagesize))
+    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_ROC-multi.png".format(config.dataset, config.model, config.image_size))
     plt.show()
 
 
@@ -141,9 +141,9 @@ def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised
     plt.tight_layout()
     bottom, top = ax.get_ylim()
     if is_normalised:
-        plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_CM-norm.png".format(config.dataset, config.model, config.imagesize))
+        plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_CM-norm.png".format(config.dataset, config.model, config.image_size))
     elif not is_normalised:
-        plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_CM.png".format(config.dataset, config.model, config.imagesize))
+        plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_CM.png".format(config.dataset, config.model, config.image_size))
     plt.show()
 
 
@@ -168,7 +168,7 @@ def plot_comparison_chart(df: pd.DataFrame) -> None:
     plt.title(title)
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=60, ha='right', rotation_mode='anchor')
     plt.tight_layout()
-    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_{}.png".format(config.dataset, config.model, config.imagesize, title), bbox_inches='tight')
+    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_{}.png".format(config.dataset, config.model, config.image_size, title), bbox_inches='tight')
     plt.show()
 
 
@@ -250,5 +250,5 @@ def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     plt.xlabel("Epoch #")
     plt.ylabel("Loss/Accuracy")
     plt.legend(loc="lower left")
-    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_{}.png".format(config.dataset, config.model, config.imagesize, plot_name))
+    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_{}.png".format(config.dataset, config.model, config.image_size, plot_name))
     plt.show()

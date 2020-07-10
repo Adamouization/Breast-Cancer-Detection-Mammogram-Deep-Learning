@@ -12,6 +12,7 @@ from model.vgg_model_large import generate_vgg_model_large
 from utils import create_label_encoder, print_error_message, print_num_gpus_available, print_runtime
 from tensorflow.keras.models import load_model
 
+
 def main() -> None:
     """
     Program entry point. Parses command line arguments to decide which dataset and model to use.
@@ -56,7 +57,7 @@ def main() -> None:
 
             # Create and train CNN model.
 
-            if config.imagesize == "small":
+            if config.image_size == "small":
                 model = generate_vgg_model(l_e.classes_.size)
             else:
                 model = generate_vgg_model_large(l_e.classes_.size)
@@ -68,10 +69,12 @@ def main() -> None:
             print_error_message()
 
         # Save the model
-        model.save("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model, config.imagesize))
+        model.save("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
+                                                                                config.image_size))
 
     elif config.run_mode == "test":
-        model = load_model("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model, config.imagesize))
+        model = load_model("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
+                                                                                        config.image_size))
 
     # Evaluate model results.
     if config.dataset == "mini-MIAS":
@@ -82,7 +85,7 @@ def main() -> None:
         evaluate(y_val, y_pred, l_e, config.dataset, 'B-M')
 
     # Print the prediction
-#     print(y_pred)
+    #     print(y_pred)
 
     # Print training runtime.
     print_runtime("Total", round(time.time() - start_time, 2))
@@ -122,9 +125,9 @@ def parse_command_line_arguments() -> None:
     config.dataset = args.dataset
     config.model = args.model
     config.run_mode = args.runmode
-    config.imagesize = args.imagesize
+    config.image_size = args.imagesize
     config.verbose_mode = args.verbose
-    
+
 
 if __name__ == '__main__':
     main()

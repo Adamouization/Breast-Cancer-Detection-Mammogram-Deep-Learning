@@ -23,7 +23,7 @@ def train_network(model, train_x, train_y, val_x, val_y, batch_s, epochs1, epoch
     :return: trained network
     """
     # Freeze VGG19 pre-trained layers.
-    if config.imagesize == "large":
+    if config.image_size == "large":
         model.layers[0].layers[1].trainable = False
     else:
         model.layers[0].trainable = False
@@ -67,11 +67,10 @@ def train_network(model, train_x, train_y, val_x, val_y, batch_s, epochs1, epoch
 
     # Train a second time with a smaller learning rate and with all layers unfrozen
     # (train over fewer epochs to prevent over-fitting).
-    if config.imagesize == "large":
+    if config.image_size == "large":
         model.layers[0].layers[1].trainable = True
     else:
         model.layers[0].trainable = True
-
 
     if config.dataset == "mini-MIAS":
         model.compile(optimizer=Adam(1e-5),  # Very low learning rate
