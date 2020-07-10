@@ -1,16 +1,33 @@
 \section{Deep Learning Pipeline Design Analysis}
 
-\subsection{Data pre-processing}
+\subsection{Dataset pre-processing}
 
-todo
+\subsubsection{Processing and organising raw images}
+
+File formats: PGM and DICOM files need to be converted.
+
+\subsubsection{Data loading}
+
+The mini-MIAS dataset is very small in size (339 Mb before pre-processing, 202 Mb after pre-processing), containing only 322 images. It can therefore be loaded into memory without any data loading optimisation techniques. However, the CBIS-DDSM dataset is much larger, containing 10,239 images that cover 163.6 Gb of disk space. The dataset therefore cannot be loaded in memory in a single import and needs to be loaded in batches.\\ % mention batches and caching
 
 \subsection{CNN Model}
+
+\subsubsection{Training}
+
+One-hot encoding of labels (for both binary and multi-class classification).\\
+
+Training/testing/validation split using stratified and shuffling splits (keep class balance and reorder images in directories).\\
+
+CNN models with pre-trained weights on ImageNet to avoid training from scratch.
+
+\subsubsection{Testing}
 
 todo
 
 \subsection{Output}
 
 Output metrics chosen: a combination of numerical metrics and visual metrics.
+
 
 \begin{itemize}
     \item numerical metrics:
@@ -28,7 +45,6 @@ Output metrics chosen: a combination of numerical metrics and visual metrics.
     \end{itemize}
 \end{itemize}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,26 +59,3 @@ Tensorflow \& Keras over PyTorch. % more widely used in industry and older, so m
 \subsection{Interface}
 
 A Command-Line Interface (CLI) is selected, allow arguments and flags to be passed to execute different sections of the code. Arguments control the dataset to use, the CNN model to use and the mode to run in (training or testing). Flags control the verbose mode to print more statements in the terminal for debugging purposed.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\clearpage
-\section{Chosen Solution}
-
-\begin{enumerate}
-    \item \underline{\textbf{Programming Language}}: 
-    \begin{enumerate}
-        \item Python 3.7
-        \item Third-party libraries:
-        \begin{enumerate}
-        	\item Keras
-        	\item TensorFlow
-            \item NumPy
-            \item Pandas
-            \item SciPy
-            \item Matplotlib
-        \end{enumerate}
-    \end{enumerate}
-\end{enumerate}
