@@ -1,0 +1,90 @@
+\section{Common Pipeline Code Instructions}
+
+Start by cloning the GitHub repository:
+
+\begin{lstlisting}
+cd ~/Projects
+git clone https://github.com/Adamouization/Breast-Cancer-Detection-Code
+\end{lstlisting}
+
+Create a repository that will be used to install Tensorflow 2 with CUDA 10 for Python and activate the virtual environment for GPU usage:
+
+\begin{lstlisting}
+cd libraries/tf2
+tar xvzf tensorflow2-cuda-10-1-e5bd53b3b5e6.tar.gz
+sh build.sh
+\end{lstlisting}
+
+Activate the virtual environment:
+
+\begin{lstlisting}
+source /Breast-Cancer-Detection-Code/tf2/venv/bin/activate
+\end{lstlisting}
+
+`cd` into the `src` directory and run the code:
+
+\begin{lstlisting}
+python main.py [-h] -d DATASET -m MODEL [-r RUNMODE] [-i IMAGESIZE] [-v]
+\end{lstlisting}
+
+where:
+\begin{itemize}
+    \item \textit{-h} is a  flag for help on how to run the code.
+    \item \textit{DATASET} is the dataset to use. Must be either \textit{mini-MIAS} or \textit{CBIS-DDMS}.
+    \item \textit{MODEL} is the model to use. Must be either \textit{basic} or \textit{advanced}.
+    \item \textit{RUNMODE} is the mode to run in (\textit{train} or \textit{test}). Default value is \textit{train}.
+    \item \textit{IMAGESIZE} is the image size to feed into the CNN model (\textit{small} - 512x512px; or \textit{large} - 2048x2048px). Default value is \textit{small}.
+    \item \textit{-v} is a flag controlling verbose mode, which prints additional statements for debugging purposes.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Dataset Installation Instructions}
+
+\subsection{mini-MIAS dataset}
+
+This example will use the mini-MIAS dataset\footnote{mini-MIAS dataset: \url{http://peipa.essex.ac.uk/info/mias.html}}. After cloning the project, travel to the \textit{data/mini-MIAS} directory (there should be 3 files in it).\\
+
+Create \textit{images\_original} and \textit{images\_processed} directories in this directory: 
+
+\begin{lstlisting}
+cd data/mini-MIAS/
+mkdir images_original
+mkdir images_processed
+\end{lstlisting}
+
+Move to the \textit{images\_original} directory and download the raw un-processed images:
+
+\begin{lstlisting}
+cd images_original
+wget http://peipa.essex.ac.uk/pix/mias/all-mias.tar.gz
+\end{lstlisting}
+
+Unzip the dataset then delete all non-image files:
+
+\begin{lstlisting}
+tar xvzf all-mias.tar.gz
+rm -rf *.txt 
+rm -rf README 
+\end{lstlisting}
+
+Move back up one level and move to the \textit{images\_processed} directory. Create 3 new directories there (\textit{benign\_cases}, \textit{malignant\_cases} and \textit{normal\_cases}):
+
+\begin{lstlisting}
+cd ../images_processed
+mkdir benign_cases
+mkdir malignant_cases
+mkdir normal_cases
+\end{lstlisting}
+
+Now run the python script for processing the dataset and render it usable with Tensorflow and Keras:
+
+\begin{lstlisting}
+python3 ../../../src/data_manipulations/mini-MIAS-initial-pre-processing.py
+\end{lstlisting}
+
+\subsection{CBIS-DDSM dataset}
+
+These datasets are very large (exceeding 160GB) and more complex than the mini-MIAS dataset to use. Downloading and pre-processing them will therefore not be covered by this README.\\
+
+Our generated CSV files to use these datasets can be found in the \textit{/data/CBIS-DDSM} directory, but the mammograms will have to be downloaded separately. The CBIS-DDSM dataset can be downloaded here:  \url{https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM#5e40bd1f79d64f04b40cac57ceca9272}.

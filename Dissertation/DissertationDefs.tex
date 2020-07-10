@@ -16,6 +16,7 @@
 \usepackage{longtable}          % span tables through multiple pages. Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \usepackage{subcaption}         % subfigures to have multiple images on the same line
 \usepackage{tabto}              % use tabs
+\usepackage{minted}             % code listings
 \usepackage[export]{adjustbox}  % allows figures to be positioned (left-center-right)
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -34,44 +35,27 @@
 %% Break long urls with the following characters
 \def\UrlBreaks{\do\/\do-\do.\do0}
 
-%% New colours defined for the code listings (https://latexcolor.com/)
-\definecolor{backcolour}{gray}{0.9}
-\definecolor{palatinateblue}{rgb}{0.15, 0.23, 0.89}
-\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
-\definecolor{dartmouthgreen}{rgb}{0.05, 0.5, 0.06}
-\definecolor{davysgrey}{rgb}{0.33, 0.33, 0.33}
-\definecolor{cornellred}{rgb}{0.7, 0.11, 0.11}
-\definecolor{deepmagenta}{rgb}{0.8, 0.0, 0.8}
-
-%% Custom listing style for Python code
-\lstloadlanguages{Python}
-\lstdefinestyle{myPythonStyle}{
-  language=Python,
-  backgroundcolor=\color{backcolour},   
-  commentstyle=\color{airforceblue},
-  basicstyle=\footnotesize,
-  keywordstyle=[1]\color{dartmouthgreen}\bfseries,  % Python keywords in bold and blue
-  keywordstyle=[2]\color{deepmagenta},              % Python functions in magenta
-  keywordstyle=[3]\color{blue}\bfseries\underbar,   % User functions bold/underlined and blue
-  morekeywords=[1]{self},
-  morekeywords=[2]{@make_spin},
-  morekeywords=[3]{main,off_line_colour_based_feature_extraction_phase,on_line_retrieval_phase,database_preprocessing_phase,HistogramGenerator,__init__,generate_video_rgb_histogram,generate_video_greyscale_histogram,generate_video_hsv_histogram,generate_and_store_average_rgb_histogram,generate_and_store_average_greyscale_histogram,generate_and_store_average_hsv_histogram,match_histograms,rgb_histogram_shot_boundary_detection,check_video_capture,destroy_video_capture,get_video_capture,get_current_reference_points,get_results_array,_normalise_histogram,_get_frames_to_process,_get_chosen_model_string,ClickAndDrop,click_and_crop,get_roi,get_reference_points,VideoStabiliser,stabilise_video,get_video_filenames,print_terminal_table,print_finished_training_message,get_video_first_frame,show_final_match,display_results_histogram,get_number_of_frames,get_video_fps,terminal_yes_no_question,video_file_already_stabilised},
-  numberstyle=\tiny\color{davysgrey},
-  stringstyle=\color{cornellred}\bfseries,
-  showspaces=false,   
-  showstringspaces=false,
-  showtabs=true,
-  numbers=left,  
-  captionpos=b,  
-  frame=single,
-  breakatwhitespace=true,         
-  breaklines=true,                 
-  keepspaces=true,                 
-  numbersep=5pt,                  
-  tabsize=4,
-  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+% style code listings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4
 }
-\lstset{style=myPythonStyle}
+\lstset{style=mystyle}
 
 %% Definitions to provide layout in the dissertation title pages
 \newenvironment{spaced}[1]
