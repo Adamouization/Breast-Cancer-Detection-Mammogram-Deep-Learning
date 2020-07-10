@@ -1,0 +1,58 @@
+{
+  "mini-MIAS": {
+    "N-B-M": [
+      {
+        "paper": "Hepsağ PU, Özel SA, Yazıcı A.",
+        "accuracy": "0.68"
+      },
+      {
+        "paper": "Kaur P, Singh G, Kaur P.",
+        "accuracy": "0.98"
+      }
+    ],
+    "B-M": [
+      {
+        "paper": "Dash JK, Sahoo L.",
+        "accuracy": "0.8596"
+      },
+      {
+        "paper": "Vishrutha V, Ravishankar M.",
+        "accuracy": "0.92"
+      },
+      {
+        "paper": "Rabidas R, Midya A, Chakraborty J.",
+        "accuracy": "0.9457"
+      },
+      {
+        "paper": "Hepsağ PU, Özel SA, Yazıcı A.",
+        "accuracy": "0.87"
+      }
+    ],
+    "N-A": [
+      {
+        "paper": "Deepa S, Bharathi VS.",
+        "accuracy": "0.925"
+      }
+    ]
+  },
+  "CBIS-DDSM": {
+    "B-M": [
+        {
+          "paper": "Agarwal R et al.",
+          "accuracy": "0.92"
+        },
+        {
+          "paper": "Sarosa SJ et al.",
+          "accuracy": "0.6303"
+        },
+        {
+          "paper": "Chen Y et al.",
+          "accuracy": "0.9315"
+        },
+        {
+          "paper": "Falconí LG et al.",
+          "accuracy": "0.784"
+        }
+    ]
+  }
+}
