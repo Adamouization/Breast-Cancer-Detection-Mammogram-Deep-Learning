@@ -1,1 +1,33 @@
-TODO.
+\section{Implementation of common deep learning pipeline}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Data pre-processing}
+
+\subsubsection{Processing and organising raw images}
+
+Two scripts written to read CSV files and reorganise the images in folders for classification.\\
+
+File formats: PGM and DICOM files need to be converted.\\
+
+Scikit-Learn's label encoder to one-hot encode labels.
+
+\subsubsection{Data loading}
+
+TF cache and batch functions
+
+Image resizing to fit in pre-trained CNN models (e.g. VGG19 model needs 224x224px image size).\\
+
+Normalising images to fit in [0-1] float range rather than [0-255] integer range.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{CNN Model}
+
+Once the CNN model is finished training model is saved in HDF5 format in order to save the model's architecture, the layers' hyperparameters and all the connection weights and biases that were learned during training.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Output}
+
+todo
