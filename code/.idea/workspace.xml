@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ee0a2ca4-0a08-43c7-9960-e632fde4ca18" name="Default Changelist" comment="" />
+    <list default="true" id="a02b6889-7c63-4ff1-bf81-7e3684b23a3e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/code/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/src/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/src/data_operations/dataset_feed.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/src/data_operations/dataset_feed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/src/data_visualisation/output.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/src/data_visualisation/output.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/src/model/train_test_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/src/model/train_test_model.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1civ42JXamNhlDtcbqHbAMFJ8T2" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="1eVL3U8Fjj1vZ7t7xFTey6H5cTD" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -27,25 +25,23 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ee0a2ca4-0a08-43c7-9960-e632fde4ca18" name="Default Changelist" comment="" />
-      <created>1591024033121</created>
+      <changelist id="a02b6889-7c63-4ff1-bf81-7e3684b23a3e" name="Default Changelist" comment="" />
+      <created>1594401614410</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1591024033121</updated>
-      <workItem from="1591024042262" duration="1802000" />
-      <workItem from="1593017351138" duration="14000" />
+      <updated>1594401614410</updated>
+      <workItem from="1594401616117" duration="469000" />
     </task>
     <servers />
   </component>
@@ -53,28 +49,13 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591024826882">
+    <state x="341" y="145" key="SettingsEditor" timestamp="1594401724434">
+      <screen x="0" y="23" width="1680" height="967" />
+    </state>
+    <state x="341" y="145" key="SettingsEditor/-136.-1057.1920.1057/0.23.1680.967@0.23.1680.967" timestamp="1594401724434" />
+    <state x="541" y="280" width="598" height="490" key="find.popup" timestamp="1594402615684">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1591024826882" />
-    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1591030901472">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1591030901472" />
-    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1591030901471">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1591030901471" />
-    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1591030901471">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1591030901471" />
-    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1591030901472">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1591030901472" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/code$main.coverage" NAME="main Coverage Results" MODIFIED="1591024790709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <state x="541" y="280" width="598" height="490" key="find.popup/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594402615684" />
   </component>
 </project>
