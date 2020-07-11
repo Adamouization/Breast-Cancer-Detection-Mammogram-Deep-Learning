@@ -5,7 +5,6 @@ import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, generate_image_transforms, \
     import_cbisddsm_training_dataset, import_minimias_dataset
-from model.train_test_model import make_predictions
 from model.cnn_model import CNN_Model
 from model.vgg_model import generate_vgg_model
 from model.vgg_model_large import generate_vgg_model_large
@@ -75,7 +74,7 @@ def main() -> None:
                                                                                         config.image_size))
     # Evaluate model results.
     if config.dataset == "mini-MIAS":
-        model.make_predictions(X_val)
+        model.make_prediction(X_val)
         model.evaluate_model(y_val, l_e, config.dataset, 'N-B-M')
     elif config.dataset == "CBIS-DDSM":
         y_pred = make_predictions(model, dataset_val)
