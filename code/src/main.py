@@ -3,10 +3,11 @@ import time
 
 import config
 from data_operations.dataset_feed import create_dataset
-from data_operations.data_preprocessing import import_cbisddsm_training_dataset, import_minimias_dataset, \
-    dataset_stratified_split, generate_image_transforms
+from data_operations.data_preprocessing import dataset_stratified_split, generate_image_transforms, \
+    import_cbisddsm_training_dataset, import_minimias_dataset
 from data_visualisation.output import evaluate
 from model.train_test_model import make_predictions, train_network
+from model.cnn_model import CNN_Model
 from model.vgg_model import generate_vgg_model
 from model.vgg_model_large import generate_vgg_model_large
 from utils import create_label_encoder, print_error_message, print_num_gpus_available, print_runtime
@@ -42,7 +43,8 @@ def main() -> None:
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=X_train_rebalanced,
                                                                       labels=y_train_rebalanced)
             # Create and train CNN model.
-            model = generate_vgg_model(l_e.classes_.size)
+            model = CNN_Model(l_e.classes_.size, "VGG")
+            # model = generate_vgg_model(l_e.classes_.size)
             model = train_network(model, X_train, y_train, X_val, y_val, config.BATCH_SIZE, config.EPOCH_1,
                                   config.EPOCH_2)
 
