@@ -1,17 +1,21 @@
+import json
 import ssl
 
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.applications import VGG19
 from tensorflow.keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
 from tensorflow.keras.metrics import CategoricalAccuracy, BinaryAccuracy
 from tensorflow.keras.optimizers import Adam
-from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.python.keras import Sequential
+from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D
 
-import config
+from data_visualisation.plots import *
+from data_visualisation.roc_curves import *
 
-# Needed to download pre-trained weights for ImageNet
+# Required to download pre-trained weights for ImageNet (stored in ~/.keras/)
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
@@ -28,6 +32,7 @@ class CNN_Model:
         """
         self.num_classes = num_classes
         self.model_name = model_name
+        self.prediction = None
 
         self.create_model()
 
@@ -52,11 +57,11 @@ class CNN_Model:
         # Generate additional convolutional layers
         if config.model == "advanced":
             self._model.add(Conv2D(1024, (3, 3),
-                                  activation='relu',
-                                  padding='same'))
+                                   activation='relu',
+                                   padding='same'))
             self._model.add(Conv2D(1024, (3, 3),
-                                  activation='relu',
-                                  padding='same'))
+                                   activation='relu',
+                                   padding='same'))
             self._model.add(MaxPooling2D((2, 2), strides=(2, 2)))
 
         # Flatten layer to convert each input into a 1D array (no parameters in this layer, just simple pre-processing).
@@ -78,7 +83,7 @@ class CNN_Model:
         # Print model details if running in debug mode.
         if config.verbose_mode:
             print(self._model.summary())
-    
+
     def train_model(self, train_x, train_y, val_x, val_y, batch_s, epochs1, epochs2):
         """
         Function to train network in two steps:
@@ -104,8 +109,8 @@ class CNN_Model:
 
         if config.dataset == "mini-MIAS":
             self._model.compile(optimizer=Adam(1e-3),
-                          loss=CategoricalCrossentropy(),
-                          metrics=[CategoricalAccuracy()])
+                                loss=CategoricalCrossentropy(),
+                                metrics=[CategoricalAccuracy()])
 
             hist_1 = self._model.fit(
                 x=train_x,
@@ -123,16 +128,16 @@ class CNN_Model:
 
         elif config.dataset == "CBIS-DDSM":
             self._model.compile(optimizer=Adam(lr=1e-4),
-                          loss=BinaryCrossentropy(),
-                          metrics=[BinaryAccuracy()])
+                                loss=BinaryCrossentropy(),
+                                metrics=[BinaryAccuracy()])
 
             hist_1 = self._model.fit(x=train_x,
-                               validation_data=val_x,
-                               epochs=epochs1,
-                               callbacks=[
-                                   EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
-                                   ReduceLROnPlateau(patience=6)]
-                               )
+                                     validation_data=val_x,
+                                     epochs=epochs1,
+                                     callbacks=[
+                                         EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                                         ReduceLROnPlateau(patience=6)]
+                                     )
 
         # Plot the training loss and accuracy.
         plot_training_results(hist_1, "Initial_training", True)
@@ -146,8 +151,8 @@ class CNN_Model:
 
         if config.dataset == "mini-MIAS":
             self._model.compile(optimizer=Adam(1e-5),  # Very low learning rate
-                          loss=CategoricalCrossentropy(),
-                          metrics=[CategoricalAccuracy()])
+                                loss=CategoricalCrossentropy(),
+                                metrics=[CategoricalAccuracy()])
 
             hist_2 = self._model.fit(
                 x=train_x,
@@ -164,36 +169,89 @@ class CNN_Model:
             )
         elif config.dataset == "CBIS-DDSM":
             self._model.compile(optimizer=Adam(lr=1e-5),  # Very low learning rate
-                          loss=BinaryCrossentropy(),
-                          metrics=[BinaryAccuracy()])
+                                loss=BinaryCrossentropy(),
+                                metrics=[BinaryAccuracy()])
 
             hist_2 = self._model.fit(x=train_x,
-                               validation_data=val_x,
-                               epochs=epochs2,
-                               callbacks=[
-                                   EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True),
-                                   ReduceLROnPlateau(patience=6)]
-                               )
+                                     validation_data=val_x,
+                                     epochs=epochs2,
+                                     callbacks=[
+                                         EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True),
+                                         ReduceLROnPlateau(patience=6)]
+                                     )
 
         # Plot the training loss and accuracy.
         plot_training_results(hist_2, "Fine_tuning_training", False)
-        
-    def make_prediction(self, x):
+
+    def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, dataset: str, classification_type: str):
+        """
+        Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.
+        :param y_true: Ground truth of the data in one-hot-encoding type.
+        :param y_pred: Prediction result of the data in one-hot-encoding type.
+        :param label_encoder: The label encoder for y value (label).
+        :param dataset: The dataset to use.
+        :param classification_type: The classification type. Ex: N-B-M: normal, benign and malignant; B-M: benign and
+        malignant.
+        :return: None.
+        """
+        # Inverse transform y_true and y_pred from one-hot-encoding to original label.
+        if label_encoder.classes_.size == 2:
+            y_true_inv = y_true
+            y_pred_inv = np.round_(self.prediction, 0)
+        else:
+            y_true_inv = label_encoder.inverse_transform(np.argmax(y_true, axis=1))
+            y_pred_inv = label_encoder.inverse_transform(np.argmax(self.prediction, axis=1))
+
+        # Calculate accuracy.
+        accuracy = float('{:.4f}'.format(accuracy_score(y_true_inv, y_pred_inv)))
+        print('accuracy = {}\n'.format(accuracy))
+
+        # Print classification report for precision, recall and f1.
+        print(classification_report(y_true_inv, y_pred_inv, target_names=label_encoder.classes_))
+
+        # Plot confusion matrix and normalised confusion matrix.
+        cm = confusion_matrix(y_true_inv, y_pred_inv)  # calculate confusion matrix with original label of classes
+        plot_confusion_matrix(cm, 'd', label_encoder, False)
+        # Calculate normalized confusion matrix with original label of classes.
+        cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        cm_normalized[np.isnan(cm_normalized)] = 0
+        plot_confusion_matrix(cm_normalized, '.2f', label_encoder, True)
+
+        # Plot ROC curve.
+        if label_encoder.classes_.size == 2:  # binary classification
+            plot_roc_curve_binary(y_true, self.prediction)
+        elif label_encoder.classes_.size >= 2:  # multi classification
+            plot_roc_curve_multiclass(y_true, self.prediction, label_encoder)
+
+        # Compare results with other similar papers' result.
+        with open(
+                'data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
+            data = json.load(config_file)
+        df = pd.DataFrame.from_records(data[dataset][classification_type],
+                                       columns=['paper', 'accuracy'])  # Filter data by dataset and classification type.
+        new_row = pd.DataFrame({'paper': 'Dissertation', 'accuracy': accuracy},
+                               index=[0])  # Add model result into dataframe to compare.
+        df = pd.concat([new_row, df]).reset_index(drop=True)
+        df['accuracy'] = pd.to_numeric(df['accuracy'])  # Digitize the accuracy column.
+        plot_comparison_chart(df)
+
+    def make_prediction(self, x_values):
         """
         :param x: Input.
         :return: Model predictions.
         """
         if config.dataset == "mini-MIAS":
-            y_predict = self._model.predict(x=x_values.astype("float32"), batch_size=10)
+            self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=10)
         elif config.dataset == "CBIS-DDSM":
-            y_predict = self._model.predict(x=x_values)
+            self.prediction = self._model.predict(x=x_values)
         if config.verbose_mode:
             print("Predictions:")
-            print(y_predict)
-        
+            print(self.prediction)
+
     def save_model(self):
-        model.save("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
-                                                                                config.image_size))
+        self._model.save("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
+                                                                                      config.image_size))
+
     @property
     def model(self):
         return self._model

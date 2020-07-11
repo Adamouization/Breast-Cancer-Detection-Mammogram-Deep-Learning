@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a02b6889-7c63-4ff1-bf81-7e3684b23a3e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/code/src/model/cnn_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/code/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/src/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="a02b6889-7c63-4ff1-bf81-7e3684b23a3e" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,7 +79,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1594401614410</updated>
-      <workItem from="1594401616117" duration="3695000" />
+      <workItem from="1594401616117" duration="3761000" />
     </task>
     <servers />
   </component>
@@ -95,6 +91,22 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463029558" />
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1594463293428">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293428" />
+    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1594463293427">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.center/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293427" />
+    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1594463293427">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.left/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293427" />
+    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1594463293428">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.right/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293428" />
     <state x="341" y="145" key="SettingsEditor" timestamp="1594401724434">
       <screen x="0" y="23" width="1680" height="967" />
     </state>

@@ -5,7 +5,6 @@ import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, generate_image_transforms, \
     import_cbisddsm_training_dataset, import_minimias_dataset
-from data_visualisation.output import evaluate
 from model.train_test_model import make_predictions
 from model.cnn_model import CNN_Model
 from model.vgg_model import generate_vgg_model
@@ -31,7 +30,7 @@ def main() -> None:
     # Run in training mode.
     if config.run_mode == "train":
 
-        # Multiclass classification (mini-MIAS dataset)
+        # Multi-class classification (mini-MIAS dataset)
         if config.dataset == "mini-MIAS":
             # Import entire dataset.
             images, labels = import_minimias_dataset(data_dir="../data/{}/images_processed".format(config.dataset),
@@ -45,8 +44,6 @@ def main() -> None:
             # Create and train CNN model.
             model = CNN_Model("VGG", l_e.classes_.size)
             model.train_model(X_train, y_train, X_val, y_val, config.BATCH_SIZE, config.EPOCH_1, config.EPOCH_2)
-            # model = generate_vgg_model(l_e.classes_.size)
-            # model = train_network(model, X_train, y_train, X_val, y_val, config.BATCH_SIZE, config.EPOCH_1, config.EPOCH_2)
 
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
@@ -76,17 +73,13 @@ def main() -> None:
     elif config.run_mode == "test":
         model = load_model("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
                                                                                         config.image_size))
-
     # Evaluate model results.
     if config.dataset == "mini-MIAS":
         model.make_predictions(X_val)
-        evaluate(y_val, y_pred, l_e, config.dataset, 'N-B-M')
+        model.evaluate_model(y_val, l_e, config.dataset, 'N-B-M')
     elif config.dataset == "CBIS-DDSM":
         y_pred = make_predictions(model, dataset_val)
         evaluate(y_val, y_pred, l_e, config.dataset, 'B-M')
-
-    # Print the prediction
-    #     print(y_pred)
 
     # Print training runtime.
     print_runtime("Total", round(time.time() - start_time, 2))
