@@ -2,6 +2,10 @@ import ssl
 
 from tensorflow.keras.applications import VGG19
 from tensorflow.keras.layers import Concatenate, Dense, Dropout, Flatten, Input
+from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
+from tensorflow.keras.metrics import CategoricalAccuracy, BinaryAccuracy
+from tensorflow.keras.optimizers import Adam
+from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D
 
@@ -22,7 +26,6 @@ class CNN_Model:
         :param num_classes: The number of classes (labels).
         :return: The VGG19 model.
         """
-        self._model = Sequential()
         self.num_classes = num_classes
         self.model_name = model_name
 
@@ -30,7 +33,7 @@ class CNN_Model:
 
     def create_model(self):
         """
-
+        Creates a CNN from an existing architecture with pre-trained weights on ImageNet.
         """
         # Reconfigure a single channel image input (greyscale) into a 3-channel greyscale input.
         single_channel_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
@@ -41,44 +44,159 @@ class CNN_Model:
             base_model = VGG19(include_top=False, weights='imagenet', input_tensor=triple_channel_input)
 
         # Add fully connected layers
-        self.model = Sequential()
+        self._model = Sequential()
 
         # Start with base model consisting of convolutional layers
-        self.model.add(base_model)
+        self._model.add(base_model)
 
         # Generate additional convolutional layers
         if config.model == "advanced":
-            self.model.add(Conv2D(1024, (3, 3),
+            self._model.add(Conv2D(1024, (3, 3),
                                   activation='relu',
                                   padding='same'))
-            self.model.add(Conv2D(1024, (3, 3),
+            self._model.add(Conv2D(1024, (3, 3),
                                   activation='relu',
                                   padding='same'))
-            self.model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+            self._model.add(MaxPooling2D((2, 2), strides=(2, 2)))
 
         # Flatten layer to convert each input into a 1D array (no parameters in this layer, just simple pre-processing).
-        self.model.add(Flatten())
+        self._model.add(Flatten())
 
         # Add fully connected hidden layers.
-        self.model.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
-        self.model.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
+        self._model.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
+        self._model.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
 
         # Possible dropout for regularisation can be added later and experimented with:
         # model.add(Dropout(0.1, name='Dropout_Regularization'))
 
         # Final output layer that uses softmax activation function (because the classes are exclusive).
         if self.num_classes == 2:
-            self.model.add(Dense(1, activation='sigmoid', name='Output'))
+            self._model.add(Dense(1, activation='sigmoid', name='Output'))
         else:
-            self.model.add(Dense(self.num_classes, activation='softmax', name='Output'))
+            self._model.add(Dense(self.num_classes, activation='softmax', name='Output'))
 
         # Print model details if running in debug mode.
         if config.verbose_mode:
-            print(self.model.summary())
+            print(self._model.summary())
+    
+    def train_model(self, train_x, train_y, val_x, val_y, batch_s, epochs1, epochs2):
+        """
+        Function to train network in two steps:
+        * Train network with initial VGG base layers frozen
+        * Unfreeze all layers and retrain with smaller learning rate
+        :param model: CNN model
+        :param train_x: training input
+        :param train_y: training outputs
+        :param val_x: validation inputs
+        :param val_y: validation outputs
+        :param batch_s: batch size
+        :param epochs1: epoch count for initial training
+        :param epochs2: epoch count for training all layers unfrozen
+        :return: trained network
+        """
+        # Freeze VGG19 pre-trained layers.
+        if config.image_size == "large":
+            self._model.layers[0].layers[1].trainable = False
+        else:
+            self._model.layers[0].trainable = False
 
+        # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
+
+        if config.dataset == "mini-MIAS":
+            self._model.compile(optimizer=Adam(1e-3),
+                          loss=CategoricalCrossentropy(),
+                          metrics=[CategoricalAccuracy()])
+
+            hist_1 = self._model.fit(
+                x=train_x,
+                y=train_y,
+                batch_size=batch_s,
+                steps_per_epoch=len(train_x) // batch_s,
+                validation_data=(val_x, val_y),
+                validation_steps=len(val_x) // batch_s,
+                epochs=epochs1,
+                callbacks=[
+                    EarlyStopping(monitor='val_categorical_accuracy', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=4)
+                ]
+            )
+
+        elif config.dataset == "CBIS-DDSM":
+            self._model.compile(optimizer=Adam(lr=1e-4),
+                          loss=BinaryCrossentropy(),
+                          metrics=[BinaryAccuracy()])
+
+            hist_1 = self._model.fit(x=train_x,
+                               validation_data=val_x,
+                               epochs=epochs1,
+                               callbacks=[
+                                   EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                                   ReduceLROnPlateau(patience=6)]
+                               )
+
+        # Plot the training loss and accuracy.
+        plot_training_results(hist_1, "Initial_training", True)
+
+        # Train a second time with a smaller learning rate and with all layers unfrozen
+        # (train over fewer epochs to prevent over-fitting).
+        if config.image_size == "large":
+            self._model.layers[0].layers[1].trainable = True
+        else:
+            self._model.layers[0].trainable = True
+
+        if config.dataset == "mini-MIAS":
+            self._model.compile(optimizer=Adam(1e-5),  # Very low learning rate
+                          loss=CategoricalCrossentropy(),
+                          metrics=[CategoricalAccuracy()])
+
+            hist_2 = self._model.fit(
+                x=train_x,
+                y=train_y,
+                batch_size=batch_s,
+                steps_per_epoch=len(train_x) // batch_s,
+                validation_data=(val_x, val_y),
+                validation_steps=len(val_x) // batch_s,
+                epochs=epochs2,
+                callbacks=[
+                    EarlyStopping(monitor='val_categorical_accuracy', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=6)
+                ]
+            )
+        elif config.dataset == "CBIS-DDSM":
+            self._model.compile(optimizer=Adam(lr=1e-5),  # Very low learning rate
+                          loss=BinaryCrossentropy(),
+                          metrics=[BinaryAccuracy()])
+
+            hist_2 = self._model.fit(x=train_x,
+                               validation_data=val_x,
+                               epochs=epochs2,
+                               callbacks=[
+                                   EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True),
+                                   ReduceLROnPlateau(patience=6)]
+                               )
+
+        # Plot the training loss and accuracy.
+        plot_training_results(hist_2, "Fine_tuning_training", False)
+        
+    def make_prediction(self, x):
+        """
+        :param x: Input.
+        :return: Model predictions.
+        """
+        if config.dataset == "mini-MIAS":
+            y_predict = self._model.predict(x=x_values.astype("float32"), batch_size=10)
+        elif config.dataset == "CBIS-DDSM":
+            y_predict = self._model.predict(x=x_values)
+        if config.verbose_mode:
+            print("Predictions:")
+            print(y_predict)
+        
+    def save_model(self):
+        model.save("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
+                                                                                config.image_size))
     @property
     def model(self):
-        return self.model()
+        return self._model
 
     @model.setter
     def model(self, value):

@@ -171,59 +171,7 @@ def plot_comparison_chart(df: pd.DataFrame) -> None:
     plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_{}.png".format(config.dataset, config.model, config.image_size, title), bbox_inches='tight')
     plt.show()
 
-
-def evaluate(y_true: list, y_pred: list, label_encoder: LabelEncoder, dataset: str, classification_type: str):
-    """
-    Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.
-    :param y_true: Ground truth of the data in one-hot-encoding type.
-    :param y_pred: Prediction result of the data in one-hot-encoding type.
-    :param label_encoder: The label encoder for y value (label).
-    :param dataset: The dataset to use.
-    :param classification_type: The classification type. Ex: N-B-M: normal, benign and malignant; B-M: benign and
-    malignant.
-    :return: None.
-    """
-    # Inverse transform y_true and y_pred from one-hot-encoding to original label.
-    if label_encoder.classes_.size == 2:
-        y_true_inv = y_true
-        y_pred_inv = np.round_(y_pred, 0)
-    else:
-        y_true_inv = label_encoder.inverse_transform(np.argmax(y_true, axis=1))
-        y_pred_inv = label_encoder.inverse_transform(np.argmax(y_pred, axis=1))
-
-    # Calculate accuracy.
-    accuracy = float('{:.4f}'.format(accuracy_score(y_true_inv, y_pred_inv)))
-    print('accuracy = {}\n'.format(accuracy))
-
-    # Print classification report for precision, recall and f1.
-    print(classification_report(y_true_inv, y_pred_inv, target_names=label_encoder.classes_))
-
-    # Plot confusion matrix and normalised confusion matrix.
-    cm = confusion_matrix(y_true_inv, y_pred_inv)  # calculate confusion matrix with original label of classes
-    plot_confusion_matrix(cm, 'd', label_encoder, False)
-    # Calculate normalized confusion matrix with original label of classes.
-    cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    cm_normalized[np.isnan(cm_normalized)] = 0
-    plot_confusion_matrix(cm_normalized, '.2f', label_encoder, True)
-
-    # Plot ROC curve.
-    if label_encoder.classes_.size == 2:  # binary classification
-        plot_roc_curve_binary(y_true, y_pred)
-    elif label_encoder.classes_.size >= 2:  # multi classification
-        plot_roc_curve_multiclass(y_true, y_pred, label_encoder)
-
-    # Compare our results with other papers' result.
-    with open('data_visualisation/other_paper_results.json') as config_file:  # load other papers' result from json file
-        data = json.load(config_file)
-    df = pd.DataFrame.from_records(data[dataset][classification_type],
-                                   columns=['paper', 'accuracy'])  # Filter data by dataset and classification type.
-    new_row = pd.DataFrame({'paper': 'Dissertation', 'accuracy': accuracy},
-                           index=[0])  # Add model result into dataframe to compare.
-    df = pd.concat([new_row, df]).reset_index(drop=True)
-    df['accuracy'] = pd.to_numeric(df['accuracy'])  # Digitize the accuracy column.
-    plot_comparison_chart(df)
-
-
+    
 def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     """
     Function to plot loss and accuracy over epoch count for training
