@@ -52,6 +52,12 @@ where:
 * `IMAGESIZE` is the image size to feed into the CNN model (`small` - 512x512px; or `large` - 2048x2048px). Default value is `small`.
 * `-v` is a flag controlling verbose mode, which prints additional statements for debugging purposes.
 
+Set the `PYTHONHASHSEED` environment variable to 0 before the program starts for reproducible results (e.g. when using hash-based operations):
+
+```
+PYTHONHASHSEED=0 python main.py [-h] -d DATASET -m MODEL [-r RUNMODE] [-i IMAGESIZE] [-v]
+```
+
 ## Dataset installation
 
 #### mini-MIAS dataset

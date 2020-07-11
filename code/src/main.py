@@ -1,6 +1,8 @@
 import argparse
 import time
 
+from tensorflow.keras.models import load_model
+
 import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, generate_image_transforms, \
@@ -8,7 +10,6 @@ from data_operations.data_preprocessing import dataset_stratified_split, generat
 from model.cnn_model import CNN_Model
 from model.vgg_model_large import generate_vgg_model_large
 from utils import create_label_encoder, print_error_message, print_num_gpus_available, print_runtime
-from tensorflow.keras.models import load_model
 
 
 def main() -> None:
