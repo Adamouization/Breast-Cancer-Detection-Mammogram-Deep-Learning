@@ -6,7 +6,6 @@ from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, generate_image_transforms, \
     import_cbisddsm_training_dataset, import_minimias_dataset
 from model.cnn_model import CNN_Model
-from model.vgg_model import generate_vgg_model
 from model.vgg_model_large import generate_vgg_model_large
 from utils import create_label_encoder, print_error_message, print_num_gpus_available, print_runtime
 from tensorflow.keras.models import load_model
@@ -50,18 +49,18 @@ def main() -> None:
 
             # Split training dataset into training/validation sets (75%/25% split).
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=images, labels=labels)
-            dataset_train = create_dataset(X_train, y_train)
-            dataset_val = create_dataset(X_val, y_val)
+            train_dataset = create_dataset(X_train, y_train)
+            validation_dataset = create_dataset(X_val, y_val)
 
             # Create and train CNN model.
 
             if config.image_size == "small":
-                model = generate_vgg_model(l_e.classes_.size)
+                model = CNN_Model("VGG", l_e.classes_.size)
             else:
                 model = generate_vgg_model_large(l_e.classes_.size)
 
-            model = train_network(model, dataset_train, None, dataset_val, None, config.BATCH_SIZE, config.EPOCH_1,
-                                  config.EPOCH_2)
+            model.train_model(train_dataset, None, validation_dataset, None, config.BATCH_SIZE, config.EPOCH_1,
+                              config.EPOCH_2)
 
         else:
             print_error_message()
@@ -77,8 +76,8 @@ def main() -> None:
         model.make_prediction(X_val)
         model.evaluate_model(y_val, l_e, config.dataset, 'N-B-M')
     elif config.dataset == "CBIS-DDSM":
-        y_pred = make_predictions(model, dataset_val)
-        evaluate(y_val, y_pred, l_e, config.dataset, 'B-M')
+        model.make_prediction(validation_dataset)
+        model.evaluate_model(y_val, l_e, config.dataset, 'B-M')
 
     # Print training runtime.
     print_runtime("Total", round(time.time() - start_time, 2))
