@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
 
@@ -50,7 +51,7 @@ def create_label_encoder():
 
 
 def print_cli_arguments() -> None:
-    print("\nCommand Line arguments:")
+    print("\nSettings used:")
     print("Dataset: {}".format(config.dataset))
     print("CNN Model: {}".format(config.model))
     print("Run mode: {}".format(config.run_mode))
@@ -59,4 +60,8 @@ def print_cli_arguments() -> None:
     print("Max number of epochs when original CNN layers are frozen: {}".format(config.max_epoch_frozen))
     print("Max number of epochs when original CNN layers are unfrozen: {}".format(config.max_epoch_unfrozen))
     print("Verbose mode: {}\n".format(config.verbose_mode))
+
     
+def save_output_figure(title: str) -> None:
+    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_{}.png".format(config.dataset, config.model, config.image_size, config.batch_size, config.max_epoch_frozen, config.max_epoch_unfrozen, title))
+    # bbox_inches='tight'

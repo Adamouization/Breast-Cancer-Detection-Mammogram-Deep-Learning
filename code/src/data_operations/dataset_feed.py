@@ -36,7 +36,19 @@ def parse_function_small(filename, label):
     image = tfio.image.decode_dicom_image(image_bytes, color_dim=True, scale="auto", dtype=tf.uint16)
     as_png = tf.image.encode_png(image[0])
     decoded_png = tf.io.decode_png(as_png, channels=1)
-    image = tf.image.resize(decoded_png, [config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['HEIGHT']])
+    if self.model_name == "VGG":
+        height = config.VGG_IMG_SIZE['HEIGHT']
+        width = config.VGG_IMG_SIZE['WIDTH']
+    elif self.model_name == "ResNet":
+        height = config.RESNET_IMG_SIZE['HEIGHT']
+        width = config.RESNET_IMG_SIZE['WIDTH']
+    elif self.model_name == "Inception":
+        height = config.INCEPTION_IMG_SIZE['HEIGHT']
+        width = config.INCEPTION_IMG_SIZE['WIDTH']
+    elif self.model_name == "Xception":
+        height = config.XCEPTION_IMG_SIZE['HEIGHT']
+        width = config.XCEPTION_IMG_SIZE['WIDTH']
+    image = tf.image.resize(decoded_png, [height, width])
     image /= 255
 
     return image, label
@@ -50,7 +62,19 @@ def parse_function_large(filename, label):
     image = tfio.image.decode_dicom_image(image_bytes,color_dim = True,  dtype=tf.uint16)
     as_png = tf.image.encode_png(image[0])
     decoded_png = tf.io.decode_png(as_png, channels=1)
-    image = tf.image.resize_with_pad(decoded_png, config.VGG_IMG_SIZE_LARGE['HEIGHT'], config.VGG_IMG_SIZE_LARGE['HEIGHT'])
+    if self.model_name == "VGG":
+        height = config.VGG_IMG_SIZE['HEIGHT']
+        width = config.VGG_IMG_SIZE['WIDTH']
+    elif self.model_name == "ResNet":
+        height = config.RESNET_IMG_SIZE['HEIGHT']
+        width = config.RESNET_IMG_SIZE['WIDTH']
+    elif self.model_name == "Inception":
+        height = config.INCEPTION_IMG_SIZE['HEIGHT']
+        width = config.INCEPTION_IMG_SIZE['WIDTH']
+    elif self.model_name == "Xception":
+        height = config.XCEPTION_IMG_SIZE['HEIGHT']
+        width = config.XCEPTION_IMG_SIZE['WIDTH']
+    image = tf.image.resize_with_pad(decoded_png, height, width)
     image /= 255
 
     return image, label

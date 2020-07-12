@@ -4,6 +4,7 @@ import pandas as pd
 import seaborn as sns
 
 import config
+from utils import save_output_figure
 
 
 def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised: bool) -> None:
@@ -35,11 +36,9 @@ def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised
     plt.tight_layout()
     bottom, top = ax.get_ylim()
     if is_normalised:
-        plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_CM-norm.png".format(config.dataset, config.model,
-                                                                                    config.image_size))
+        save_output_figure("CM-normalised")
     elif not is_normalised:
-        plt.savefig(
-            "../output/dataset-{}_model-{}_imagesize-{}_CM.png".format(config.dataset, config.model, config.image_size))
+        save_output_figure("CM")
     plt.show()
 
 
@@ -64,9 +63,7 @@ def plot_comparison_chart(df: pd.DataFrame) -> None:
     plt.title(title)
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=60, ha='right', rotation_mode='anchor')
     plt.tight_layout()
-    plt.savefig(
-        "../output/dataset-{}_model-{}_imagesize-{}_{}.png".format(config.dataset, config.model, config.image_size,
-                                                                   title), bbox_inches='tight')
+    save_output_figure(title)
     plt.show()
 
 
@@ -96,7 +93,5 @@ def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     plt.xlabel("Epoch #")
     plt.ylabel("Loss/Accuracy")
     plt.legend(loc="lower left")
-    plt.savefig(
-        "../output/dataset-{}_model-{}_imagesize-{}_{}.png".format(config.dataset, config.model, config.image_size,
-                                                                   plot_name))
+    save_output_figure(plot_name)
     plt.show()

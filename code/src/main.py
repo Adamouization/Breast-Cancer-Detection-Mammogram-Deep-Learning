@@ -42,7 +42,7 @@ def main() -> None:
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=X_train_rebalanced,
                                                                       labels=y_train_rebalanced)
             # Create and train CNN model.
-            model = CNN_Model("VGG", l_e.classes_.size)
+            model = CNN_Model(config.model, l_e.classes_.size)
             model.train_model(X_train, y_train, X_val, y_val, config.batch_size, config.max_epoch_frozen,
                               config.max_epoch_unfrozen)
 
@@ -58,7 +58,7 @@ def main() -> None:
             # Create and train CNN model.
 
             if config.image_size == "small":
-                model = CNN_Model("VGG", l_e.classes_.size)
+                model = CNN_Model(config.model, l_e.classes_.size)
             else:
                 model = generate_vgg_model_large(l_e.classes_.size)
 
@@ -75,6 +75,7 @@ def main() -> None:
         model = load_model("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
                                                                                         config.image_size))
     # Evaluate model results.
+    print_cli_arguments()
     if config.dataset == "mini-MIAS":
         model.make_prediction(X_val)
         model.evaluate_model(y_val, l_e, config.dataset, 'N-B-M')

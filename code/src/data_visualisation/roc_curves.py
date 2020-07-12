@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.metrics import auc, roc_curve
 
 import config
+from utils import save_output_figure
+
 
 
 def plot_roc_curve_binary(y_true: list, y_pred: list) -> None:
@@ -30,8 +32,7 @@ def plot_roc_curve_binary(y_true: list, y_pred: list) -> None:
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic')
     plt.legend(loc='lower right')
-    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_ROC-binary.png".format(config.dataset, config.model,
-                                                                                   config.image_size))
+    save_output_figure("ROC-binary")
     plt.show()
 
 
@@ -104,6 +105,5 @@ def plot_roc_curve_multiclass(y_true: list, y_pred: list, label_encoder) -> None
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic')
     plt.legend(loc='lower right')
-    plt.savefig("../output/dataset-{}_model-{}_imagesize-{}_ROC-multi.png".format(config.dataset, config.model,
-                                                                                  config.image_size))
+    save_output_figure("ROC-multi")
     plt.show()

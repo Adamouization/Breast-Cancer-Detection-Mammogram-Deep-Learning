@@ -61,9 +61,18 @@ def preprocess_image(image_path: str) -> np.ndarray:
     :param image_path: The path to the image to preprocess.
     :return: The pre-processed image in NumPy array format.
     """
+    if config.model == "VGG":
+        target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])
+    elif config.model == "ResNet":
+        target_size = (config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE["WIDTH"])    
+    elif config.model == "Inception":
+        target_size = (config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE["WIDTH"])
+    elif config.model == "Xception":
+        target_size = (config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE["WIDTH"])
+    
     image = load_img(image_path,
                      color_mode="grayscale",
-                     target_size=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"]))
+                     target_size=target_size)
     image = img_to_array(image)
     image /= 255.0
     return image
@@ -160,8 +169,19 @@ def generate_image_transforms(images, labels):
             a = create_individual_transform(indiv_class_images[k % len(indiv_class_images)], available_transforms)
             transformed_image = create_individual_transform(indiv_class_images[k % len(indiv_class_images)],
                                                             available_transforms)
-            transformed_image = transformed_image.reshape(1, config.VGG_IMG_SIZE['HEIGHT'],
-                                                          config.VGG_IMG_SIZE['WIDTH'], 1)
+            if config.model == "VGG":
+                height = config.VGG_IMG_SIZE['HEIGHT']
+                width = config.VGG_IMG_SIZE['WIDTH']
+            elif config.model == "ResNet":
+                height = config.RESNET_IMG_SIZE['HEIGHT']
+                width = config.RESNET_IMG_SIZE['WIDTH']
+            elif config.model == "Inception":
+                height = config.INCEPTION_IMG_SIZE['HEIGHT']
+                width = config.INCEPTION_IMG_SIZE['WIDTH']
+            elif config.model == "Xception":
+                height = config.XCEPTION_IMG_SIZE['HEIGHT']
+                width = config.XCEPTION_IMG_SIZE['WIDTH']
+            transformed_image = transformed_image.reshape(1, height, width, 1)
 
             images_with_transforms = np.append(images_with_transforms, transformed_image, axis=0)
             transformed_label = label.reshape(1, len(label))

@@ -17,10 +17,12 @@ INCEPTION_IMG_SIZE = {
     "HEIGHT": 299,
     "WIDTH": 299
 }
+XCEPTION_IMG_SIZE = INCEPTION_IMG_SIZE
+
 
 # Variables set by command line arguments/flags
 dataset = "mini-MIAS"       # The dataset to use.
-model = "basic"             # The model to use.
+model = "VGG"               # The model to use.
 run_mode = "training"       # The type of running mode, either training or testing.
 image_size = "small"        # Image resizing for VGG19 model.
 batch_size = 2              # Batch size.
