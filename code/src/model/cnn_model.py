@@ -54,15 +54,14 @@ class CNN_Model:
         # Start with base model consisting of convolutional layers
         self._model.add(base_model)
 
-        # Generate additional convolutional layers
-        if config.model == "advanced":
-            self._model.add(Conv2D(1024, (3, 3),
-                                   activation='relu',
-                                   padding='same'))
-            self._model.add(Conv2D(1024, (3, 3),
-                                   activation='relu',
-                                   padding='same'))
-            self._model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+        # Generate additional convolutional layers (advanced model)
+        # self._model.add(Conv2D(1024, (3, 3),
+        #                        activation='relu',
+        #                        padding='same'))
+        # self._model.add(Conv2D(1024, (3, 3),
+        #                        activation='relu',
+        #                        padding='same'))
+        # self._model.add(MaxPooling2D((2, 2), strides=(2, 2)))
 
         # Flatten layer to convert each input into a 1D array (no parameters in this layer, just simple pre-processing).
         self._model.add(Flatten())

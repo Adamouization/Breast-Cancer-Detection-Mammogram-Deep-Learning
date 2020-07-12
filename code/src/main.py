@@ -42,7 +42,8 @@ def main() -> None:
                                                                       labels=y_train_rebalanced)
             # Create and train CNN model.
             model = CNN_Model("VGG", l_e.classes_.size)
-            model.train_model(X_train, y_train, X_val, y_val, config.BATCH_SIZE, config.EPOCH_1, config.EPOCH_2)
+            model.train_model(X_train, y_train, X_val, y_val, config.batch_size, config.max_epoch_frozen,
+                              config.max_epoch_unfrozen)
 
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
@@ -60,8 +61,8 @@ def main() -> None:
             else:
                 model = generate_vgg_model_large(l_e.classes_.size)
 
-            model.train_model(train_dataset, None, validation_dataset, None, config.BATCH_SIZE, config.EPOCH_1,
-                              config.EPOCH_2)
+            model.train_model(train_dataset, None, validation_dataset, None, config.batch_size, config.max_epoch_frozen,
+                              config.max_epoch_unfrozen)
 
         else:
             print_error_message()
@@ -96,18 +97,35 @@ def parse_command_line_arguments() -> None:
                         help="The dataset to use. Must be either 'mini-MIAS' or 'CBIS-DDMS'."
                         )
     parser.add_argument("-m", "--model",
-                        default="basic",
+                        default="VGG",
                         required=True,
-                        help="The model to use. Must be either 'basic' or 'advanced'."
+                        help="The model to use. Must be either 'VGG' or 'XXXX'."
                         )
     parser.add_argument("-r", "--runmode",
                         default="train",
-                        help="Running mode: train model from scratch and make predictions, otherwise load pre-trained "
-                             "model for predictions. Must be either 'train' or 'test'."
+                        help="The mode to run the code in. Either train the model from scratch and make predictions, "
+                             "otherwise load a previously trained model for predictions. Must be either 'train' or "
+                             "'test'. Defaults to 'train'."
                         )
     parser.add_argument("-i", "--imagesize",
                         default="small",
-                        help="small: use resized images to 512x512, otherwise use 'large' to use 2048x2048 size image with model with extra convolutions for downsizing."
+                        help="The initial input image size to feed into the CNN model. If set to 'small', will use "
+                             "images resized to 512x512px. If set to 'large' will use images resized to 2048x2048px "
+                             "(using with extra convolution layers for downsizing). Defaults to 'small'."
+                        )
+    parser.add_argument("-b", "--batchsize",
+                        default=2,
+                        help="The batch size to use Defaults to 'small'."
+                        )
+    parser.add_argument("-e1", "--max_epoch_frozen",
+                        default=100,
+                        help="The maximum number of epochs in the first training phrase (with frozen layers). Defaults "
+                             "to 100."
+                        )
+    parser.add_argument("-e2", "--max_epoch_unfrozen",
+                        default=50,
+                        help="The maximum number of epochs in the second training phrase (with unfrozen layers). "
+                             "Defaults to 50."
                         )
     parser.add_argument("-v", "--verbose",
                         action="store_true",
@@ -119,6 +137,13 @@ def parse_command_line_arguments() -> None:
     config.model = args.model
     config.run_mode = args.runmode
     config.image_size = args.imagesize
+    if args.batchsize <= 0 or args.batchsize >= 25:
+        print_error_message()
+    config.batch_size = args.batchsize
+    if all([args.args.max_epoch_frozen, args.max_epoch_unfrozen]) <= 0:
+        print_error_message()
+    config.max_epoch_frozen = args.max_epoch_frozen
+    config.max_epoch_unfrozen = args.max_epoch_unfrozen
     config.verbose_mode = args.verbose
 
 

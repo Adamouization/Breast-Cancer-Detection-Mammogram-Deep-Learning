@@ -6,7 +6,7 @@ import config
 
 def create_dataset(x, y):
     """
-    Genereate a tensorflow dataset for feeding in the data
+    Generates a TF dataset for feeding in the data.
     :param x: X inputs - paths to images
     :param y: y values - labels for images
     :return: the dataset
@@ -19,7 +19,7 @@ def create_dataset(x, y):
         dataset = dataset.map(parse_function_large, num_parallel_calls=tf.data.experimental.AUTOTUNE)
     # Dataset to cache data and repeat until all samples have been run once in each epoch
     dataset = dataset.cache().repeat(1)
-    dataset = dataset.batch(config.BATCH_SIZE)
+    dataset = dataset.batch(config.batch_size)
     dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)
 
     return dataset

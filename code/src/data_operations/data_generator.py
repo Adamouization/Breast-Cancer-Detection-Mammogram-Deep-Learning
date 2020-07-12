@@ -1,8 +1,6 @@
 import numpy as np
 import pydicom
-from pydicom.data import get_testdata_files
 from tensorflow.keras.utils import Sequence
-from tensorflow.keras.utils import to_categorical
 from skimage.transform import resize
 
 import config
@@ -43,9 +41,8 @@ class DataGenerator(Sequence):
     Generates data using Sequence to cycle through images to be processed for training
     """
 
-    def __init__(self, list_IDs, labels, batch_size=config.BATCH_SIZE,
-                 dim=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH']),
-                 n_channels=1, shuffle=True):
+    def __init__(self, list_IDs, labels, batch_size=config.batch_size,
+                 dim=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH']), n_channels=1, shuffle=True):
         'Initialization'
         self.dim = dim
         self.labels = labels
