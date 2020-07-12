@@ -8,9 +8,14 @@ VGG_IMG_SIZE = {
     "HEIGHT": 512,
     "WIDTH": 512
 }
+RESNET_IMG_SIZE = VGG_IMG_SIZE
 VGG_IMG_SIZE_LARGE = {
     "HEIGHT": 2048,
     "WIDTH": 2048
+}
+INCEPTION_IMG_SIZE = {
+    "HEIGHT": 299,
+    "WIDTH": 299
 }
 
 # Variables set by command line arguments/flags

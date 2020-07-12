@@ -3,7 +3,7 @@ import ssl
 
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
-from tensorflow.keras.applications import VGG19
+from tensorflow.keras.applications import InceptionV3, VGG19
 from tensorflow.keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
 from tensorflow.keras.metrics import CategoricalAccuracy, BinaryAccuracy
@@ -15,7 +15,7 @@ from tensorflow.python.keras.layers import Conv2D, MaxPooling2D
 from data_visualisation.plots import *
 from data_visualisation.roc_curves import *
 
-# Required to download pre-trained weights for ImageNet (stored in ~/.keras/)
+# Required to download pre-trained weights for ImageNet (stored in ~/.keras/models/)
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
@@ -41,12 +41,17 @@ class CNN_Model:
         Creates a CNN from an existing architecture with pre-trained weights on ImageNet.
         """
         # Reconfigure a single channel image input (greyscale) into a 3-channel greyscale input.
-        single_channel_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
+        if self.model_name == "VGG":
+            single_channel_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
+        elif self.model_name == "Inception":
+            single_channel_input = Input(shape=(config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1))
         triple_channel_input = Concatenate()([single_channel_input, single_channel_input, single_channel_input])
 
-        # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.
+        # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluding the fully connected layers.
         if self.model_name == "VGG":
-            base_model = VGG19(include_top=False, weights='imagenet', input_tensor=triple_channel_input)
+            base_model = VGG19(include_top=False, weights="imagenet", input_tensor=triple_channel_input)
+        elif self.model_name == "Inception":
+            base_model = InceptionV3(include_top=False, weights="imagenet", input_tensor=triple_channel_input)
 
         # Add fully connected layers
         self._model = Sequential()

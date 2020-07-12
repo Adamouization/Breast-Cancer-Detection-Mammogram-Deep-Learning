@@ -98,9 +98,8 @@ def parse_command_line_arguments() -> None:
                         help="The dataset to use. Must be either 'mini-MIAS' or 'CBIS-DDMS'."
                         )
     parser.add_argument("-m", "--model",
-                        default="VGG",
                         required=True,
-                        help="The model to use. Must be either 'VGG' or 'XXXX'."
+                        help="The model to use. Must be either 'VGG' or 'Inception'."
                         )
     parser.add_argument("-r", "--runmode",
                         default="train",
