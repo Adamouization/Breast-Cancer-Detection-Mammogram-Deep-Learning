@@ -1,6 +1,8 @@
 from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
 
+import  config
+
 
 def print_runtime(text: str, runtime: float) -> None:
     """
@@ -45,3 +47,16 @@ def create_label_encoder():
     :return: The instantiated label encoder.
     """
     return LabelEncoder()
+
+
+def print_cli_arguments() -> None:
+    print("\nCommand Line arguments:")
+    print("Dataset: {}".format(config.dataset))
+    print("CNN Model: {}".format(config.model))
+    print("Run mode: {}".format(config.run_mode))
+    print("Model input image size: {}".format(config.image_size))
+    print("Batch size: {}".format(config.batch_size))
+    print("Max number of epochs when original CNN layers are frozen: {}".format(config.max_epoch_frozen))
+    print("Max number of epochs when original CNN layers are unfrozen: {}".format(config.max_epoch_unfrozen))
+    print("Verbose mode: {}\n".format(config.verbose_mode))
+    

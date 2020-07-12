@@ -9,7 +9,8 @@ from data_operations.data_preprocessing import dataset_stratified_split, generat
     import_cbisddsm_training_dataset, import_minimias_dataset
 from model.cnn_model import CNN_Model
 from model.vgg_model_large import generate_vgg_model_large
-from utils import create_label_encoder, print_error_message, print_num_gpus_available, print_runtime
+from utils import create_label_encoder, print_cli_arguments, print_error_message, \
+    print_num_gpus_available, print_runtime
 
 
 def main() -> None:
@@ -114,15 +115,18 @@ def parse_command_line_arguments() -> None:
                              "(using with extra convolution layers for downsizing). Defaults to 'small'."
                         )
     parser.add_argument("-b", "--batchsize",
+                        type=int,
                         default=2,
                         help="The batch size to use Defaults to 'small'."
                         )
     parser.add_argument("-e1", "--max_epoch_frozen",
+                        type=int,
                         default=100,
                         help="The maximum number of epochs in the first training phrase (with frozen layers). Defaults "
                              "to 100."
                         )
     parser.add_argument("-e2", "--max_epoch_unfrozen",
+                        type=int,
                         default=50,
                         help="The maximum number of epochs in the second training phrase (with unfrozen layers). "
                              "Defaults to 50."
@@ -140,11 +144,14 @@ def parse_command_line_arguments() -> None:
     if args.batchsize <= 0 or args.batchsize >= 25:
         print_error_message()
     config.batch_size = args.batchsize
-    if all([args.args.max_epoch_frozen, args.max_epoch_unfrozen]) <= 0:
+    if all([args.max_epoch_frozen, args.max_epoch_unfrozen]) <= 0:
         print_error_message()
     config.max_epoch_frozen = args.max_epoch_frozen
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
     config.verbose_mode = args.verbose
+    
+    if config.verbose_mode:
+        print_cli_arguments()
 
 
 if __name__ == '__main__':
