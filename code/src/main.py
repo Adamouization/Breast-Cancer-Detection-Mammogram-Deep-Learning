@@ -98,6 +98,10 @@ def parse_command_line_arguments() -> None:
                         required=True,
                         help="The dataset to use. Must be either 'mini-MIAS' or 'CBIS-DDMS'."
                         )
+    parser.add_argument("-mt", "--mammogramtype",
+                        default="all",
+                        help="The mammogram type to use. Can be either 'calc', 'mass' or 'all'."
+                        )
     parser.add_argument("-m", "--model",
                         required=True,
                         help="The model to use. Must be either 'VGG' or 'Inception'."
@@ -138,6 +142,7 @@ def parse_command_line_arguments() -> None:
 
     args = parser.parse_args()
     config.dataset = args.dataset
+    config.mammogram_type = args.mammogramtype
     config.model = args.model
     config.run_mode = args.runmode
     config.image_size = args.imagesize

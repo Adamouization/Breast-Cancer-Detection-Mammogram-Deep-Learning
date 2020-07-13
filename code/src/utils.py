@@ -53,6 +53,7 @@ def create_label_encoder():
 def print_cli_arguments() -> None:
     print("\nSettings used:")
     print("Dataset: {}".format(config.dataset))
+    print("Mammogram type: {}".format(config.mammogram_type))
     print("CNN Model: {}".format(config.model))
     print("Run mode: {}".format(config.run_mode))
     print("Model input image size: {}".format(config.image_size))

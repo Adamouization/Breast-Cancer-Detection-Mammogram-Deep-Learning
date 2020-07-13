@@ -45,7 +45,14 @@ def import_cbisddsm_training_dataset(label_encoder):
     :param label_encoder: The label encoder.
     :return: Two arrays, one for the image paths and one for the encoded labels.
     """
-    df = pd.read_csv("../data/CBIS-DDSM/training.csv")
+    cbis_ddsm_path = str()
+    if config.mammogram_type == "calc":
+        cbis_ddsm_path = "../data/CBIS-DDSM/calc-training.csv"
+    elif config.mammogram_type == "mass":
+        cbis_ddsm_path = "../data/CBIS-DDSM/mass-training.csv"
+    else:
+        cbis_ddsm_path = "../data/CBIS-DDSM/training.csv"
+    df = pd.read_csv("../data/CBIS-DDSM/calc-training.csv")
     list_IDs = df['img_path'].values
     labels = encode_labels(df['label'].values, label_encoder)
     return list_IDs, labels
