@@ -36,6 +36,7 @@ class CNN_Model:
         """
         self.num_classes = num_classes
         self.model_name = model_name
+        self.history = None
         self.prediction = None
 
         self.create_model()
@@ -104,23 +105,17 @@ class CNN_Model:
         # Print model details if running in debug mode.
         if config.verbose_mode:
             print(self._model.summary())
-            
-        
 
-    def train_model(self, train_x, train_y, val_x, val_y, batch_s, epochs1, epochs2):
+    def train_model(self, X_train, X_val, y_train, y_val) -> None:
         """
         Function to train network in two steps:
-        * Train network with initial VGG base layers frozen
-        * Unfreeze all layers and retrain with smaller learning rate
-        :param model: CNN model
-        :param train_x: training input
-        :param train_y: training outputs
-        :param val_x: validation inputs
-        :param val_y: validation outputs
-        :param batch_s: batch size
-        :param epochs1: epoch count for initial training
-        :param epochs2: epoch count for training all layers unfrozen
-        :return: trained network
+            * Train network with initial pre-trained CNN's layers frozen.
+            * Unfreeze all layers and retrain with smaller learning rate.
+        :param X_train: training input
+        :param X_val: training outputs
+        :param y_train: validation inputs
+        :param y_val: validation outputs
+        :return: None
         """
         # Freeze pre-trained CNN model layers: only train fully connected layers.
         if config.image_size == "large":
@@ -129,174 +124,143 @@ class CNN_Model:
             self._model.layers[0].trainable = False
 
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
-
-        if config.dataset == "mini-MIAS":
-            self._model.compile(optimizer=Adam(1e-3),
-                                loss=CategoricalCrossentropy(),
-                                metrics=[CategoricalAccuracy()])
-            hist_1 = self._model.fit(
-                x=train_x,
-                y=train_y,
-                batch_size=batch_s,
-                steps_per_epoch=len(train_x) // batch_s,
-                validation_data=(val_x, val_y),
-                validation_steps=len(val_x) // batch_s,
-                epochs=epochs1,
-                callbacks=[
-                    EarlyStopping(monitor='val_categorical_accuracy', patience=8, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=4)
-                ]
-            )
-        
-        elif config.dataset == "mini-MIAS-binary":
-            self._model.compile(optimizer=Adam(1e-3),
-                                loss=BinaryCrossentropy(),
-                                metrics=[BinaryAccuracy()])
-            hist_1 = self._model.fit(
-                x=train_x,
-                y=train_y,
-                batch_size=batch_s,
-                steps_per_epoch=len(train_x) // batch_s,
-                validation_data=(val_x, val_y),
-                validation_steps=len(val_x) // batch_s,
-                epochs=epochs1,
-                callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=4)
-                ]
-            )
-
-        elif config.dataset == "CBIS-DDSM":
-            self._model.compile(optimizer=Adam(lr=1e-3),
-                                loss=BinaryCrossentropy(),
-                                metrics=[BinaryAccuracy()])
-            hist_1 = self._model.fit(
-                x=train_x,
-                validation_data=val_x,
-                epochs=epochs1,
-                callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=4)]
-                )
-
+        self.compile_model(1e-3)
+        self.fit_model(X_train, X_val, y_train, y_val)
         # Plot the training loss and accuracy.
-        plot_training_results(hist_1, "Initial_training", True)
+        plot_training_results(self.history, "Initial_training", True)
 
-        # Train a second time with a smaller learning rate and with all layers unfrozen
-        # (train over fewer epochs to prevent over-fitting).
+        # Unfreeze all layers.
         if config.image_size == "large":
             self._model.layers[0].layers[1].trainable = True
         else:
             self._model.layers[0].trainable = True
 
-        if config.dataset == "mini-MIAS":
-            self._model.compile(optimizer=Adam(1e-5),  # Very low learning rate
+        # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
+        self.compile_model(1e-5)
+        self.fit_model(X_train, X_val, y_train, y_val)
+        # Plot the training loss and accuracy.
+        plot_training_results(self.history, "Fine_tuning_training", False)
+
+    def compile_model(self, learning_rate) -> None:
+        """
+        Compile the Keras CNN model.
+        :param learning_rate:
+        :return:
+        """
+        if self.num_classes == 2:
+            self._model.compile(optimizer=Adam(learning_rate),
+                                loss=BinaryCrossentropy(),
+                                metrics=[BinaryAccuracy()])
+        else:
+            self._model.compile(optimizer=Adam(learning_rate),
                                 loss=CategoricalCrossentropy(),
                                 metrics=[CategoricalAccuracy()])
-            hist_2 = self._model.fit(
-                x=train_x,
-                y=train_y,
-                batch_size=batch_s,
-                steps_per_epoch=len(train_x) // batch_s,
-                validation_data=(val_x, val_y),
-                validation_steps=len(val_x) // batch_s,
-                epochs=epochs2,
-                callbacks=[
-                    EarlyStopping(monitor='val_categorical_accuracy', patience=8, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=6)
-                ]
-            )
-        
-        elif config.dataset == "mini-MIAS-binary":
-            self._model.compile(optimizer=Adam(1e-5),  # Very low learning rate
-                                loss=BinaryCrossentropy(),
-                                metrics=[BinaryAccuracy()])
-            hist_2 = self._model.fit(
-                x=train_x,
-                y=train_y,
-                batch_size=batch_s,
-                steps_per_epoch=len(train_x) // batch_s,
-                validation_data=(val_x, val_y),
-                validation_steps=len(val_x) // batch_s,
-                epochs=epochs2,
+
+    def fit_model(self, X_train, X_val, y_train, y_val) -> None:
+        """
+        Fit the Keras CNN model and plot the training evolution.
+        :param X_train:
+        :param X_val:
+        :param y_train:
+        :param y_val:
+        :return:
+        """
+        if self.num_classes == 2:
+            self.history = self._model.fit(
+                x=X_train,
+                y=y_train,
+                batch_size=config.batch_size,
+                steps_per_epoch=len(X_train) // config.batch_size,
+                validation_data=(X_val, y_val),
+                validation_steps=len(X_val) // config.batch_size,
+                epochs=config.max_epoch_frozen,
                 callbacks=[
                     EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=6)
+                    ReduceLROnPlateau(patience=4)
                 ]
             )
-        
-        elif config.dataset == "CBIS-DDSM":
-            self._model.compile(optimizer=Adam(lr=1e-5),  # Very low learning rate
-                                loss=BinaryCrossentropy(),
-                                metrics=[BinaryAccuracy()])
-            hist_2 = self._model.fit(
-                x=train_x,
-                validation_data=val_x,
-                epochs=epochs2,
+        else:
+            self.history = self._model.fit(
+                x=X_train,
+                y=y_train,
+                batch_size=config.batch_size,
+                steps_per_epoch=len(X_train) // config.batch_size,
+                validation_data=(X_val, y_val),
+                validation_steps=len(X_val) // config.batch_size,
+                epochs=config.max_epoch_frozen,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=6)]
-                )
+                    EarlyStopping(monitor='val_categorical_accuracy', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=4)
+                ]
+            )
 
-        # Plot the training loss and accuracy.
-        plot_training_results(hist_2, "Fine_tuning_training", False)
+    def make_prediction(self, x_values):
+        """
+        :param x_values: The input.
+        :return: The model predictions (not probabilities).
+        """
+        if config.dataset == "mini-MIAS" or "mini-MIAS-binary":
+            self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=config.batch_size)
+        elif config.dataset == "CBIS-DDSM":
+            self.prediction = self._model.predict(x=x_values)
+        # print(self.prediction)
 
     def grid_search(self, X_train, y_train) -> None:
-        """Grid Search"""
-        print("doing grid search")
+        """
+        Perform grid search.
+        :param X_train:
+        :param y_train:
+        :return: Nones
+        """
         param_grid = {
             "optimizer": ["rmsprop", "adam"]
         }
-        
-        self._model.compile(optimizer=Adam(1e-3),
-                            loss=CategoricalCrossentropy(),
-                            metrics=[CategoricalAccuracy()])
-        
+
         # Wrap Keras model for Sklearn grid search.
+        self.compile_model(1e-3)
         model = KerasClassifier(build_fn=self.model)
-        
+
         # Grid Search
         gs = GridSearchCV(
             estimator=model,
-            param_grid=param_grid, 
-            cv=5, 
-            n_jobs=-1, 
+            param_grid=param_grid,
+            cv=5,
+            n_jobs=-1,
             scoring=make_scorer(log_loss)
         )
         gs_results = gs.fit(X_train, y_train)
-        
+
         # Save results to CSV.
         gs_results_df = pd.DataFrame(gs_results.cv_results_)
-        gs_results_df.to_csv("../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_grid_search_results.csv".format(
-            config.dataset,
-            config.model,
-            config.image_size,
-            config.batch_size,
-            config.max_epoch_frozen,
-            config.max_epoch_unfrozen
-        ))
-        
+        gs_results_df.to_csv(
+            "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_grid_search_results.csv".format(
+                config.dataset,
+                config.model,
+                config.image_size,
+                config.batch_size,
+                config.max_epoch_frozen,
+                config.max_epoch_unfrozen
+            ))
+
         # Save best model found.
         final_model = gs_results.best_estimator_
         print("\nBest model hyperparameters found by grid search algorithm:")
         print(final_model)
         print("Score: {}".format(gs_results.best_score_))
-        joblib.dump(final_model, "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_gs-best-estimator.pkl".format(
-            config.dataset,
-            config.model,
-            config.image_size,
-            config.batch_size,
-            config.max_epoch_frozen,
-            config.max_epoch_unfrozen
-        ))
-        
-        
-        
-    def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str):
+        joblib.dump(final_model,
+                    "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_gs-best-estimator.pkl".format(
+                        config.dataset,
+                        config.model,
+                        config.image_size,
+                        config.batch_size,
+                        config.max_epoch_frozen,
+                        config.max_epoch_unfrozen
+                    ))
+
+    def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str) -> None:
         """
         Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.
         :param y_true: Ground truth of the data in one-hot-encoding type.
-        :param y_pred: Prediction result of the data in one-hot-encoding type.
         :param label_encoder: The label encoder for y value (label).
         :param classification_type: The classification type. Ex: N-B-M: normal, benign and malignant; B-M: benign and
         malignant.
@@ -320,13 +284,15 @@ class CNN_Model:
                                                        output_dict=True)).transpose()
         report_df.append({'accuracy': accuracy}, ignore_index=True)
         report_df.to_csv(
-            "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_report.csv".format(config.dataset,
-                                                                                            config.model,
-                                                                                            config.image_size,
-                                                                                            config.batch_size,
-                                                                                            config.max_epoch_frozen,
-                                                                                            config.max_epoch_unfrozen),
-            index=False, 
+            "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_report.csv".format(
+                config.dataset,
+                config.model,
+                config.image_size,
+                config.batch_size,
+                config.max_epoch_frozen,
+                config.max_epoch_unfrozen
+            ),
+            index=False,
             header=True
         )
 
@@ -345,13 +311,14 @@ class CNN_Model:
             plot_roc_curve_multiclass(y_true, self.prediction, label_encoder)
 
         # Compare results with other similar papers' result.
-        with open('data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
+        with open(
+                'data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
             data = json.load(config_file)
-        
+
         dataset_key = config.dataset
         if config.dataset == "mini-MIAS-binary":
             dataset_key = "mini-MIAS"
-        
+
         df = pd.DataFrame.from_records(data[dataset_key][classification_type],
                                        columns=['paper', 'accuracy'])  # Filter data by dataset and classification type.
         new_row = pd.DataFrame({'paper': 'Dissertation', 'accuracy': accuracy},
@@ -360,20 +327,12 @@ class CNN_Model:
         df['accuracy'] = pd.to_numeric(df['accuracy'])  # Digitize the accuracy column.
         plot_comparison_chart(df)
 
-    def make_prediction(self, x_values):
+    def save_model(self) -> None:
         """
-        :param x: Input.
-        :return: Model predictions.
+        Saves the model in h5 format.
+        Currently saves in lab machines scratch space.
+        :return: None
         """
-        if config.dataset == "mini-MIAS" or "mini-MIAS-binary":
-            self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=config.batch_size)
-        elif config.dataset == "CBIS-DDSM":
-            self.prediction = self._model.predict(x=x_values)
-        # if config.verbose_mode:
-        #   print("Predictions:")
-        #   print(self.prediction)
-
-    def save_model(self):
         # Scratch space
         self._model.save(
             "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}.h5".format(
@@ -384,13 +343,20 @@ class CNN_Model:
                 config.max_epoch_frozen,
                 config.max_epoch_unfrozen)
         )
-        # Local directory below
-        # self._model.save("../saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}.h5".format(config.dataset, config.model, config.image_size, config.batch_size, config.max_epoch_frozen, config.max_epoch_unfrozen))
 
     @property
     def model(self):
+        """
+        CNN model getter.
+        :return: the model.
+        """
         return self._model
 
     @model.setter
-    def model(self, value):
+    def model(self, value) -> None:
+        """
+        CNN model setter.
+        :param value:
+        :return: None
+        """
         pass

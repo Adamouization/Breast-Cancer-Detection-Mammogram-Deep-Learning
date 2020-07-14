@@ -32,7 +32,6 @@ def generate_image_transforms(images, labels):
         label[i] = 1
         indices = [j for j, x in enumerate(labels) if np.array_equal(x, label)]
         indiv_class_images = [images[j] for j in indices]
-        
 
         for k in range(int(to_add[i])):
             a = create_individual_transform(indiv_class_images[k % len(indiv_class_images)], available_transforms)

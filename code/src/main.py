@@ -41,22 +41,22 @@ def main() -> None:
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
             if config.dataset == "mini-MIAS":
                 X_train, y_train = generate_image_transforms(X_train, y_train)
-            
+
             # Create CNN Model.
             model = CNN_Model(config.model, l_e.classes_.size)
-        
+
             # Fine-tune hyperparameters using grid search.
             if config.is_grid_search:
                 model.grid_search(X_train, y_train)
             # Train CNN model.
             else:
                 # Split training/validation set (75/25% split).
-                X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, 
+                X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
                                                                           dataset=X_train,
                                                                           labels=y_train)
                 model.train_model(X_train, y_train, X_val, y_val, config.batch_size, config.max_epoch_frozen,
                                   config.max_epoch_unfrozen)
-            
+
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
             images, labels = import_cbisddsm_training_dataset(l_e)
@@ -174,7 +174,7 @@ def parse_command_line_arguments() -> None:
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
     config.is_grid_search = args.gridsearch
     config.verbose_mode = args.verbose
-    
+
     if config.verbose_mode:
         print_cli_arguments()
 
