@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a02b6889-7c63-4ff1-bf81-7e3684b23a3e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/data_operations/data_transformations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_operations/data_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/data_generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_operations/dataset_feed.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/dataset_feed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset_processing_scripts/mask_csv_changes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset_processing_scripts/mask_csv_changes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_operations/data_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/other/data_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_operations/data_preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/data_preprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_visualisation/roc_curves.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_visualisation/roc_curves.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/cnn_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/cnn_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,10 +43,12 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/other" />
       <recent name="$PROJECT_DIR$/code" />
     </key>
   </component>
@@ -58,13 +61,13 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/code/src" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code/src/main.py" />
-      <option name="PARAMETERS" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+      <option name="PARAMETERS" value="-d mini-MIAS-binary -m VGG -b 2 -e1 4 -2 4 -v" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -92,7 +95,8 @@
       <workItem from="1594473399346" duration="1188000" />
       <workItem from="1594480401577" duration="2199000" />
       <workItem from="1594543580678" duration="8000" />
-      <workItem from="1594543600792" duration="1027000" />
+      <workItem from="1594543600792" duration="1256000" />
+      <workItem from="1594721282853" duration="1457000" />
     </task>
     <servers />
   </component>
@@ -105,31 +109,31 @@
     </ignored-roots>
   </component>
   <component name="WindowStateProjectService">
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1594463029558">
+    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1594722033696">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463029558" />
-    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1594463293428">
+    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722033696" />
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1594722750739">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.bottom/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293428" />
-    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1594463293427">
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722750739" />
+    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1594722750738">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.center/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293427" />
-    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1594463293427">
+    <state width="1638" height="295" key="GridCell.Tab.0.center/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722750738" />
+    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1594722750738">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.left/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293427" />
-    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1594463293428">
+    <state width="1638" height="295" key="GridCell.Tab.0.left/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722750738" />
+    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1594722750739">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1638" height="295" key="GridCell.Tab.0.right/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594463293428" />
-    <state x="341" y="132" key="SettingsEditor" timestamp="1594543885913">
+    <state width="1638" height="295" key="GridCell.Tab.0.right/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722750739" />
+    <state x="341" y="132" key="SettingsEditor" timestamp="1594721320801">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="341" y="145" key="SettingsEditor/-136.-1057.1920.1057/0.23.1680.967@0.23.1680.967" timestamp="1594401724434" />
-    <state x="341" y="132" key="SettingsEditor/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594543885913" />
+    <state x="341" y="132" key="SettingsEditor/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594721320801" />
     <state x="628" y="446" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594482471233">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -140,6 +144,7 @@
     <state x="541" y="280" width="598" height="490" key="find.popup/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594402615684" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/code$main.coverage" NAME="main Coverage Results" MODIFIED="1594722034757" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/Breast_Cancer_Detection_and_Segmentation$main.coverage" NAME="main Coverage Results" MODIFIED="1594463032320" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code/src" />
   </component>
 </project>

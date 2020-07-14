@@ -5,12 +5,13 @@ from tensorflow.keras.models import load_model
 
 import config
 from data_operations.dataset_feed import create_dataset
-from data_operations.data_preprocessing import dataset_stratified_split, generate_image_transforms, \
-    import_cbisddsm_training_dataset, import_minimias_dataset
+from data_operations.data_preprocessing import dataset_stratified_split, import_cbisddsm_training_dataset, \
+    import_minimias_dataset
+from data_operations.data_transformations import generate_image_transforms
 from model.cnn_model import CNN_Model
 from model.vgg_model_large import generate_vgg_model_large
-from utils import create_label_encoder, print_cli_arguments, print_error_message, \
-    print_num_gpus_available, print_runtime
+from utils import create_label_encoder, print_cli_arguments, print_error_message, print_num_gpus_available, \
+    print_runtime
 
 
 def main() -> None:
@@ -89,9 +90,10 @@ def main() -> None:
 
 def parse_command_line_arguments() -> None:
     """
-    Parse command line arguments and save their value in config.py.
+    Parse command line arguments and save their value in global config.py variables.
     :return: None
     """
+    # Create CLI arguments parser.
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--dataset",
                         default="mini-MIAS",
@@ -140,6 +142,7 @@ def parse_command_line_arguments() -> None:
                         help="Verbose mode: include this flag additional print statements for debugging purposes."
                         )
 
+    # Parse and save CLI arguments to global config.py variables.
     args = parser.parse_args()
     config.dataset = args.dataset
     config.mammogram_type = args.mammogramtype
@@ -154,7 +157,7 @@ def parse_command_line_arguments() -> None:
     config.max_epoch_frozen = args.max_epoch_frozen
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
     config.verbose_mode = args.verbose
-    
+
     if config.verbose_mode:
         print_cli_arguments()
 

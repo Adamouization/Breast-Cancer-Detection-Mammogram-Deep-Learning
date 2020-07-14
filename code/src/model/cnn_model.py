@@ -25,8 +25,8 @@ class CNN_Model:
     def __init__(self, model_name: str, num_classes: int):
         """
         Function to create a VGG19 model pre-trained with custom FC Layers.
-        If the "advanced" command line argument is selected, adds an extra convolutional layer with extra filters to support
-        larger images.
+        If the "advanced" command line argument is selected, adds an extra convolutional layer with extra filters to
+        support larger images.
         :param model_name: The CNN model to use.
         :param num_classes: The number of classes (labels).
         :return: The VGG19 model.
@@ -47,12 +47,16 @@ class CNN_Model:
         elif self.model_name == "ResNet":
             single_channel_input = Input(shape=(config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 1))
         elif self.model_name == "Inception":
-            single_channel_input = Input(shape=(config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1))
+            single_channel_input = Input(
+                shape=(config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1))
         elif self.model_name == "Xception":
-            single_channel_input = Input(shape=(config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 1))
+            single_channel_input = Input(
+                shape=(config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 1)
+            )
         triple_channel_input = Concatenate()([single_channel_input, single_channel_input, single_channel_input])
 
-        # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluding the fully connected layers.
+        # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluding the fully
+        # connected layers.
         if self.model_name == "VGG":
             base_model = VGG19(include_top=False, weights="imagenet", input_tensor=triple_channel_input)
         elif self.model_name == "ResNet":
@@ -222,11 +226,17 @@ class CNN_Model:
 
         # Print and save classification report for precision, recall and f1 score metrics.
         print(classification_report(y_true_inv, y_pred_inv, target_names=label_encoder.classes_))
-        report_df = pd.DataFrame(classification_report(y_true_inv, y_pred_inv, target_names=label_encoder.classes_, output_dict=True)).transpose()
+        report_df = pd.DataFrame(classification_report(y_true_inv, y_pred_inv, target_names=label_encoder.classes_,
+                                                       output_dict=True)).transpose()
         report_df.append({'accuracy': accuracy}, ignore_index=True)
         report_df.to_csv(
-            "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_report.csv".format(config.dataset, config.model, config.image_size, config.batch_size, config.max_epoch_frozen, config.max_epoch_unfrozen),
-            index = False, header=True
+            "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_report.csv".format(config.dataset,
+                                                                                            config.model,
+                                                                                            config.image_size,
+                                                                                            config.batch_size,
+                                                                                            config.max_epoch_frozen,
+                                                                                            config.max_epoch_unfrozen),
+            index=False, header=True
         )
 
         # Plot confusion matrix and normalised confusion matrix.
@@ -264,16 +274,23 @@ class CNN_Model:
             self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=10)
         elif config.dataset == "CBIS-DDSM":
             self.prediction = self._model.predict(x=x_values)
-        #if config.verbose_mode:
+        # if config.verbose_mode:
         #   print("Predictions:")
         #   print(self.prediction)
 
     def save_model(self):
         # Scratch space
-        self._model.save("/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}.h5".format(config.dataset, config.model, config.image_size, config.batch_size, config.max_epoch_frozen, config.max_epoch_unfrozen))
+        self._model.save(
+            "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}.h5".format(
+                config.dataset,
+                config.model,
+                config.image_size,
+                config.batch_size,
+                config.max_epoch_frozen,
+                config.max_epoch_unfrozen)
+        )
         # Local directory below
-#         self._model.save("../saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}.h5".format(config.dataset, config.model, config.image_size, config.batch_size, config.max_epoch_frozen, config.max_epoch_unfrozen))
-
+        # self._model.save("../saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}.h5".format(config.dataset, config.model, config.image_size, config.batch_size, config.max_epoch_frozen, config.max_epoch_unfrozen))
 
     @property
     def model(self):

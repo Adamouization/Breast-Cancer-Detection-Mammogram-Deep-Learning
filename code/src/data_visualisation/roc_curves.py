@@ -6,7 +6,6 @@ import config
 from utils import save_output_figure
 
 
-
 def plot_roc_curve_binary(y_true: list, y_pred: list) -> None:
     """
     Plot ROC curve for binary classification.
