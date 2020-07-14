@@ -221,10 +221,15 @@ def get_class_balances(y_vals):
     :param y_vals: labels
     :return: array count of each class
     """
-    num_classes = len(y_vals[0])
-    counts = np.zeros(num_classes)
-    for y_val in y_vals:
-        for i in range(num_classes):
-            counts[i] += y_val[i]
-
-    return (counts.tolist())
+    if config.dataset == "mini-MIAS":
+        num_classes = len(y_vals[0])
+        counts = np.zeros(num_classes)
+        for y_val in y_vals:
+            for i in range(num_classes):
+                counts[i] += y_val[i]
+        print(counts.tolist())
+        return (counts.tolist())
+    
+    elif config.dataset == "mini-MIAS-binary":
+        num_classes = 2
+    

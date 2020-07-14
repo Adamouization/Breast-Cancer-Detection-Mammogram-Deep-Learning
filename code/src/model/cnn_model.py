@@ -4,7 +4,7 @@ import ssl
 import pandas as pd
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
-from tensorflow.keras.applications import InceptionV3, ResNet50, VGG19, Xception
+from tensorflow.keras.applications import InceptionV3, ResNet50, ResNet50V2, VGG19, Xception
 from tensorflow.keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
 from tensorflow.keras.metrics import CategoricalAccuracy, BinaryAccuracy
@@ -41,7 +41,7 @@ class CNN_Model:
         """
         Creates a CNN from an existing architecture with pre-trained weights on ImageNet.
         """
-        # Reconfigure a single channel image input (greyscale) into a 3-channel greyscale input.
+        # Reconfigure a single channel image input (greyscale) into a 3-channel greyscale input (tensor).
         if self.model_name == "VGG":
             single_channel_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
         elif self.model_name == "ResNet":
@@ -56,7 +56,7 @@ class CNN_Model:
         if self.model_name == "VGG":
             base_model = VGG19(include_top=False, weights="imagenet", input_tensor=triple_channel_input)
         elif self.model_name == "ResNet":
-            base_model = ResNet50(include_top=False, weights="imagenet", input_tensor=triple_channel_input)
+            base_model = ResNet50V2(include_top=False, weights="imagenet", input_tensor=triple_channel_input)
         elif self.model_name == "Inception":
             base_model = InceptionV3(include_top=False, weights="imagenet", input_tensor=triple_channel_input)
         elif self.model_name == "Xception":
@@ -81,8 +81,9 @@ class CNN_Model:
         self._model.add(Flatten())
 
         # Add fully connected hidden layers.
-        self._model.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
-        self._model.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
+        self._model.add(Dense(units=512, activation='relu', name='Dense 1'))
+        self._model.add(Dense(units=128, activation='relu', name='Dense 2'))
+        self._model.add(Dense(units=32, activation='relu', name='Dense 3'))
 
         # Possible dropout for regularisation can be added later and experimented with:
         # model.add(Dropout(0.1, name='Dropout_Regularization'))
@@ -112,7 +113,7 @@ class CNN_Model:
         :param epochs2: epoch count for training all layers unfrozen
         :return: trained network
         """
-        # Freeze VGG19 pre-trained layers.
+        # Freeze pre-trained CNN model layers: only train fully connected layers.
         if config.image_size == "large":
             self._model.layers[0].layers[1].trainable = False
         else:
@@ -140,7 +141,7 @@ class CNN_Model:
             )
 
         elif config.dataset == "CBIS-DDSM":
-            self._model.compile(optimizer=Adam(lr=1e-4),
+            self._model.compile(optimizer=Adam(lr=1e-3),
                                 loss=BinaryCrossentropy(),
                                 metrics=[BinaryAccuracy()])
 

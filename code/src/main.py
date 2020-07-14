@@ -31,7 +31,7 @@ def main() -> None:
     if config.run_mode == "train":
 
         # Multi-class classification (mini-MIAS dataset)
-        if config.dataset == "mini-MIAS":
+        if config.dataset == "mini-MIAS" or "mini-MIAS-binary":
             # Import entire dataset.
             images, labels = import_minimias_dataset(data_dir="../data/{}/images_processed".format(config.dataset),
                                                      label_encoder=l_e)

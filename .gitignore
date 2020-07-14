@@ -1,6 +1,14 @@
 # Local files
 
-# ...
+code/data/mini-MIAS/images_original
+code/data/mini-MIAS/images_processed
+code/data/mini-MIAS-binary/images_original
+code/data/mini-MIAS-binary/images_processed
+code/.idea
+*.tar.gz
+*.zip
+code/output
+code/saved_models
 
 # ______________________________________________________________________________________________________________________
 
