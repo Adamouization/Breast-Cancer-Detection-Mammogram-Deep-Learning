@@ -59,7 +59,7 @@ def parse_function_large(filename, label):
     mapping function to convert filename to array of pixel values for larger images we use resize with padding
     """
     image_bytes = tf.io.read_file(filename)
-    image = tfio.image.decode_dicom_image(image_bytes,color_dim = True,  dtype=tf.uint16)
+    image = tfio.image.decode_dicom_image(image_bytes, color_dim = True, dtype=tf.uint16)
     as_png = tf.image.encode_png(image[0])
     decoded_png = tf.io.decode_png(as_png, channels=1)
     if config.model == "VGG":

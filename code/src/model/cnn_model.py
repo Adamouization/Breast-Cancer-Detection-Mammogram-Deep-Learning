@@ -1,14 +1,17 @@
 import json
 import ssl
 
+import joblib
 import pandas as pd
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, log_loss, make_scorer
+from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.applications import InceptionV3, ResNet50, ResNet50V2, VGG19, Xception
 from tensorflow.keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
 from tensorflow.keras.metrics import CategoricalAccuracy, BinaryAccuracy
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D
@@ -101,6 +104,8 @@ class CNN_Model:
         # Print model details if running in debug mode.
         if config.verbose_mode:
             print(self._model.summary())
+            
+        
 
     def train_model(self, train_x, train_y, val_x, val_y, batch_s, epochs1, epochs2):
         """
@@ -236,6 +241,57 @@ class CNN_Model:
         # Plot the training loss and accuracy.
         plot_training_results(hist_2, "Fine_tuning_training", False)
 
+    def grid_search(self, X_train, y_train) -> None:
+        """Grid Search"""
+        print("doing grid search")
+        param_grid = {
+            "optimizer": ["rmsprop", "adam"]
+        }
+        
+        self._model.compile(optimizer=Adam(1e-3),
+                            loss=CategoricalCrossentropy(),
+                            metrics=[CategoricalAccuracy()])
+        
+        # Wrap Keras model for Sklearn grid search.
+        model = KerasClassifier(build_fn=self.model)
+        
+        # Grid Search
+        gs = GridSearchCV(
+            estimator=model,
+            param_grid=param_grid, 
+            cv=5, 
+            n_jobs=-1, 
+            scoring=make_scorer(log_loss)
+        )
+        gs_results = gs.fit(X_train, y_train)
+        
+        # Save results to CSV.
+        gs_results_df = pd.DataFrame(gs_results.cv_results_)
+        gs_results_df.to_csv("../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_grid_search_results.csv".format(
+            config.dataset,
+            config.model,
+            config.image_size,
+            config.batch_size,
+            config.max_epoch_frozen,
+            config.max_epoch_unfrozen
+        ))
+        
+        # Save best model found.
+        final_model = gs_results.best_estimator_
+        print("\nBest model hyperparameters found by grid search algorithm:")
+        print(final_model)
+        print("Score: {}".format(gs_results.best_score_))
+        joblib.dump(final_model, "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_gs-best-estimator.pkl".format(
+            config.dataset,
+            config.model,
+            config.image_size,
+            config.batch_size,
+            config.max_epoch_frozen,
+            config.max_epoch_unfrozen
+        ))
+        
+        
+        
     def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str):
         """
         Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.

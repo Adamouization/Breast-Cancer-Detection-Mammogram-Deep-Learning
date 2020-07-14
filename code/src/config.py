@@ -29,4 +29,5 @@ image_size = "small"        # Image resizing for VGG19 model.
 batch_size = 2              # Batch size.
 max_epoch_frozen = 100      # Max number of epochs when original CNN layers are frozen.
 max_epoch_unfrozen = 50     # Max number of epochs when original CNN layers are unfrozen.
+is_grid_search = False      # Run the grid search algorithm to determine the optimal hyper-parameters for the model.
 verbose_mode = False        # Boolean used to print additional logs for debugging purposes.

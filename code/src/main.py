@@ -37,17 +37,26 @@ def main() -> None:
             images, labels = import_minimias_dataset(data_dir="../data/{}/images_processed".format(config.dataset),
                                                      label_encoder=l_e)
 
-            # Split dataset into training/test/validation sets (60%/20%/20% split).
+            # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
             if config.dataset == "mini-MIAS":
                 X_train, y_train = generate_image_transforms(X_train, y_train)
-            X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=X_train,
-                                                                      labels=y_train)
-            # Create and train CNN model.
+            
+            # Create CNN Model.
             model = CNN_Model(config.model, l_e.classes_.size)
-            model.train_model(X_train, y_train, X_val, y_val, config.batch_size, config.max_epoch_frozen,
-                              config.max_epoch_unfrozen)
-
+        
+            # Fine-tune hyperparameters using grid search.
+            if config.is_grid_search:
+                model.grid_search(X_train, y_train)
+            # Train CNN model.
+            else:
+                # Split training/validation set (75/25% split).
+                X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, 
+                                                                          dataset=X_train,
+                                                                          labels=y_train)
+                model.train_model(X_train, y_train, X_val, y_val, config.batch_size, config.max_epoch_frozen,
+                                  config.max_epoch_unfrozen)
+            
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
             images, labels = import_cbisddsm_training_dataset(l_e)
@@ -58,7 +67,6 @@ def main() -> None:
             validation_dataset = create_dataset(X_val, y_val)
 
             # Create and train CNN model.
-
             if config.image_size == "small":
                 model = CNN_Model(config.model, l_e.classes_.size)
             else:
@@ -140,6 +148,12 @@ def parse_command_line_arguments() -> None:
                         help="The maximum number of epochs in the second training phrase (with unfrozen layers). "
                              "Defaults to 50."
                         )
+    parser.add_argument("-gs", "--gridsearch",
+                        action="store_true",
+                        default=False,
+                        help="Include this flag to run the grid search algorithm to determine the optimal "
+                             "hyperparameters for the CNN model."
+                        )
     parser.add_argument("-v", "--verbose",
                         action="store_true",
                         help="Verbose mode: include this flag additional print statements for debugging purposes."
@@ -158,6 +172,7 @@ def parse_command_line_arguments() -> None:
         print_error_message()
     config.max_epoch_frozen = args.max_epoch_frozen
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
+    config.is_grid_search = args.gridsearch
     config.verbose_mode = args.verbose
     
     if config.verbose_mode:
