@@ -10,8 +10,8 @@ from data_operations.data_preprocessing import dataset_stratified_split, import_
 from data_operations.data_transformations import generate_image_transforms
 from model.cnn_model import CNN_Model
 from model.vgg_model_large import generate_vgg_model_large
-from utils import create_label_encoder, print_cli_arguments, print_error_message, print_num_gpus_available, \
-    print_runtime
+from utils import create_label_encoder, print_cli_arguments, print_error_message, \
+    print_num_gpus_available, print_runtime
 
 
 def main() -> None:
@@ -39,9 +39,10 @@ def main() -> None:
 
             # Split dataset into training/test/validation sets (60%/20%/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
-            X_train_rebalanced, y_train_rebalanced = generate_image_transforms(X_train, y_train)
-            X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=X_train_rebalanced,
-                                                                      labels=y_train_rebalanced)
+            if config.dataset == "mini-MIAS":
+                X_train, y_train = generate_image_transforms(X_train, y_train)
+            X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=X_train,
+                                                                      labels=y_train)
             # Create and train CNN model.
             model = CNN_Model(config.model, l_e.classes_.size)
             model.train_model(X_train, y_train, X_val, y_val, config.batch_size, config.max_epoch_frozen,
@@ -79,10 +80,13 @@ def main() -> None:
     print_cli_arguments()
     if config.dataset == "mini-MIAS":
         model.make_prediction(X_val)
-        model.evaluate_model(y_val, l_e, config.dataset, 'N-B-M')
+        model.evaluate_model(y_val, l_e, 'N-B-M')
+    elif config.dataset == "mini-MIAS-binary":
+        model.make_prediction(X_val)
+        model.evaluate_model(y_val, l_e, 'B-M')
     elif config.dataset == "CBIS-DDSM":
         model.make_prediction(validation_dataset)
-        model.evaluate_model(y_val, l_e, config.dataset, 'B-M')
+        model.evaluate_model(y_val, l_e, 'B-M')
 
     # Print training runtime.
     print_runtime("Total", round(time.time() - start_time, 2))
@@ -90,10 +94,9 @@ def main() -> None:
 
 def parse_command_line_arguments() -> None:
     """
-    Parse command line arguments and save their value in global config.py variables.
+    Parse command line arguments and save their value in config.py.
     :return: None
     """
-    # Create CLI arguments parser.
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--dataset",
                         default="mini-MIAS",
@@ -142,7 +145,6 @@ def parse_command_line_arguments() -> None:
                         help="Verbose mode: include this flag additional print statements for debugging purposes."
                         )
 
-    # Parse and save CLI arguments to global config.py variables.
     args = parser.parse_args()
     config.dataset = args.dataset
     config.mammogram_type = args.mammogramtype
@@ -157,7 +159,7 @@ def parse_command_line_arguments() -> None:
     config.max_epoch_frozen = args.max_epoch_frozen
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
     config.verbose_mode = args.verbose
-
+    
     if config.verbose_mode:
         print_cli_arguments()
 

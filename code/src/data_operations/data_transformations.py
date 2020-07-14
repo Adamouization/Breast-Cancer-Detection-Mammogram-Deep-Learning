@@ -32,6 +32,7 @@ def generate_image_transforms(images, labels):
         label[i] = 1
         indices = [j for j, x in enumerate(labels) if np.array_equal(x, label)]
         indiv_class_images = [images[j] for j in indices]
+        
 
         for k in range(int(to_add[i])):
             a = create_individual_transform(indiv_class_images[k % len(indiv_class_images)], available_transforms)
@@ -110,14 +111,10 @@ def get_class_balances(y_vals):
     :param y_vals: labels
     :return: array count of each class
     """
-    if config.dataset == "mini-MIAS":
-        num_classes = len(y_vals[0])
-        counts = np.zeros(num_classes)
-        for y_val in y_vals:
-            for i in range(num_classes):
-                counts[i] += y_val[i]
-        print(counts.tolist())
-        return (counts.tolist())
-
-    elif config.dataset == "mini-MIAS-binary":
-        num_classes = 2
+    num_classes = len(y_vals[0])
+    counts = np.zeros(num_classes)
+    for y_val in y_vals:
+        for i in range(num_classes):
+            counts[i] += y_val[i]
+    print(counts.tolist())
+    return (counts.tolist())

@@ -85,9 +85,9 @@ class CNN_Model:
         self._model.add(Flatten())
 
         # Add fully connected hidden layers.
-        self._model.add(Dense(units=512, activation='relu', name='Dense 1'))
-        self._model.add(Dense(units=128, activation='relu', name='Dense 2'))
-        self._model.add(Dense(units=32, activation='relu', name='Dense 3'))
+        self._model.add(Dense(units=512, activation='relu', name='Dense_1'))
+        self._model.add(Dense(units=128, activation='relu', name='Dense_2'))
+        self._model.add(Dense(units=32, activation='relu', name='Dense_3'))
 
         # Possible dropout for regularisation can be added later and experimented with:
         # model.add(Dropout(0.1, name='Dropout_Regularization'))
@@ -129,7 +129,6 @@ class CNN_Model:
             self._model.compile(optimizer=Adam(1e-3),
                                 loss=CategoricalCrossentropy(),
                                 metrics=[CategoricalAccuracy()])
-
             hist_1 = self._model.fit(
                 x=train_x,
                 y=train_y,
@@ -143,19 +142,37 @@ class CNN_Model:
                     ReduceLROnPlateau(patience=4)
                 ]
             )
+        
+        elif config.dataset == "mini-MIAS-binary":
+            self._model.compile(optimizer=Adam(1e-3),
+                                loss=BinaryCrossentropy(),
+                                metrics=[BinaryAccuracy()])
+            hist_1 = self._model.fit(
+                x=train_x,
+                y=train_y,
+                batch_size=batch_s,
+                steps_per_epoch=len(train_x) // batch_s,
+                validation_data=(val_x, val_y),
+                validation_steps=len(val_x) // batch_s,
+                epochs=epochs1,
+                callbacks=[
+                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=4)
+                ]
+            )
 
         elif config.dataset == "CBIS-DDSM":
             self._model.compile(optimizer=Adam(lr=1e-3),
                                 loss=BinaryCrossentropy(),
                                 metrics=[BinaryAccuracy()])
-
-            hist_1 = self._model.fit(x=train_x,
-                                     validation_data=val_x,
-                                     epochs=epochs1,
-                                     callbacks=[
-                                         EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
-                                         ReduceLROnPlateau(patience=6)]
-                                     )
+            hist_1 = self._model.fit(
+                x=train_x,
+                validation_data=val_x,
+                epochs=epochs1,
+                callbacks=[
+                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=4)]
+                )
 
         # Plot the training loss and accuracy.
         plot_training_results(hist_1, "Initial_training", True)
@@ -171,7 +188,6 @@ class CNN_Model:
             self._model.compile(optimizer=Adam(1e-5),  # Very low learning rate
                                 loss=CategoricalCrossentropy(),
                                 metrics=[CategoricalAccuracy()])
-
             hist_2 = self._model.fit(
                 x=train_x,
                 y=train_y,
@@ -185,29 +201,47 @@ class CNN_Model:
                     ReduceLROnPlateau(patience=6)
                 ]
             )
+        
+        elif config.dataset == "mini-MIAS-binary":
+            self._model.compile(optimizer=Adam(1e-5),  # Very low learning rate
+                                loss=BinaryCrossentropy(),
+                                metrics=[BinaryAccuracy()])
+            hist_2 = self._model.fit(
+                x=train_x,
+                y=train_y,
+                batch_size=batch_s,
+                steps_per_epoch=len(train_x) // batch_s,
+                validation_data=(val_x, val_y),
+                validation_steps=len(val_x) // batch_s,
+                epochs=epochs2,
+                callbacks=[
+                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=6)
+                ]
+            )
+        
         elif config.dataset == "CBIS-DDSM":
             self._model.compile(optimizer=Adam(lr=1e-5),  # Very low learning rate
                                 loss=BinaryCrossentropy(),
                                 metrics=[BinaryAccuracy()])
-
-            hist_2 = self._model.fit(x=train_x,
-                                     validation_data=val_x,
-                                     epochs=epochs2,
-                                     callbacks=[
-                                         EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True),
-                                         ReduceLROnPlateau(patience=6)]
-                                     )
+            hist_2 = self._model.fit(
+                x=train_x,
+                validation_data=val_x,
+                epochs=epochs2,
+                callbacks=[
+                    EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=6)]
+                )
 
         # Plot the training loss and accuracy.
         plot_training_results(hist_2, "Fine_tuning_training", False)
 
-    def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, dataset: str, classification_type: str):
+    def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str):
         """
         Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.
         :param y_true: Ground truth of the data in one-hot-encoding type.
         :param y_pred: Prediction result of the data in one-hot-encoding type.
         :param label_encoder: The label encoder for y value (label).
-        :param dataset: The dataset to use.
         :param classification_type: The classification type. Ex: N-B-M: normal, benign and malignant; B-M: benign and
         malignant.
         :return: None.
@@ -236,11 +270,12 @@ class CNN_Model:
                                                                                             config.batch_size,
                                                                                             config.max_epoch_frozen,
                                                                                             config.max_epoch_unfrozen),
-            index=False, header=True
+            index=False, 
+            header=True
         )
 
         # Plot confusion matrix and normalised confusion matrix.
-        cm = confusion_matrix(y_true_inv, y_pred_inv)  # calculate confusion matrix with original label of classes
+        cm = confusion_matrix(y_true_inv, y_pred_inv)  # Calculate CM with original label of classes
         plot_confusion_matrix(cm, 'd', label_encoder, False)
         # Calculate normalized confusion matrix with original label of classes.
         cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -254,10 +289,14 @@ class CNN_Model:
             plot_roc_curve_multiclass(y_true, self.prediction, label_encoder)
 
         # Compare results with other similar papers' result.
-        with open(
-                'data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
+        with open('data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
             data = json.load(config_file)
-        df = pd.DataFrame.from_records(data[dataset][classification_type],
+        
+        dataset_key = config.dataset
+        if config.dataset == "mini-MIAS-binary":
+            dataset_key = "mini-MIAS"
+        
+        df = pd.DataFrame.from_records(data[dataset_key][classification_type],
                                        columns=['paper', 'accuracy'])  # Filter data by dataset and classification type.
         new_row = pd.DataFrame({'paper': 'Dissertation', 'accuracy': accuracy},
                                index=[0])  # Add model result into dataframe to compare.
@@ -270,8 +309,8 @@ class CNN_Model:
         :param x: Input.
         :return: Model predictions.
         """
-        if config.dataset == "mini-MIAS":
-            self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=10)
+        if config.dataset == "mini-MIAS" or "mini-MIAS-binary":
+            self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=config.batch_size)
         elif config.dataset == "CBIS-DDSM":
             self.prediction = self._model.predict(x=x_values)
         # if config.verbose_mode:
