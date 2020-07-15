@@ -115,5 +115,4 @@ def get_class_balances(y_vals):
     for y_val in y_vals:
         for i in range(num_classes):
             counts[i] += y_val[i]
-    print(counts.tolist())
     return (counts.tolist())

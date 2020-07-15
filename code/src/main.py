@@ -39,6 +39,7 @@ def main() -> None:
 
             # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
+            
             if config.dataset == "mini-MIAS":
                 X_train, y_train = generate_image_transforms(X_train, y_train)
 
@@ -54,8 +55,7 @@ def main() -> None:
                 X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
                                                                           dataset=X_train,
                                                                           labels=y_train)
-                model.train_model(X_train, y_train, X_val, y_val, config.batch_size, config.max_epoch_frozen,
-                                  config.max_epoch_unfrozen)
+                model.train_model(X_train, X_val, y_train, y_val)
 
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
@@ -72,8 +72,7 @@ def main() -> None:
             else:
                 model = generate_vgg_model_large(l_e.classes_.size)
 
-            model.train_model(train_dataset, None, validation_dataset, None, config.batch_size, config.max_epoch_frozen,
-                              config.max_epoch_unfrozen)
+            model.train_model(train_dataset, validation_dataset, None, None)
 
         else:
             print_error_message()

@@ -16,6 +16,7 @@ from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D
 
+import config
 from data_visualisation.plots import *
 from data_visualisation.roc_curves import *
 
@@ -136,7 +137,7 @@ class CNN_Model:
             self._model.layers[0].trainable = True
 
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
-        self.compile_model(1e-5)
+        self.compile_model(1e-5)  # Very low learning rate.
         self.fit_model(X_train, X_val, y_train, y_val)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Fine_tuning_training", False)
@@ -165,21 +166,7 @@ class CNN_Model:
         :param y_val:
         :return:
         """
-        if self.num_classes == 2:
-            self.history = self._model.fit(
-                x=X_train,
-                y=y_train,
-                batch_size=config.batch_size,
-                steps_per_epoch=len(X_train) // config.batch_size,
-                validation_data=(X_val, y_val),
-                validation_steps=len(X_val) // config.batch_size,
-                epochs=config.max_epoch_frozen,
-                callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=4)
-                ]
-            )
-        else:
+        if config.dataset == "mini-MIAS":
             self.history = self._model.fit(
                 x=X_train,
                 y=y_train,
@@ -193,6 +180,29 @@ class CNN_Model:
                     ReduceLROnPlateau(patience=4)
                 ]
             )
+        elif config.dataset == "mini-MIAS-binary":
+            self.history = self._model.fit(
+                x=X_train,
+                y=y_train,
+                batch_size=config.batch_size,
+                steps_per_epoch=len(X_train) // config.batch_size,
+                validation_data=(X_val, y_val),
+                validation_steps=len(X_val) // config.batch_size,
+                epochs=config.max_epoch_frozen,
+                callbacks=[
+                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=4)
+                ]
+            )
+        elif config.dataset == "CBIS-DDSM":
+            self.history = self._model.fit(
+                x=X_train,
+                validation_data=X_val,
+                epochs=epochs1,
+                callbacks=[
+                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=4)]
+                )            
 
     def make_prediction(self, x_values):
         """
