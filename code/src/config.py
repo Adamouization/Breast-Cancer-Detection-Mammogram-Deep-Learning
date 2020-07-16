@@ -4,15 +4,15 @@ Variables set by the command line arguments dictating which parts of the program
 
 # Constants
 RANDOM_SEED = 111
+MINI_MIAS_IMG_SIZE = {
+    "HEIGHT": 1024,
+    "WIDTH": 1024
+}
 VGG_IMG_SIZE = {
     "HEIGHT": 512,
     "WIDTH": 512
 }
 RESNET_IMG_SIZE = VGG_IMG_SIZE
-VGG_IMG_SIZE_LARGE = {
-    "HEIGHT": 2048,
-    "WIDTH": 2048
-}
 INCEPTION_IMG_SIZE = {
     "HEIGHT": 299,
     "WIDTH": 299

@@ -37,18 +37,20 @@ def generate_image_transforms(images, labels):
             a = create_individual_transform(indiv_class_images[k % len(indiv_class_images)], available_transforms)
             transformed_image = create_individual_transform(indiv_class_images[k % len(indiv_class_images)],
                                                             available_transforms)
-            if config.model == "VGG":
-                height = config.VGG_IMG_SIZE['HEIGHT']
-                width = config.VGG_IMG_SIZE['WIDTH']
-            elif config.model == "ResNet":
-                height = config.RESNET_IMG_SIZE['HEIGHT']
-                width = config.RESNET_IMG_SIZE['WIDTH']
-            elif config.model == "Inception":
-                height = config.INCEPTION_IMG_SIZE['HEIGHT']
-                width = config.INCEPTION_IMG_SIZE['WIDTH']
-            elif config.model == "Xception":
-                height = config.XCEPTION_IMG_SIZE['HEIGHT']
-                width = config.XCEPTION_IMG_SIZE['WIDTH']
+#             if config.model == "VGG":
+#                 height = config.VGG_IMG_SIZE['HEIGHT']
+#                 width = config.VGG_IMG_SIZE['WIDTH']
+#             elif config.model == "ResNet":
+#                 height = config.RESNET_IMG_SIZE['HEIGHT']
+#                 width = config.RESNET_IMG_SIZE['WIDTH']
+#             elif config.model == "Inception":
+#                 height = config.INCEPTION_IMG_SIZE['HEIGHT']
+#                 width = config.INCEPTION_IMG_SIZE['WIDTH']
+#             elif config.model == "Xception":
+#                 height = config.XCEPTION_IMG_SIZE['HEIGHT']
+#                 width = config.XCEPTION_IMG_SIZE['WIDTH']
+            height = config.MINI_MIAS_IMG_SIZE['HEIGHT']
+            width = config.MINI_MIAS_IMG_SIZE["WIDTH"]
             transformed_image = transformed_image.reshape(1, height, width, 1)
 
             images_with_transforms = np.append(images_with_transforms, transformed_image, axis=0)

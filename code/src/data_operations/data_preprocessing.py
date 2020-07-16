@@ -65,14 +65,15 @@ def preprocess_image(image_path: str) -> np.ndarray:
     :param image_path: The path to the image to preprocess.
     :return: The pre-processed image in NumPy array format.
     """
-    if config.model == "VGG":
-        target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])
-    elif config.model == "ResNet":
-        target_size = (config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE["WIDTH"])
-    elif config.model == "Inception":
-        target_size = (config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE["WIDTH"])
-    elif config.model == "Xception":
-        target_size = (config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE["WIDTH"])
+    target_size = (config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"])
+#     if config.model == "VGG":
+#         target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])
+#     elif config.model == "ResNet":
+#         target_size = (config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE["WIDTH"])
+#     elif config.model == "Inception":
+#         target_size = (config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE["WIDTH"])
+#     elif config.model == "Xception":
+#         target_size = (config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE["WIDTH"])
 
     image = load_img(image_path,
                      color_mode="grayscale",
