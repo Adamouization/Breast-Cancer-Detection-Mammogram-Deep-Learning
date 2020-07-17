@@ -1,4 +1,4 @@
-\section{Common Pipeline Code Instructions}
+\section{Installation Instructions}
 
 Start by cloning the GitHub repository:
 
@@ -22,6 +22,42 @@ source /Breast-Cancer-Detection-Code/tf2/venv/bin/activate
 \end{lstlisting}
 
 `cd` into the `src` directory and run the code:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Individual Code Instructions}
+
+Run the code:
+
+\begin{lstlisting}
+main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-gs] [-v]
+\end{lstlisting}
+
+where:
+\begin{itemize}
+    \item \textit{-h} is a  flag for help on how to run the code.
+    \item \textit{DATASET} is the dataset to use. Must be either \textit{mini-MIAS} or \textit{CBIS-DDMS}.
+    \item \textit{MAMMOGRAMTYPE} is the type of mammogram to use. Can be either \textit{calc}, \textit{mass} or \textit{all}.
+    \item \textit{MODEL} is the model to use. Must be either \textit{VGG}, \textit{ResNet}, \textit{Inception} or \textit{Xception}. Default value is \textit{VGG}.
+    \item \textit{RUNMODE} is the mode to run in (\textit{train} or \textit{test}). Default value is \textit{train}.
+    \item \textit{BATCHSIZE} is the batch size to use when training the model. Defaults to \textit{2}.
+    \item \textit{MAXEPOCHFROZEN} is the maximum number of epochs in the first training phrase (with frozen layers). Defaults to \textit{100}.
+    \item \textit{MAXEPOCHUNFROZEN} is the maximum number of epochs in the second training phrase (with unfrozen layers). Defaults to \textit{50}.
+    \item \textit{-gs} is a flag to run the grid search algorithm to determine the optimal hyperparameters for the CNN model.
+    \item \textit{-v} is a flag controlling verbose mode, which prints additional statements for debugging purposes.
+\end{itemize}
+
+Set the \textit{PYTHONHASHSEED} environment variable to 0 before the program starts for reproducible results (e.g. when using hash-based operations):
+
+\begin{lstlisting}
+PYTHONHASHSEED=0 main.py [...]
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Common Pipeline Code Instructions}
+
+Run the code:
 
 \begin{lstlisting}
 python main.py [-h] -d DATASET -m MODEL [-r RUNMODE] [-i IMAGESIZE] [-v]
