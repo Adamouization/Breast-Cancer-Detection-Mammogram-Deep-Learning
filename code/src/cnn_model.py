@@ -2,7 +2,6 @@ import json
 import ssl
 
 import joblib
-import pandas as pd
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, log_loss, make_scorer
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
@@ -48,48 +47,55 @@ class CNN_Model:
         Creates a CNN from an existing architecture with pre-trained weights on ImageNet.
         """
         base_model = Sequential()
-        
+
         # Reconfigure a single channel image input (greyscale) into a 3-channel greyscale input (tensor).
         single_channel_input = Input(shape=(config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE['WIDTH'], 1))
-#         if self.model_name == "VGG":
-#             single_channel_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
-#         elif self.model_name == "ResNet":
-#             single_channel_input = Input(shape=(config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 1))
-#         elif self.model_name == "Inception":
-#             single_channel_input = Input(
-#                 shape=(config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1))
-#         elif self.model_name == "Xception":
-#             single_channel_input = Input(
-#                 shape=(config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 1)
-#             )
+        #         if self.model_name == "VGG":
+        #             single_channel_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
+        #         elif self.model_name == "ResNet":
+        #             single_channel_input = Input(shape=(config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 1))
+        #         elif self.model_name == "Inception":
+        #             single_channel_input = Input(
+        #                 shape=(config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1))
+        #         elif self.model_name == "Xception":
+        #             single_channel_input = Input(
+        #                 shape=(config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 1)
+        #             )
         triple_channel_input = Concatenate()([single_channel_input, single_channel_input, single_channel_input])
         input_model = Model(inputs=single_channel_input, outputs=triple_channel_input)
         base_model.add(input_model)
-        
+
         # Generate extra convolutional layers for model to put at the beginning
         base_model.add(Conv2D(16, (3, 3),
-                          activation='relu',
-                          padding='same'))
+                              activation='relu',
+                              padding='same'))
         base_model.add(Conv2D(16, (3, 3),
-                          activation='relu',
-                          padding='same'))
+                              activation='relu',
+                              padding='same'))
         base_model.add(MaxPooling2D((2, 2), strides=(2, 2)))
         base_model.add(Dropout(0.25))
-        
+
         # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluding the fully
         # connected layers.
         if self.model_name == "VGG":
             base_model.add(Conv2D(64, (3, 3),
-                      activation='relu',
-                      padding='same'))
-            pre_trained_model = VGG19(include_top=False, weights="imagenet", input_shape=[config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 3])
+                                  activation='relu',
+                                  padding='same'))
+            pre_trained_model = VGG19(include_top=False, weights="imagenet",
+                                      input_shape=[config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 3])
         elif self.model_name == "ResNet":
-            pre_trained_model = ResNet50V2(include_top=False, weights="imagenet", input_shape=[config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 3])
+            pre_trained_model = ResNet50V2(include_top=False, weights="imagenet",
+                                           input_shape=[config.RESNET_IMG_SIZE['HEIGHT'],
+                                                        config.RESNET_IMG_SIZE['WIDTH'], 3])
         elif self.model_name == "Inception":
-            pre_trained_model = InceptionV3(include_top=False, weights="imagenet", input_shape=[config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 3])
+            pre_trained_model = InceptionV3(include_top=False, weights="imagenet",
+                                            input_shape=[config.INCEPTION_IMG_SIZE['HEIGHT'],
+                                                         config.INCEPTION_IMG_SIZE['WIDTH'], 3])
         elif self.model_name == "Xception":
-            pre_trained_model = Xception(include_top=False, weights="imagenet", input_shape=[config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 3])
-            
+            pre_trained_model = Xception(include_top=False, weights="imagenet",
+                                         input_shape=[config.XCEPTION_IMG_SIZE['HEIGHT'],
+                                                      config.XCEPTION_IMG_SIZE['WIDTH'], 3])
+
         # Exclude input layer and first convolutional layer of VGG model.
         pre_trained_model_trimmed = Sequential()
         for layer in pre_trained_model.layers[2:]:
@@ -116,11 +122,11 @@ class CNN_Model:
 
         # Add fully connected hidden layers and dropout layers between each for regularisation.
         self._model.add(Dense(units=512, activation='relu', name='Dense_1'))
-#         self._model.add(Dropout(0.2))
+        #         self._model.add(Dropout(0.2))
         self._model.add(Dense(units=32, activation='relu', name='Dense_2'))
-#         self._model.add(Dropout(0.2))
-#         self._model.add(Dense(units=16, activation='relu', name='Dense_3'))
-#         self._model.add(Dropout(0.2))
+        #         self._model.add(Dropout(0.2))
+        #         self._model.add(Dense(units=16, activation='relu', name='Dense_3'))
+        #         self._model.add(Dropout(0.2))
 
         # Final output layer that uses softmax activation function (because the classes are exclusive).
         if config.dataset == "CBIS-DDSM" or config.dataset == "mini-MIAS-binary":
@@ -229,7 +235,7 @@ class CNN_Model:
                 callbacks=[
                     EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
                     ReduceLROnPlateau(patience=4)]
-                )            
+            )
 
     def make_prediction(self, x_values):
         """
@@ -284,15 +290,16 @@ class CNN_Model:
         print("\nBest model hyperparameters found by grid search algorithm:")
         print(final_model)
         print("Score: {}".format(gs_results.best_score_))
-        joblib.dump(final_model,
-                    "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_gs-best-estimator.pkl".format(
-                        config.dataset,
-                        config.model,
-                        config.image_size,
-                        config.batch_size,
-                        config.max_epoch_frozen,
-                        config.max_epoch_unfrozen
-                    ))
+        joblib.dump(
+            final_model,
+            "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_gs-best-estimator.pkl".format(
+                config.dataset,
+                config.model,
+                config.image_size,
+                config.batch_size,
+                config.max_epoch_frozen,
+                config.max_epoch_unfrozen
+            ))
 
     def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str) -> None:
         """

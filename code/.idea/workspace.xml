@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a02b6889-7c63-4ff1-bf81-7e3684b23a3e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_operations/data_transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/data_transformations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/cnn_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/cnn_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/cnn_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/vgg_model_large.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +44,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/other" />
       <recent name="$PROJECT_DIR$/code" />
     </key>
@@ -93,7 +94,8 @@
       <workItem from="1594543580678" duration="8000" />
       <workItem from="1594543600792" duration="1256000" />
       <workItem from="1594721282853" duration="1457000" />
-      <workItem from="1594746667599" duration="1328000" />
+      <workItem from="1594746667599" duration="2048000" />
+      <workItem from="1594975209866" duration="184000" />
     </task>
     <servers />
   </component>
@@ -126,11 +128,12 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="1638" height="295" key="GridCell.Tab.0.right/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722750739" />
-    <state x="341" y="132" key="SettingsEditor" timestamp="1594746684573">
+    <state x="341" y="132" key="SettingsEditor" timestamp="1594975257202">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="341" y="145" key="SettingsEditor/-136.-1057.1920.1057/0.23.1680.967@0.23.1680.967" timestamp="1594401724434" />
     <state x="341" y="132" key="SettingsEditor/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594746684573" />
+    <state x="341" y="132" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1594975257202" />
     <state x="628" y="446" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594482471233">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>

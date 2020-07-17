@@ -7,9 +7,8 @@ import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, import_cbisddsm_training_dataset, \
     import_minimias_dataset
-from data_operations.data_transformations import generate_image_transforms, get_data_augmentation_iterator
-from model.cnn_model import CNN_Model
-from model.vgg_model_large import generate_vgg_model_large
+from data_operations.data_transformations import generate_image_transforms
+from cnn_model import CNN_Model
 from utils import create_label_encoder, print_cli_arguments, print_error_message, \
     print_num_gpus_available, print_runtime
 
@@ -39,7 +38,7 @@ def main() -> None:
 
             # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
-            
+
             if config.dataset == "mini-MIAS":
                 X_train, y_train = generate_image_transforms(X_train, y_train)
 
@@ -67,11 +66,7 @@ def main() -> None:
             validation_dataset = create_dataset(X_val, y_val)
 
             # Create and train CNN model.
-            if config.image_size == "small":
-                model = CNN_Model(config.model, l_e.classes_.size)
-            else:
-                model = generate_vgg_model_large(l_e.classes_.size)
-
+            model = CNN_Model(config.model, l_e.classes_.size)
             model.train_model(train_dataset, validation_dataset, None, None)
 
         else:
