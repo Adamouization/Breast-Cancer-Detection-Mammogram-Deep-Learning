@@ -17,7 +17,9 @@ def get_data_augmentation_iterator():
         height_shift_range=0.2,
         brightness_range=[0.05,0.2],
         zoom_range=[0.05,0.2],
-        horizontal_flip=True)
+        horizontal_flip=True,
+        validation_split=0.25
+    )
 
 def generate_image_transforms(images, labels):
     """

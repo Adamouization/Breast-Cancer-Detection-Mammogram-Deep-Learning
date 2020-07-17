@@ -60,7 +60,6 @@ def print_cli_arguments() -> None:
     print("Mammogram type: {}".format(config.mammogram_type))
     print("CNN Model: {}".format(config.model))
     print("Run mode: {}".format(config.run_mode))
-    print("Model input image size: {}".format(config.image_size))
     print("Batch size: {}".format(config.batch_size))
     print("Max number of epochs when original CNN layers are frozen: {}".format(config.max_epoch_frozen))
     print("Max number of epochs when original CNN layers are unfrozen: {}".format(config.max_epoch_unfrozen))
@@ -74,9 +73,8 @@ def save_output_figure(title: str) -> None:
     :return: None
     """
     plt.savefig(
-        "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_{}.png".format(config.dataset,
+        "../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}_{}.png".format(config.dataset,
                                                                                     config.model,
-                                                                                    config.image_size,
                                                                                     config.batch_size,
                                                                                     config.max_epoch_frozen,
                                                                                     config.max_epoch_unfrozen,

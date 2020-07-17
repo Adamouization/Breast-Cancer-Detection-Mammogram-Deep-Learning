@@ -46,7 +46,7 @@ class CNN_Model:
         """
         Creates a CNN from an existing architecture with pre-trained weights on ImageNet.
         """
-        base_model = Sequential()
+        base_model = Sequential(name="Base_Model")
 
         # Reconfigure a single channel image input (greyscale) into a 3-channel greyscale input (tensor).
         single_channel_input = Input(shape=(config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE['WIDTH'], 1))
@@ -97,12 +97,12 @@ class CNN_Model:
                                                       config.XCEPTION_IMG_SIZE['WIDTH'], 3])
 
         # Exclude input layer and first convolutional layer of VGG model.
-        pre_trained_model_trimmed = Sequential()
+        pre_trained_model_trimmed = Sequential(name="Pre-trained_Model")
         for layer in pre_trained_model.layers[2:]:
             pre_trained_model_trimmed.add(layer)
 
         # Add fully connected layers
-        self._model = Sequential()
+        self._model = Sequential(name="Breast_Cancer_Model")
 
         # Start with base model consisting of convolutional layers
         self._model.add(base_model)
@@ -152,10 +152,7 @@ class CNN_Model:
         :return: None
         """
         # Freeze pre-trained CNN model layers: only train fully connected layers.
-        if config.image_size == "large":
-            self._model.layers[0].layers[1].trainable = False
-        else:
-            self._model.layers[0].trainable = False
+        self._model.layers[1].trainable = False
 
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
         self.compile_model(1e-3)
@@ -164,13 +161,10 @@ class CNN_Model:
         plot_training_results(self.history, "Initial_training", True)
 
         # Unfreeze all layers.
-        if config.image_size == "large":
-            self._model.layers[0].layers[1].trainable = True
-        else:
-            self._model.layers[0].trainable = True
+        self._model.layers[1].trainable = True
 
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
-        self.compile_model(1e-5)  # Very low learning rate.
+        self.compile_model(1e-4)  # Very low learning rate.
         self.fit_model(X_train, X_val, y_train, y_val)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Fine_tuning_training", False)
@@ -276,10 +270,9 @@ class CNN_Model:
         # Save results to CSV.
         gs_results_df = pd.DataFrame(gs_results.cv_results_)
         gs_results_df.to_csv(
-            "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_grid_search_results.csv".format(
+            "../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}_grid_search_results.csv".format(
                 config.dataset,
                 config.model,
-                config.image_size,
                 config.batch_size,
                 config.max_epoch_frozen,
                 config.max_epoch_unfrozen
@@ -292,10 +285,9 @@ class CNN_Model:
         print("Score: {}".format(gs_results.best_score_))
         joblib.dump(
             final_model,
-            "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_gs-best-estimator.pkl".format(
+            "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}_gs-best-estimator.pkl".format(
                 config.dataset,
                 config.model,
-                config.image_size,
                 config.batch_size,
                 config.max_epoch_frozen,
                 config.max_epoch_unfrozen
@@ -328,10 +320,9 @@ class CNN_Model:
                                                        output_dict=True)).transpose()
         report_df.append({'accuracy': accuracy}, ignore_index=True)
         report_df.to_csv(
-            "../output/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}_report.csv".format(
+            "../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}_report.csv".format(
                 config.dataset,
                 config.model,
-                config.image_size,
                 config.batch_size,
                 config.max_epoch_frozen,
                 config.max_epoch_unfrozen
@@ -379,10 +370,9 @@ class CNN_Model:
         """
         # Scratch space
         self._model.save(
-            "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_imagesize-{}_b-{}_e1-{}_e2-{}.h5".format(
+            "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}.h5".format(
                 config.dataset,
                 config.model,
-                config.image_size,
                 config.batch_size,
                 config.max_epoch_frozen,
                 config.max_epoch_unfrozen)

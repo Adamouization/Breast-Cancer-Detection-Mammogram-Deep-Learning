@@ -41,7 +41,7 @@ def main() -> None:
 
             if config.dataset == "mini-MIAS":
                 X_train, y_train = generate_image_transforms(X_train, y_train)
-
+                
             # Create CNN Model.
             model = CNN_Model(config.model, l_e.classes_.size)
 
@@ -119,12 +119,6 @@ def parse_command_line_arguments() -> None:
                              "otherwise load a previously trained model for predictions. Must be either 'train' or "
                              "'test'. Defaults to 'train'."
                         )
-    parser.add_argument("-i", "--imagesize",
-                        default="small",
-                        help="The initial input image size to feed into the CNN model. If set to 'small', will use "
-                             "images resized to 512x512px. If set to 'large' will use images resized to 2048x2048px "
-                             "(using with extra convolution layers for downsizing). Defaults to 'small'."
-                        )
     parser.add_argument("-b", "--batchsize",
                         type=int,
                         default=2,
@@ -158,7 +152,6 @@ def parse_command_line_arguments() -> None:
     config.mammogram_type = args.mammogramtype
     config.model = args.model
     config.run_mode = args.runmode
-    config.image_size = args.imagesize
     if args.batchsize <= 0 or args.batchsize >= 25:
         print_error_message()
     config.batch_size = args.batchsize
