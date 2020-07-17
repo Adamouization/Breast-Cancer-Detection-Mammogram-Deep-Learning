@@ -1,3 +1,9 @@
+\section{Dataset \& Classification type}
+
+Why choose CBIS-DDSM over DDSM? Binary classification vs multi-class classification.\\
+
+CBIS-DDSM uses uncompressed images (DICOM vs LJPEG - which is no longer used), meaning they can be fed into the CNN with larger sizes, allowing the model to learn more high-level features.
+
 \section{Deep Learning Pipeline Design Analysis}
 
 \subsection{Dataset pre-processing}
@@ -18,7 +24,9 @@ One-hot encoding of labels (for both binary and multi-class classification).\\
 
 Training/testing/validation split using stratified and shuffling splits (keep class balance and reorder images in directories).\\
 
-CNN models with pre-trained weights on ImageNet to avoid training from scratch.
+CNN models with pre-trained weights on ImageNet to avoid training from scratch. However, this  forces the input images to have the same size as the images in ImageNet it was trained on.\\
+
+Early stopping conditions.\\
 
 \subsubsection{Testing}
 
