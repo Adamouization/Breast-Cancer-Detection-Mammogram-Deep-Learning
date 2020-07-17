@@ -41,21 +41,25 @@ mkdir saved_models
 `cd` into the `src` directory and run the code:
 
 ```
-python main.py [-h] -d DATASET -m MODEL [-r RUNMODE] [-i IMAGESIZE] [-v]
+main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-gs] [-v]
 ```
 
 where:
-* `-h` is a  flag for help on how to run the code.
-* `DATASET` is the dataset to use. Must be either `mini-MIAS` or `CBIS-DDMS`.
-* `MODEL` is the model to use. Must be either `basic` or `advanced`.
+* `-h` is a flag for help on how to run the code.
+* `DATASET` is the dataset to use. Must be either `mini-MIAS`, `mini-MIAS-binary` or `CBIS-DDMS`.
+* `MAMMOGRAMTYPE` is the type of mammograms to use. Can be either `calc`, `mass` or `all`. Defaults to `all`.
+* `MODEL` is the model to use. Must be either `VGG` or `ResNet`.
 * `RUNMODE` is the mode to run in (`train` or `test`). Default value is `train`.
-* `IMAGESIZE` is the image size to feed into the CNN model (`small` - 512x512px; or `large` - 2048x2048px). Default value is `small`.
+* `BATCHSIZE` is the batch size to use when training the model. Defaults to `2`.
+* `MAX_EPOCH_FROZEN` is the maximum number of epochs in the first training phrase (with frozen layers). Defaults to `100`.
+* `MAX_EPOCH_UNFROZEN`is the maximum number of epochs in the second training phrase (with unfrozen layers). Defaults to `50`.
+* `-gs` is a flag  to run the grid search algorithm to determine the optimal hyperparameters for the CNN model.
 * `-v` is a flag controlling verbose mode, which prints additional statements for debugging purposes.
 
 Set the `PYTHONHASHSEED` environment variable to 0 before the program starts for reproducible results (e.g. when using hash-based operations):
 
 ```
-PYTHONHASHSEED=0 python main.py [-h] -d DATASET -m MODEL [-r RUNMODE] [-i IMAGESIZE] [-v]
+PYTHONHASHSEED=0 main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-gs] [-v]
 ```
 
 ## Dataset installation
