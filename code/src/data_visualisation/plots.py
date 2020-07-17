@@ -19,12 +19,14 @@ def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised
     title = str()
     if is_normalised:
         title = "Confusion Matrix Normalised"
+        vmax = 1  # Y scale.
     elif not is_normalised:
         title = "Confusion Matrix"
+        vmax = np.max(cm.sum(axis=1))  # Y scale.
 
     # Plot.
     fig, ax = plt.subplots(figsize=(6, 4))
-    sns.heatmap(cm, annot=True, ax=ax, fmt=fmt, cmap=plt.cm.Blues)  # annot=True to annotate cells
+    sns.heatmap(cm, annot=True, ax=ax, fmt=fmt, cmap=plt.cm.Blues, vmin=0, vmax=vmax)  # annot=True to annotate cells
 
     # Set labels, title, ticks and axis range.
     ax.set_xlabel('Predicted classes')
