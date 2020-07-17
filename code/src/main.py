@@ -7,7 +7,7 @@ import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, import_cbisddsm_training_dataset, \
     import_minimias_dataset
-from data_operations.data_transformations import generate_image_transforms
+from data_operations.data_transformations import generate_image_transforms, get_data_augmentation_iterator
 from model.cnn_model import CNN_Model
 from model.vgg_model_large import generate_vgg_model_large
 from utils import create_label_encoder, print_cli_arguments, print_error_message, \

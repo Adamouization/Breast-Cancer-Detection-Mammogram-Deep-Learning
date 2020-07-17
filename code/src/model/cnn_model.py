@@ -84,11 +84,11 @@ class CNN_Model:
                       padding='same'))
             pre_trained_model = VGG19(include_top=False, weights="imagenet", input_shape=[config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 3])
         elif self.model_name == "ResNet":
-            pre_trained_model = ResNet50V2(include_top=False, weights="imagenet", input_shape=[config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 1])
+            pre_trained_model = ResNet50V2(include_top=False, weights="imagenet", input_shape=[config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 3])
         elif self.model_name == "Inception":
-            pre_trained_model = InceptionV3(include_top=False, weights="imagenet", input_shape=[config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1])
+            pre_trained_model = InceptionV3(include_top=False, weights="imagenet", input_shape=[config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 3])
         elif self.model_name == "Xception":
-            pre_trained_model = Xception(include_top=False, weights="imagenet", input_shape=[config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 1])
+            pre_trained_model = Xception(include_top=False, weights="imagenet", input_shape=[config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 3])
             
         # Exclude input layer and first convolutional layer of VGG model.
         pre_trained_model_trimmed = Sequential()
@@ -115,18 +115,17 @@ class CNN_Model:
         self._model.add(Flatten())
 
         # Add fully connected hidden layers and dropout layers between each for regularisation.
-        self._model.add(Dense(units=256, activation='relu', name='Dense_1'))
-        self._model.add(Dropout(0.2))
-        self._model.add(Dense(units=64, activation='relu', name='Dense_2'))
-        self._model.add(Dropout(0.2))
-        self._model.add(Dense(units=16, activation='relu', name='Dense_3'))
-        self._model.add(Dropout(0.2))
+        self._model.add(Dense(units=512, activation='relu', name='Dense_1'))
+#         self._model.add(Dropout(0.2))
+        self._model.add(Dense(units=32, activation='relu', name='Dense_2'))
+#         self._model.add(Dropout(0.2))
+#         self._model.add(Dense(units=16, activation='relu', name='Dense_3'))
+#         self._model.add(Dropout(0.2))
 
         # Final output layer that uses softmax activation function (because the classes are exclusive).
         if config.dataset == "CBIS-DDSM" or config.dataset == "mini-MIAS-binary":
             self._model.add(Dense(1, activation='sigmoid', name='Output'))
         elif config.dataset == "mini-MIAS":
-            print("softmax, num_classes = {}".format(self.num_classes))
             self._model.add(Dense(self.num_classes, activation='softmax', name='Output'))
 
         # Print model details if running in debug mode.

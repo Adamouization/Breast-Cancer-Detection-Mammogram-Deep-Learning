@@ -3,9 +3,21 @@ import random
 import numpy as np
 import skimage as sk
 import skimage.transform
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 import config
 
+
+def get_data_augmentation_iterator():
+    return ImageDataGenerator(
+        featurewise_center=True,
+        featurewise_std_normalization=True,
+        rotation_range=25,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        brightness_range=[0.05,0.2],
+        zoom_range=[0.05,0.2],
+        horizontal_flip=True)
 
 def generate_image_transforms(images, labels):
     """
