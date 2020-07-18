@@ -4,88 +4,27 @@ Breast cancer is one of the most common forms of cancer amongst women in the UK,
 
 The goal of this project is to design a deep learning pipeline that can learn how to detect cases of breast cancer in mammograms (X-ray pictures of breasts) by detecting the presence of tumours, whether they are benign (non-cancerous) or malignant (cancerous), and their location in the mammogram. The deep learning algorithm will learn the underlying patterns of a large dataset of mammograms to carry out the aforementioned tasks. The motivation behind this project is to allow a technique for early and accurate breast cancer detection to prevent unnecessary treatments in cases of false positives and to prevent late treatments due to false negatives. Ultimately, the target of this project is to combine it with deep learning algorithms developed across other projects supervised by Dr David Harris-Birtill (past and present). This will allow a general artificial intelligence system capable of detecting multiple forms of cancer with higher accuracies than radiologist diagnostics.\\
 
-Parts of the work undertaken during this project will be conducted as a group comprised of two other members. The tasks in common involve the data cleaning and pre-processing, the results output and the implementation of a basic deep learning pipeline. The reasoning for these common tasks is to allow each group member to further explore deep learning techniques on their own using the common basic pipeline as a starting point and to compare final results at the end. Section~\ref{sec:introduction-project-aims} covers in more detail which tasks will be conducted personally and in a group.
+Parts of the work undertaken during this project will be conducted as a group comprised of two other members. The tasks in common involve the data cleaning and pre-processing, the results output and the implementation of a basic deep learning pipeline. The reasoning for these common tasks is to allow each group member to further explore deep learning techniques on their own using the common basic pipeline as a starting point and to compare final results at the end. Section X covers in more detail which tasks will be conducted personally and in a group.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Problem Description}
 \label{sec:problem-description}
 
-TODO.\\
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Related Systems \& Their Applications}
-\label{sec:v2v_applications}
-
-TODO.\\
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Project Aims}
-\label{sec:introduction-project-aims}
-
-Objectives are divided into primary and secondary objectives, where primary objectives correspond to essential milestones (organised as a linear timeline to follow during the 11-week duration of the project), while secondary objectives complement these essential milestones.
-
-\subsection{Primary objectives}
-
-\begin{enumerate}
-    \item The first primary objective conducted individually consists of writing a complete and extensive literature review by the end of the 3rd week (some papers may be shared amongst group members), which will:
-    \begin{itemize}
-        \item cover the background of deep learning techniques applied to the field of cancer detection (and disease detection using medical imagery);
-        \item review state of the art deep learning methods applied to the detection of breast cancer in mammograms, which will be used to guide the research towards promising areas and govern the choice of techniques to implement and explore;
-        \item identify results achieved using different methods (models, optimisation techniques, etc.).
-    \end{itemize}
-    \item The second objective relies on achieving a prototype implementation of a deep learning pipeline by the end of the 6th week in a group, including:
-    \begin{itemize}
-        \item selecting a basic machine learning model that is proven to work on breast cancer detection based on the explored literature;
-        \item implementing a basic machine learning/deep learning pipeline using Python machine learning software (e.g. Tensorflow, Keras) capable of running on the GPUs using a subset the cleaned and pre-processed data into the selected model;
-    \end{itemize}
-    \item Next, the third primary objective consists of individually exploring more advanced/optimised deep learning algorithms in a fully functional pipeline by the end of the 8th week, consisting of:
-    \begin{itemize}
-        \item extending and optimising the basic pipeline created in the third primary objecting for the task of breast cancer detection;
-        \item designing a full deep learning pipeline capable of running on the entire dataset in batches using efficient memory allocation optimisation methods due to the large size of the dataset and the limited amount of RAM available.
-    \end{itemize}
-    \item Finally, the fourth primary objective involves the results' evaluation  and finishing the dissertation write-up by the end of the 11th week (parts will be written during the previous objectives as well):
-    \begin{itemize}
-        \item evaluating the final deep learning pipeline's results by employing common evaluation metrics and output formats used in the basic pipeline and in other papers. This will allow direct comparisons of the final results with:
-        \begin{itemize}
-            \item the basic pipeline's results developed in common (from the second objective);
-            \item the results achieved by the two other group members;
-            \item the results from papers researching breast cancer detection identified in the literature review.
-        \end{itemize}
-        \item individually writing the dissertation paper;
-        \item polishing the pipeline.
-    \end{itemize}
-\end{enumerate}
-
-\subsection{Secondary objectives}  
-
-These secondary objectives serve as additions to the primary objectives that are hard to achieve, but that will be attempted if time permits it.
-
-\begin{itemize}
-    \item Implement segmentation (the task of localising the tumour in the mammogram) in the pipeline, on top of the task of cancer detection.
-    \item Explore optimisation methods to reduce the training time required, such  GPU acceleration.
-    \item Examine the trade-off between speed and accuracy when using different algorithms, model hyperparameters and optimisation techniques.
-    % \item Equalling or improving state of the art breast cancer detection systems, such as Google's breast cancer detection paper ``Artificial Intelligence Based Breast Cancer Nodal Metastasis Detection: Insights into the Black Box for Pathologists'', with 1 false positive per patient \cite{Liu2018}.
-    % \item Achieving results that are at least as good as the ones produced on the original dataset (see Section~\ref{sec:resources}) on new datasets used  by other papers (will require an amended Ethics Application).
-    \item Achieve a high-level quality of code by following professional coding guidelines (e.g. PEP8 coding guidelines for Python \cite{pep8}), along with detailed documentation and useful comments throughout the code. This includes following software-engineering practices of version controlling the code with git and covering vital code sections with a testing suite.
-\end{itemize}
+To complete.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Report Structure}
 
-\tab \textbf{Introduction} \space Sets the tone for the entire dissertation by presenting the subject and the problem being tackled, while also laying out the plan for the rest of the report. Subsections include the motivation \& problem description and the project aims.\\
+\tab \textbf{Introduction} \space 
+Presents the subject's background through a problem description and the motivation to tackle this problem.\\
 
 \textbf{Context Survey} \space
-Explores the literature surrounding breast cancer detection using deep learning techniques, including state of the art techniques recently used, by covering the background of both deep learning techniques and their applications to the problem of breast cancer detection.\\
-
-\textbf{Requirements} \space
-Establishes and prioritises the functional and non-functional properties of the code.\\
+Explores the literature and background surrounding breast cancer detection techniques, starting from primitive systems, exploring early machine learning methods, and ending with the deep learning techniques nowadays.\\
 
 \textbf{Ethics \& Datasets} \space
-Considers the ethical issues considered for this project and describes the various datasets used.\\
+Considers the ethical issues taken into account for this project and describes the various datasets used.\\
 
 \textbf{Design} \space
 Details the general structure of the system, offering an analysis of different parts of the deep learning pipeline without going into technical code-related or mathematics-related details. For example, this includes the choice of input method, data pre-processing steps, output format and programming languages and libraries.\\
