@@ -14,6 +14,9 @@ from data_operations.data_preprocessing import dataset_stratified_split
 
 
 def main() -> None:
+    """
+    Originally written as a group for the common pipeline.
+    """
     parse_command_line_arguments()
 
     path = "/cs/tmp/datasets/CBIS-DDSM/Calc-Training_P_00005_RIGHT_CC/08-07-2016-DDSM-23157/1.000000-full mammogram images-38548/1-1.dcm"

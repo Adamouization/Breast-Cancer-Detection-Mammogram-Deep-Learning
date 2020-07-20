@@ -4,6 +4,9 @@ import tensorflow as tf
 
 
 def gpu_checks() -> None:
+    """
+    Originally written as a group for the common pipeline.
+    """
     if socket.gethostname() == "pc5-026-l":
         print("Running sanity checks for GPU through PyTorch and Tensorflow")
         test_gpu()
@@ -13,6 +16,9 @@ def gpu_checks() -> None:
 
 
 def basic_import_test() -> None:
+    """
+    Originally written as a group for the common pipeline.
+    """
     # PyTorch test
     # x = torch.rand(5, 3)
     # print(x)
@@ -35,6 +41,9 @@ def basic_import_test() -> None:
 
 
 def test_gpu() -> None:
+    """
+    Originally written as a group for the common pipeline.
+    """
     # PyTorch
     # print("torch.cuda.current_device() ", torch.cuda.current_device())
     # print("torch.cuda.device(0) ", torch.cuda.device(0))

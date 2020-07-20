@@ -1,5 +1,6 @@
 """
 Variables set by the command line arguments dictating which parts of the program to execute.
+Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
 """
 
 # Constants

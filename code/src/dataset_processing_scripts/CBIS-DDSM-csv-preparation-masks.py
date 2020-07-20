@@ -14,10 +14,13 @@ def main() -> None:
         * Merges image path which extracted on GPU machine and image pathology which is in the original csv file on image id
         * Outputs 4 CSV files.
 
-        Generate CSV file columns:
-          img: image id (e.g Calc-Test_P_00038_LEFT_CC => <case type>_<patient id>_<left or right breast>_<CC or MLO>)
-          img_path: image path on the GPU machine
-          label: image pathology (BENIGN or MALIGNANT)
+    Generate CSV file columns:
+      img: image id (e.g Calc-Test_P_00038_LEFT_CC => <case type>_<patient id>_<left or right breast>_<CC or MLO>)
+      img_path: image path on the GPU machine
+      label: image pathology (BENIGN or MALIGNANT)
+      
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    
     :return: None
     """
     csv_root = '../data/CBIS-DDSM/ori_csv'      # original csv folder

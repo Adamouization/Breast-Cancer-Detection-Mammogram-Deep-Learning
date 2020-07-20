@@ -10,6 +10,7 @@ from utils import save_output_figure
 def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised: bool) -> None:
     """
     Plot confusion matrix.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :param cm: Confusion matrix array.
     :param fmt: The formatter for numbers in confusion matrix.
     :param label_encoder: The label encoder used to get the number of classes.
@@ -47,6 +48,7 @@ def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised
 def plot_comparison_chart(df: pd.DataFrame) -> None:
     """
     Plot comparison bar chart.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :param df: Compare data from json file.
     :return: None.
     """
@@ -71,7 +73,8 @@ def plot_comparison_chart(df: pd.DataFrame) -> None:
 
 def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     """
-    Function to plot loss and accuracy over epoch count for training
+    Function to plot loss and accuracy over epoch count for training.
+    Originally written as a group for the common pipeline.
     :param is_frozen_layers: Boolean controlling whether some layers are frozen (for the plot title).
     :param hist_input: The training history.
     :param plot_name: The plot name.

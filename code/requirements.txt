@@ -7,16 +7,20 @@ bleach==3.1.5
 cachetools==4.1.0
 certifi==2020.6.20
 chardet==3.0.4
+cloudpickle==1.5.0
 cycler==0.10.0
 decorator==4.4.2
 defusedxml==0.6.0
 entrypoints==0.3
+future==0.18.2
 gast==0.2.2
 google-auth==1.18.0
 google-auth-oauthlib==0.4.1
 google-pasta==0.2.0
 grpcio==1.30.0
 h5py==2.10.0
+hyperas==0.4.1
+hyperopt==0.2.4
 idna==2.9
 imageio==2.8.0
 importlib-metadata==1.6.1
@@ -37,6 +41,7 @@ jupyter-console==6.1.0
 jupyter-core==4.6.3
 jupyterlab==2.1.5
 jupyterlab-server==1.2.0
+Keras==2.4.3
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.2
 kiwisolver==1.2.0
@@ -72,6 +77,7 @@ pyrsistent==0.16.0
 python-dateutil==2.8.1
 pytz==2020.1
 PyWavelets==1.1.1
+PyYAML==5.3.1
 pyzmq==19.0.1
 qtconsole==4.7.5
 QtPy==1.9.0
@@ -99,6 +105,7 @@ tf-nightly==2.5.0.dev20200626
 threadpoolctl==2.1.0
 tifffile==2020.6.3
 tornado==6.0.4
+tqdm==4.48.0
 traitlets==4.3.3
 urllib3==1.25.9
 wcwidth==0.2.5

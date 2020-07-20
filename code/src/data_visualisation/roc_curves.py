@@ -9,6 +9,7 @@ from utils import save_output_figure
 def plot_roc_curve_binary(y_true: list, y_pred: list) -> None:
     """
     Plot ROC curve for binary classification.
+    Originally written as a group for the common pipeline.
     :param y_true: Ground truth of the data in one-hot-encoding type.
     :param y_pred: Prediction result of the data in one-hot-encoding type.
     :return: None.
@@ -40,7 +41,8 @@ def plot_roc_curve_multiclass(y_true: list, y_pred: list, label_encoder) -> None
     Plot ROC curve for multi classification.
 
     Code reference: https://github.com/DeepmindHub/python-/blob/master/ROC%20Curve%20Multiclass.py
-
+    Originally written as a group for the common pipeline.
+    
     :param y_true: Ground truth of the data in one-hot-encoding type.
     :param y_pred: Prediction result of the data in one-hot-encoding type.
     :return: None.

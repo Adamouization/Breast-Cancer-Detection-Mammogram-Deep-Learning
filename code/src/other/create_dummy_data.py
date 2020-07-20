@@ -11,6 +11,7 @@ def get_fashion_images():
     Function to load mnist_fashion data set:
         * Only using a subset of the data for testing functionality of the model
         * Resize the images to 512*512
+    Originally written as a group for the common pipeline.
     :return: training and testing data
     """
     (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
@@ -44,6 +45,7 @@ def get_fashion_images():
 def generate_all_data():
     """
     Function to generate all dummy training validation and testing data for functionality testing of network
+    Originally written as a group for the common pipeline.
     :return: training, validation, testing data and imageDataGenerators
     """
     trainX, testX, trainY, testY = get_fashion_images()

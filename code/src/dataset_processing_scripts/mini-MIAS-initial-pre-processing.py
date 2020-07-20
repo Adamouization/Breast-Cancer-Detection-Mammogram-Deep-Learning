@@ -12,6 +12,7 @@ def main() -> None:
         * Organises all images into labelled directories instead of one large directory with all images from all
         classes.
         * Converts all PGM images to PNG format.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :return: None
     """
     KEY_LABEL = 3

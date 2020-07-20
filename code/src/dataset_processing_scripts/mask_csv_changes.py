@@ -3,7 +3,8 @@ import pandas as pd
 
 def main() -> None:
     """
-    Folder to adjust csv to remove images with multiple masks i.e. when they have multiple tumours
+    Folder to adjust csv to remove images with multiple masks i.e. when they have multiple tumours.
+    Originally written as a group for the common pipeline.
     """
     csv_mask_root_file = '../data/CBIS-DDSM-mask/training.csv'
     csv_image_root_file = '../data/CBIS-DDSM/training.csv'
@@ -20,6 +21,9 @@ def main() -> None:
 
 
 def join_paths_and_remove_duplicates(mask_path, img_path, file_name, output_path):
+    """
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    """
     df_masks = pd.read_csv(mask_path, usecols=["img", "img_path", "label"])
     df_masks['shortened_img_name'] = df_masks.apply(lambda x: x["img"][:-2], axis=1)
     df_masks.drop_duplicates(subset="shortened_img_name", keep=False, inplace=True)

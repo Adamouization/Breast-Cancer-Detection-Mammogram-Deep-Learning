@@ -3,12 +3,13 @@ import time
 
 from tensorflow.keras.models import load_model
 
+from cnn_model import CNN_Model
 import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, import_cbisddsm_training_dataset, \
     import_minimias_dataset
 from data_operations.data_transformations import generate_image_transforms
-from cnn_model import CNN_Model
+# from grid_search import fine_tune_hyperparameters
 from utils import create_label_encoder, print_cli_arguments, print_error_message, \
     print_num_gpus_available, print_runtime
 
@@ -16,6 +17,7 @@ from utils import create_label_encoder, print_cli_arguments, print_error_message
 def main() -> None:
     """
     Program entry point. Parses command line arguments to decide which dataset and model to use.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :return: None.
     """
     parse_command_line_arguments()
@@ -38,24 +40,25 @@ def main() -> None:
 
             # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
-
+            
+            # Data augmentation.
             if config.dataset == "mini-MIAS":
                 X_train, y_train = generate_image_transforms(X_train, y_train)
                 
-            # Create CNN Model.
-            model = CNN_Model(config.model, l_e.classes_.size)
-
-            # Fine-tune hyperparameters using grid search.
-            if config.is_grid_search:
-                model.grid_search(X_train, y_train)
             # Train CNN model.
-            else:
-                # Split training/validation set (75/25% split).
+            if not config.is_grid_search:
+                # Create CNN model and split training/validation set (75/25% split).
+                model = CNN_Model(config.model, l_e.classes_.size)
                 X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
                                                                           dataset=X_train,
                                                                           labels=y_train)
                 model.train_model(X_train, X_val, y_train, y_val)
-
+            
+            # Fine-tune hyperparameters using grid search.
+#             else: 
+#                 fine_tune_hyperparameters(X_train, X_val, y_train, y_val)
+                # model.grid_search(X_train, y_train)
+                
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
             images, labels = import_cbisddsm_training_dataset(l_e)
@@ -107,11 +110,11 @@ def parse_command_line_arguments() -> None:
                         )
     parser.add_argument("-mt", "--mammogramtype",
                         default="all",
-                        help="The mammogram type to use. Can be either 'calc', 'mass' or 'all'."
+                        help="The mammogram type to use. Can be either 'calc', 'mass' or 'all'. Defaults to 'all'."
                         )
     parser.add_argument("-m", "--model",
                         required=True,
-                        help="The model to use. Must be either 'VGG' or 'Inception'."
+                        help="The model to use. Must be either 'VGG' or 'ResNet'."
                         )
     parser.add_argument("-r", "--runmode",
                         default="train",
@@ -122,7 +125,7 @@ def parse_command_line_arguments() -> None:
     parser.add_argument("-b", "--batchsize",
                         type=int,
                         default=2,
-                        help="The batch size to use Defaults to 'small'."
+                        help="The batch size to use. Defaults to 2."
                         )
     parser.add_argument("-e1", "--max_epoch_frozen",
                         type=int,

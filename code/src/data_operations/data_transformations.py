@@ -24,6 +24,7 @@ def get_data_augmentation_iterator():
 def generate_image_transforms(images, labels):
     """
     Oversample data by transforming existing images.
+    Originally written as a group for the common pipeline.
     :param images: input images
     :param labels: input labels
     :return: updated list of images and labels with extra transformed images and labels
@@ -77,6 +78,7 @@ def generate_image_transforms(images, labels):
 def random_rotation(image_array: np.ndarray):
     """
     Randomly rotate the image
+    Originally written as a group for the common pipeline.
     :param image_array: input image
     :return: randomly rotated image
     """
@@ -87,6 +89,7 @@ def random_rotation(image_array: np.ndarray):
 def random_noise(image_array: np.ndarray):
     """
     Add random noise to image
+    Originally written as a group for the common pipeline.
     :param image_array: input image
     :return: image with added random noise
     """
@@ -95,7 +98,8 @@ def random_noise(image_array: np.ndarray):
 
 def horizontal_flip(image_array: np.ndarray):
     """
-    Flip image
+    Flip image horizontally.
+    Originally written as a group for the common pipeline.
     :param image_array: input image
     :return: horizantally flipped image
     """
@@ -104,7 +108,8 @@ def horizontal_flip(image_array: np.ndarray):
 
 def create_individual_transform(image: np.array, transforms: dict):
     """
-    Create transformation of an individual image
+    Create transformation of an individual image.
+    Originally written as a group for the common pipeline.
     :param image: input image
     :param transforms: the possible transforms to do on the image
     :return: transformed image
@@ -123,6 +128,7 @@ def create_individual_transform(image: np.array, transforms: dict):
 def get_class_balances(y_vals):
     """
     Count occurrences of each class.
+    Originally written as a group for the common pipeline.
     :param y_vals: labels
     :return: array count of each class
     """

@@ -29,8 +29,6 @@ class CNN_Model:
     def __init__(self, model_name: str, num_classes: int):
         """
         Function to create a CNN model containing a pre-trained CNN architecture with custom convolution layers at the top and fully connected layers at the end.
-        If the "advanced" command line argument is selected, adds an extra convolutional layer with extra filters to
-        support larger images.
         :param model_name: The CNN model to use.
         :param num_classes: The number of classes (labels).
         :return: The VGG19 model.
@@ -42,9 +40,11 @@ class CNN_Model:
 
         self.create_model()
 
-    def create_model(self):
+    def create_model(self) -> None:
         """
         Creates a CNN from an existing architecture with pre-trained weights on ImageNet.
+        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+        :return: None.
         """
         base_model = Sequential(name="Base_Model")
 
@@ -145,6 +145,7 @@ class CNN_Model:
         Function to train network in two steps:
             * Train network with initial pre-trained CNN's layers frozen.
             * Unfreeze all layers and retrain with smaller learning rate.
+        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
         :param X_train: training input
         :param X_val: training outputs
         :param y_train: validation inputs
@@ -172,8 +173,9 @@ class CNN_Model:
     def compile_model(self, learning_rate) -> None:
         """
         Compile the Keras CNN model.
-        :param learning_rate:
-        :return:
+        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+        :param learning_rate: The initial learning rate for the optimiser.
+        :return: None
         """
         if config.dataset == "CBIS-DDSM" or config.dataset == "mini-MIAS-binary":
             self._model.compile(optimizer=Adam(learning_rate),
@@ -187,6 +189,7 @@ class CNN_Model:
     def fit_model(self, X_train, X_val, y_train, y_val) -> None:
         """
         Fit the Keras CNN model and plot the training evolution.
+        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
         :param X_train:
         :param X_val:
         :param y_train:
@@ -217,7 +220,7 @@ class CNN_Model:
                 validation_steps=len(X_val) // config.batch_size,
                 epochs=config.max_epoch_frozen,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                    EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
                     ReduceLROnPlateau(patience=4)
                 ]
             )
@@ -225,14 +228,16 @@ class CNN_Model:
             self.history = self._model.fit(
                 x=X_train,
                 validation_data=X_val,
-                epochs=epochs1,
+                epochs=config.max_epoch_frozen,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True),
+                    EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
                     ReduceLROnPlateau(patience=4)]
             )
 
     def make_prediction(self, x_values):
         """
+        Makes a prediction using unseen data.
+        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
         :param x_values: The input.
         :return: The model predictions (not probabilities).
         """
@@ -296,6 +301,7 @@ class CNN_Model:
     def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str) -> None:
         """
         Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.
+        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
         :param y_true: Ground truth of the data in one-hot-encoding type.
         :param label_encoder: The label encoder for y value (label).
         :param classification_type: The classification type. Ex: N-B-M: normal, benign and malignant; B-M: benign and

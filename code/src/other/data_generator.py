@@ -38,7 +38,8 @@ model.fit(x=training_generator,
 
 class DataGenerator(Sequence):
     """
-    Generates data using Sequence to cycle through images to be processed for training
+    Generates data using Sequence to cycle through images to be processed for training.
+    Originally written as a group for the common pipeline.
     """
 
     def __init__(self, list_IDs, labels, batch_size=config.batch_size,

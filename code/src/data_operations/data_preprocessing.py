@@ -13,6 +13,7 @@ import config
 def import_minimias_dataset(data_dir: str, label_encoder) -> (np.ndarray, np.ndarray):
     """
     Import the dataset by pre-processing the images and encoding the labels.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :param data_dir: Directory to the mini-MIAS images.
     :param label_encoder: The label encoder.
     :return: Two NumPy arrays, one for the processed images and one for the encoded labels.
@@ -39,6 +40,7 @@ def import_minimias_dataset(data_dir: str, label_encoder) -> (np.ndarray, np.nda
 def import_cbisddsm_training_dataset(label_encoder):
     """
     Import the dataset getting the image paths (downloaded on BigTMP) and encoding the labels.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :param label_encoder: The label encoder.
     :return: Two arrays, one for the image paths and one for the encoded labels.
     """
@@ -62,6 +64,7 @@ def preprocess_image(image_path: str) -> np.ndarray:
         * resize it to 224x224 pixels for the VGG19 CNN model,
         * transform it to an array format,
         * normalise the pixel intensities.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :param image_path: The path to the image to preprocess.
     :return: The pre-processed image in NumPy array format.
     """
@@ -86,6 +89,7 @@ def preprocess_image(image_path: str) -> np.ndarray:
 def encode_labels(labels_list: np.ndarray, label_encoder) -> np.ndarray:
     """
     Encode labels using one-hot encoding.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :param label_encoder: The label encoder.
     :param labels_list: The list of labels in NumPy array format.
     :return: The encoded list of labels in NumPy array format.
@@ -102,6 +106,7 @@ def dataset_stratified_split(split: float, dataset: np.ndarray, labels: np.ndarr
     """
     Partition the data into training and testing splits. Stratify the split to keep the same class distribution in both
     sets and shuffle the order to avoid having imbalanced splits.
+    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :param split: Dataset split (e.g. if 0.2 is passed, then the dataset is split in 80%/20%).
     :param dataset: The dataset of pre-processed images.
     :param labels: The list of labels.
