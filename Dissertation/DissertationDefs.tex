@@ -1,5 +1,5 @@
 %% Package to includes to provide additional functionality to the dissertation document
-\usepackage{harvard}        	% Uses harvard style referencing
+\usepackage[comma, semicolon]{natbib} % Uses harvard style referencing
 \usepackage{graphicx}       	% Permits import of various graphics formats
 \usepackage{multicol}   	    % Provides ability to split output into columns
 \usepackage{listings}       	% Provides styled code listings
@@ -17,6 +17,7 @@
 \usepackage{subcaption}         % subfigures to have multiple images on the same line
 \usepackage{tabto}              % use tabs
 \usepackage{minted}             % code listings
+\usepackage[nottoc]{tocbibind}  % add bibliography to toc
 \usepackage[export]{adjustbox}  % allows figures to be positioned (left-center-right)
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -27,15 +28,17 @@
 % \geometry{bindingoffset=1cm}    
 
 %% Format definitions for the style
-\bibliographystyle{agsm} %{alpha}
-\citationstyle{dcu}
+\bibliographystyle{agsm}
+\setcitestyle{aysep={,}, citesep={;}} 
+
+% Heading style
 \pagestyle{headings}
 \fussy
 
 %% Break long urls with the following characters
 \def\UrlBreaks{\do\/\do-\do.\do0}
 
-% style code listings
+% Style code listings
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
