@@ -13,8 +13,10 @@ def create_dataset(x, y):
     :return: the dataset
     """
     dataset = tf.data.Dataset.from_tensor_slices((x, y))
-    # map values from dicom image path to array
+
+    # Map values from dicom image path to array
     dataset = dataset.map(parse_function, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
     # Dataset to cache data and repeat until all samples have been run once in each epoch
     dataset = dataset.cache().repeat(1)
     dataset = dataset.batch(config.batch_size)
@@ -26,15 +28,13 @@ def create_dataset(x, y):
 def parse_function(filename, label):
     """
     Mapping function to convert filename to array of pixel values.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     """
     image_bytes = tf.io.read_file(filename)
     image = tfio.image.decode_dicom_image(image_bytes, color_dim = True, dtype=tf.uint16)
     as_png = tf.image.encode_png(image[0])
     decoded_png = tf.io.decode_png(as_png, channels=1)
-    height = config.MINI_MIAS_IMG_SIZE['HEIGHT']
-    width = config.MINI_MIAS_IMG_SIZE["WIDTH"]
-    image = tf.image.resize(decoded_png, [height, width])
+    image = tf.image.resize(decoded_png, [config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"]])
     image /= 255
 
     return image, label

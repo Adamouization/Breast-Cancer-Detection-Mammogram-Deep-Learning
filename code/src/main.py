@@ -3,13 +3,12 @@ import time
 
 from tensorflow.keras.models import load_model
 
-from cnn_model import CNN_Model
+from cnn_models.cnn_model import CNN_Model
 import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import dataset_stratified_split, import_cbisddsm_training_dataset, \
     import_minimias_dataset
 from data_operations.data_transformations import generate_image_transforms
-# from grid_search import fine_tune_hyperparameters
 from utils import create_label_encoder, print_cli_arguments, print_error_message, \
     print_num_gpus_available, print_runtime
 
@@ -40,11 +39,11 @@ def main() -> None:
 
             # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
-            
+
             # Data augmentation.
             if config.dataset == "mini-MIAS":
                 X_train, y_train = generate_image_transforms(X_train, y_train)
-                
+
             # Train CNN model.
             if not config.is_grid_search:
                 # Create CNN model and split training/validation set (75/25% split).
@@ -53,12 +52,12 @@ def main() -> None:
                                                                           dataset=X_train,
                                                                           labels=y_train)
                 model.train_model(X_train, X_val, y_train, y_val)
-            
+
             # Fine-tune hyperparameters using grid search.
-#             else: 
+#             else:
 #                 fine_tune_hyperparameters(X_train, X_val, y_train, y_val)
                 # model.grid_search(X_train, y_train)
-                
+
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
             images, labels = import_cbisddsm_training_dataset(l_e)

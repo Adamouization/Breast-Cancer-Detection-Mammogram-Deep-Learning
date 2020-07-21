@@ -13,7 +13,7 @@ import config
 def import_minimias_dataset(data_dir: str, label_encoder) -> (np.ndarray, np.ndarray):
     """
     Import the dataset by pre-processing the images and encoding the labels.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param data_dir: Directory to the mini-MIAS images.
     :param label_encoder: The label encoder.
     :return: Two NumPy arrays, one for the processed images and one for the encoded labels.
@@ -40,7 +40,7 @@ def import_minimias_dataset(data_dir: str, label_encoder) -> (np.ndarray, np.nda
 def import_cbisddsm_training_dataset(label_encoder):
     """
     Import the dataset getting the image paths (downloaded on BigTMP) and encoding the labels.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param label_encoder: The label encoder.
     :return: Two arrays, one for the image paths and one for the encoded labels.
     """
@@ -51,7 +51,7 @@ def import_cbisddsm_training_dataset(label_encoder):
         cbis_ddsm_path = "../data/CBIS-DDSM/mass-training.csv"
     else:
         cbis_ddsm_path = "../data/CBIS-DDSM/training.csv"
-    df = pd.read_csv("../data/CBIS-DDSM/calc-training.csv")
+    df = pd.read_csv(cbis_ddsm_path)
     list_IDs = df['img_path'].values
     labels = encode_labels(df['label'].values, label_encoder)
     return list_IDs, labels
@@ -64,7 +64,7 @@ def preprocess_image(image_path: str) -> np.ndarray:
         * resize it to 224x224 pixels for the VGG19 CNN model,
         * transform it to an array format,
         * normalise the pixel intensities.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param image_path: The path to the image to preprocess.
     :return: The pre-processed image in NumPy array format.
     """
