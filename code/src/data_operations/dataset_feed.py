@@ -23,35 +23,6 @@ def create_dataset(x, y):
     return dataset
 
 
-# def parse_function_small(filename, label):
-#     """
-#     mapping function to convert filename to array of pixel values
-#     :param filename:
-#     :param label:
-#     :return:
-#     """
-#     image_bytes = tf.io.read_file(filename)
-#     image = tfio.image.decode_dicom_image(image_bytes, color_dim=True, scale="auto", dtype=tf.uint16)
-#     as_png = tf.image.encode_png(image[0])
-#     decoded_png = tf.io.decode_png(as_png, channels=1)
-#     if config.model == "VGG":
-#         height = config.VGG_IMG_SIZE['HEIGHT']
-#         width = config.VGG_IMG_SIZE['WIDTH']
-#     elif config.model == "ResNet":
-#         height = config.RESNET_IMG_SIZE['HEIGHT']
-#         width = config.RESNET_IMG_SIZE['WIDTH']
-#     elif config.model == "Inception":
-#         height = config.INCEPTION_IMG_SIZE['HEIGHT']
-#         width = config.INCEPTION_IMG_SIZE['WIDTH']
-#     elif config.model == "Xception":
-#         height = config.XCEPTION_IMG_SIZE['HEIGHT']
-#         width = config.XCEPTION_IMG_SIZE['WIDTH']
-#     image = tf.image.resize(decoded_png, [height, width])
-#     image /= 255
-
-#     return image, label
-
-
 def parse_function(filename, label):
     """
     Mapping function to convert filename to array of pixel values.
@@ -63,19 +34,6 @@ def parse_function(filename, label):
     decoded_png = tf.io.decode_png(as_png, channels=1)
     height = config.MINI_MIAS_IMG_SIZE['HEIGHT']
     width = config.MINI_MIAS_IMG_SIZE["WIDTH"]
-#     if config.model == "VGG":
-#         height = config.VGG_IMG_SIZE['HEIGHT']
-#         width = config.VGG_IMG_SIZE['WIDTH']
-#     elif config.model == "ResNet":
-#         height = config.RESNET_IMG_SIZE['HEIGHT']
-#         width = config.RESNET_IMG_SIZE['WIDTH']
-#     elif config.model == "Inception":
-#         height = config.INCEPTION_IMG_SIZE['HEIGHT']
-#         width = config.INCEPTION_IMG_SIZE['WIDTH']
-#     elif config.model == "Xception":
-#         height = config.XCEPTION_IMG_SIZE['HEIGHT']
-#         width = config.XCEPTION_IMG_SIZE['WIDTH']
-#     image = tf.image.resize_with_pad(decoded_png, height, width)
     image = tf.image.resize(decoded_png, [height, width])
     image /= 255
 

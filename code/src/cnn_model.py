@@ -38,7 +38,14 @@ class CNN_Model:
         self.history = None
         self.prediction = None
 
-        self.create_model()
+        if self.model_name == "VGG":
+            self.create_model()
+        elif self.model_name == "ResNet":
+            pass
+        elif self.model_name == "Inception":
+            pass
+        elif self.model_name == "Xception":
+            pass
 
     def create_model(self) -> None:
         """
@@ -50,17 +57,6 @@ class CNN_Model:
 
         # Reconfigure a single channel image input (greyscale) into a 3-channel greyscale input (tensor).
         single_channel_input = Input(shape=(config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE['WIDTH'], 1))
-        #         if self.model_name == "VGG":
-        #             single_channel_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
-        #         elif self.model_name == "ResNet":
-        #             single_channel_input = Input(shape=(config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 1))
-        #         elif self.model_name == "Inception":
-        #             single_channel_input = Input(
-        #                 shape=(config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1))
-        #         elif self.model_name == "Xception":
-        #             single_channel_input = Input(
-        #                 shape=(config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE['WIDTH'], 1)
-        #             )
         triple_channel_input = Concatenate()([single_channel_input, single_channel_input, single_channel_input])
         input_model = Model(inputs=single_channel_input, outputs=triple_channel_input)
         base_model.add(input_model)
@@ -73,7 +69,6 @@ class CNN_Model:
                               activation='relu',
                               padding='same'))
         base_model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-        base_model.add(Dropout(0.25))
 
         # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluding the fully
         # connected layers.
@@ -108,26 +103,15 @@ class CNN_Model:
         self._model.add(base_model)
         self._model.add(pre_trained_model_trimmed)
 
-        # Generate additional convolutional layers (advanced model)
-        # self._model.add(Conv2D(1024, (3, 3),
-        #                        activation='relu',
-        #                        padding='same'))
-        # self._model.add(Conv2D(1024, (3, 3),
-        #                        activation='relu',
-        #                        padding='same'))
-        # self._model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-
         # Flatten layer to convert each input into a 1D array (no parameters in this layer, just simple pre-processing).
         self._model.add(Flatten())
 
         # Add fully connected hidden layers and dropout layers between each for regularisation.
+        self._model.add(Dropout(0.2))
         self._model.add(Dense(units=512, activation='relu', name='Dense_1'))
-        #         self._model.add(Dropout(0.2))
+        self._model.add(Dropout(0.2))
         self._model.add(Dense(units=32, activation='relu', name='Dense_2'))
-        #         self._model.add(Dropout(0.2))
-        #         self._model.add(Dense(units=16, activation='relu', name='Dense_3'))
-        #         self._model.add(Dropout(0.2))
-
+        
         # Final output layer that uses softmax activation function (because the classes are exclusive).
         if config.dataset == "CBIS-DDSM" or config.dataset == "mini-MIAS-binary":
             self._model.add(Dense(1, activation='sigmoid', name='Output'))
@@ -156,7 +140,7 @@ class CNN_Model:
         self._model.layers[1].trainable = False
 
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
-        self.compile_model(1e-3)
+        self.compile_model(3e-3)
         self.fit_model(X_train, X_val, y_train, y_val)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Initial_training", True)
@@ -165,7 +149,7 @@ class CNN_Model:
         self._model.layers[1].trainable = True
 
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
-        self.compile_model(1e-4)  # Very low learning rate.
+        self.compile_model(1e-5)  # Very low learning rate.
         self.fit_model(X_train, X_val, y_train, y_val)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Fine_tuning_training", False)
@@ -206,7 +190,7 @@ class CNN_Model:
                 validation_steps=len(X_val) // config.batch_size,
                 epochs=config.max_epoch_frozen,
                 callbacks=[
-                    EarlyStopping(monitor='val_categorical_accuracy', patience=8, restore_best_weights=True),
+                    EarlyStopping(monitor='val_categorical_accuracy', patience=5, restore_best_weights=True),
                     ReduceLROnPlateau(patience=4)
                 ]
             )
