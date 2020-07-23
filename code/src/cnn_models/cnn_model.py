@@ -11,6 +11,7 @@ from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 import config
 from cnn_models.vgg19 import create_vgg19_model
+from cnn_models.vgg19_common import create_vgg19_model_common
 from data_visualisation.plots import *
 from data_visualisation.roc_curves import *
 
@@ -19,11 +20,11 @@ class CNN_Model:
 
     def __init__(self, model_name: str, num_classes: int):
         """
-        Function to create a CNN model containing a pre-trained CNN architecture with custom convolution layers at the
-        top and fully connected layers at the end.
-        :param model_name: The CNN model to use.
+        Function to create a CNN model object and instantiate a CNN model containing a pre-trained CNN architecture 
+        with custom convolution layers at the  top and fully connected layers at the end.
+        :param model_name: The name of the CNN model to use.
         :param num_classes: The number of classes (labels).
-        :return: The VGG19 model.
+        :return: None.
         """
         self.num_classes = num_classes
         self.model_name = model_name
@@ -32,6 +33,8 @@ class CNN_Model:
 
         if self.model_name == "VGG":
             self._model = create_vgg19_model(self.num_classes)
+        elif self.model_name == "VGG-common":
+            self._model = create_vgg19_model_common(self.num_classes)
         elif self.model_name == "ResNet":
             pass
         elif self.model_name == "Inception":
@@ -52,20 +55,33 @@ class CNN_Model:
         :return: None
         """
         # Freeze pre-trained CNN model layers: only train fully connected layers.
-        self._model.layers[1].trainable = False
+        layer_name = str()
+        if self.model_name == "VGG":
+            self._model.layers[1].trainable = False
+            layer_name = self._model.layers[1].name
+        elif self.model_name == "VGG-common":
+            self._model.layers[0].trainable = False
+            layer_name = self._model.layers[0].name
+        if config.verbose_mode:
+            print("Freezing '{}' layers".format(layer_name))
 
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
-        self.compile_model(3e-3)
-        self.fit_model(X_train, X_val, y_train, y_val, )
+        self.compile_model(1e-3)
+        self.fit_model(X_train, X_val, y_train, y_val, True)
         # Plot the training loss and accuracy.
-        plot_training_results(self.history, "Initial_training", True)
+        plot_training_results(self.history, "Initial_training", is_frozen_layers=True)
 
         # Unfreeze all layers.
-        self._model.layers[1].trainable = True
+        if self.model_name == "VGG":
+            self._model.layers[1].trainable = True
+        elif self.model_name == "VGG-common":
+            self._model.layers[0].trainable = True
+        if config.verbose_mode:
+            print("Unfreezing '{}' layers (all layers now unfrozen)".format(layer_name))
 
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
-        self.compile_model(1e-5)  # Very low learning rate.
-        self.fit_model(X_train, X_val, y_train, y_val)
+        self.compile_model(3e-5)  # Very low learning rate.
+        self.fit_model(X_train, X_val, y_train, y_val, is_frozen_layers=False)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Fine_tuning_training", False)
 
@@ -98,8 +114,10 @@ class CNN_Model:
         """
         if is_frozen_layers:
             max_epochs = config.max_epoch_frozen
+            patience = config.max_epoch_frozen / 10
         else:
             max_epochs = config.max_epoch_unfrozen
+            patience = config.max_epoch_unfrozen / 10
 
         if config.dataset == "mini-MIAS":
             self.history = self._model.fit(
@@ -111,8 +129,8 @@ class CNN_Model:
                 validation_steps=len(X_val) // config.batch_size,
                 epochs=max_epochs,
                 callbacks=[
-                    EarlyStopping(monitor='val_categorical_accuracy', patience=5, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=4)
+                    EarlyStopping(monitor='val_categorical_accuracy', patience=patience, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=5)
                 ]
             )
         elif config.dataset == "mini-MIAS-binary":
@@ -125,8 +143,8 @@ class CNN_Model:
                 validation_steps=len(X_val) // config.batch_size,
                 epochs=max_epochs,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=4)
+                    EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=5)
                 ]
             )
         elif config.dataset == "CBIS-DDSM":
@@ -135,8 +153,8 @@ class CNN_Model:
                 validation_data=X_val,
                 epochs=config.max_epochs,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=4)]
+                    EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=5)]
             )
 
     def make_prediction(self, x_values):
@@ -207,7 +225,7 @@ class CNN_Model:
 
         # Compare results with other similar papers' result.
         with open(
-                '../data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
+                'data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
             data = json.load(config_file)
 
         dataset_key = config.dataset

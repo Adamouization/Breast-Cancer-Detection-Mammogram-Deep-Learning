@@ -61,23 +61,17 @@ def preprocess_image(image_path: str) -> np.ndarray:
     """
     Pre-processing steps:
         * Load the input image in grayscale mode (1 channel),
-        * resize it to 224x224 pixels for the VGG19 CNN model,
+        * resize it to fit the CNN model input,
         * transform it to an array format,
         * normalise the pixel intensities.
     Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param image_path: The path to the image to preprocess.
     :return: The pre-processed image in NumPy array format.
     """
-    target_size = (config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"])
-    #     if config.model == "VGG":
-    #         target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])
-    #     elif config.model == "ResNet":
-    #         target_size = (config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE["WIDTH"])
-    #     elif config.model == "Inception":
-    #         target_size = (config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE["WIDTH"])
-    #     elif config.model == "Xception":
-    #         target_size = (config.XCEPTION_IMG_SIZE['HEIGHT'], config.XCEPTION_IMG_SIZE["WIDTH"])
-
+    if config.model == "VGG":
+        target_size = (config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"])
+    elif config.model == "VGG-common":
+        target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])
     image = load_img(image_path,
                      color_mode="grayscale",
                      target_size=target_size)

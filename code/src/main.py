@@ -10,7 +10,7 @@ from data_operations.data_preprocessing import dataset_stratified_split, import_
     import_minimias_dataset
 from data_operations.data_transformations import generate_image_transforms
 from utils import create_label_encoder, print_cli_arguments, print_error_message, \
-    print_num_gpus_available, print_runtime
+    print_num_gpus_available, print_runtime, set_random_seeds
 
 
 def main() -> None:
@@ -19,6 +19,7 @@ def main() -> None:
     Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
     :return: None.
     """
+    set_random_seeds()
     parse_command_line_arguments()
     print_num_gpus_available()
 

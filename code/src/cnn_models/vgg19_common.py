@@ -33,15 +33,8 @@ def create_vgg19_model_common(num_classes: int):
     # Flatten layer to convert each input into a 1D array (no parameters in this layer, just simple pre-processing).
     model.add(Flatten())
 
-    # Possible dropout for regularisation can be added later and experimented with:
-    model.add(Dropout(0.2, name='Dropout_Regularization_1'))
-
-    # Add fully connected hidden layers.
+    # Fully connected layers.
     model.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
-
-    # Possible dropout for regularisation can be added later and experimented with:
-    model.add(Dropout(0.2, name='Dropout_Regularization_2'))
-
     model.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
 
     # Final output layer that uses softmax activation function (because the classes are exclusive).
