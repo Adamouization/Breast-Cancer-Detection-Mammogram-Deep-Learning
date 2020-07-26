@@ -1,17 +1,26 @@
 \section{Motivation}
 
-Breast cancer is one of the most common forms of cancer amongst women in the UK, with statistics indicating that 1 in 7 females will be diagnosed with breast cancer in their lifetime. Indeed, 55,200 new breast cancer cases are reported every year in the UK, of which an average of 11,400 lead to death (20\% mortality rate) \citep{BreastCancerResearchUK}. However, many other types of cancer types exist, ranging from lung and prostate cancers to colon and bladder cancers to name a few \citep{cokkinides2005american}.\\
+Breast cancer is one of the most common forms of cancer amongst women in the UK, with statistics indicating that 1 in 7 females will be diagnosed with breast cancer in their lifetime. Indeed, 55,200 new breast cancer cases are reported every year in the UK, of which an average of 11,400 lead to death \citep{BreastCancerResearchUK}, averaging a 20\% mortality rate.\\
 
-The goal of this project is to design a deep learning pipeline that can learn how to detect cases of breast cancer in mammograms (X-ray pictures of breasts) by detecting the presence of tumours, whether they are benign (non-cancerous) or malignant (cancerous), and their location in the mammogram. The deep learning algorithm will learn the underlying patterns of a large dataset of mammograms to carry out the aforementioned tasks. The motivation behind this project is to allow a technique for early and accurate breast cancer detection to prevent unnecessary treatments in cases of false positives and to prevent late treatments due to false negatives. Ultimately, the target of this project is to combine it with deep learning algorithms developed across other projects supervised by Dr David Harris-Birtill (past and present). This will allow a general artificial intelligence system capable of detecting multiple forms of cancer with higher accuracies than radiologist diagnostics.\\
+Early detection of breast cancer through screening tests such as mammograms is an efficient way to maximise the survival chances of patients by treating the disease prematurely. However, no matter the expertise of radiologists examining mammograms, external factors such as fatigue, distractions and human error need to be minimised \citep{Polat2007}, as the rate of missed breast cancers during initial mammogram screenings  are as high as 30\% \citep{Elter2009}. To convey the complexity of mammogram interpretation, Figure~\ref{fig:introduction-mammogram-examples} illustrates three different mammograms containing either normal or abnormal (benign and malignant) cases, and how similar they all look to an untrained eye.\\
 
-Parts of the work undertaken during this project will be conducted as a group comprised of two other members. The tasks in common involve the data cleaning and pre-processing, the results output and the implementation of a basic deep learning pipeline. The reasoning for these common tasks is to allow each group member to further explore deep learning techniques on their own using the common basic pipeline as a starting point and to compare final results at the end. Section~\ref{sec:introduction-objectives} covers in more detail which tasks will be conducted personally and in a group.
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/introduction/mammogram examples.png}}
+\caption{\label{fig:introduction-mammogram-examples}Example of three types of mammograms, including normal, benign and malignant cases. Figures extracted from the mini-MIAS dataset (Suckling, 1994). Created using draw.io.}
+\end{figure}
+
+Indeed, error-prone mammogram interpretations by radiologists can lead to decisions that can ultimately harm the patients. On one hand, breast cancers can be missed altogether, inducing an absence of treatments for sick patients, while on the other hand, an instance of breast cancer can be reported when in reality there is no cancerous tumour, leading to unnecessary treatment being carried out \citep{Elter2009}. To that end, using Computer-Assisted Detection (CAD) software can help minimise the number of wrong interpretations and increase the accuracy of mammography screening \citep{Shen2017}.\\
+
+The motivation behind this project is to implement a system to accurately detect breast cancer in order to prevent late treatments due to false negatives as well as preventing unnecessary treatments in cases of false positives. Ultimately, the long-term target of this project is to combine it with other deep learning algorithms developed across other projects supervised by Dr David Harris-Birtill (past and present). This will allow a general artificial intelligence system capable of detecting multiple forms of cancer with higher accuracies than radiologist diagnostics.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Problem Description}
 \label{sec:problem-description}
 
-To complete.
+CAD systems using deep learning techniques could in theory highly increase the accuracy of mammogram screenings for detecting early signs of breast cancers. However, these techniques require large amounts of data to learn its underlying patterns and adapt to new cases, powerful computing resources to accelerate the processing of learning the data, and are often very hard to optimise and .\\
+
+Parts of the work undertaken during this project will be conducted as a group comprised of two other members, Ashay Patel and Shuen-Jen Chen. Section~\ref{sec:introduction-objectives} covers in more detail which tasks will be conducted personally and in a group. The reasoning behind these common tasks is for a functional pipeline to be reached earlier, eventually allowing each group member to further explore deep learning techniques individually more quickly due to the limited time frame of this project, using the common basic pipeline as a starting point.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -20,7 +29,7 @@ To complete.
 
 The main objective of this project consists of implementing a deep learning pipeline that will be able to learn how to detect cases of breast cancer in mammograms. This objective is broken down into two steps:
 \begin{itemize}
-    \item \textbf{Group work}: a common deep learning pipeline will be initially implemented as part of a group with Ashay Patel and Shuen-Jen Chen over the course of a three-week period. The distribution of tasks between the group can be found in Appendix~\ref{ch:appendix-team-meeting-summaries}.
+    \item \textbf{Group work}: a common deep learning pipeline will be initially implemented as part of a group with Ashay Patel and Shuen-Jen Chen over the course of a three-week period, including data cleaning and pre-processing, results output and a basic deep learning model. The distribution of tasks between the group can be found in Appendix~\ref{ch:appendix-team-meeting-summaries}.
     \item \textbf{Individual work}: the aforementioned pipeline will then be individually extended by introducing techniques that differ from the ones found in existing literature.
 \end{itemize}
 

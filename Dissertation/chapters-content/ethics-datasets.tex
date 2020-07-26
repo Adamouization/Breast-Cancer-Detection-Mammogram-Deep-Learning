@@ -1,21 +1,17 @@
 \section{Ethical Considerations}
 
-The deep learning model will require real-life human data to learn its underlying patterns in order to detect cases of breast cancer in mammograms and to evaluate its performance. Therefore, the main ethical concern when using this sensitive medical data is whether it can be traced back to the original patient. As a result, fully anonymised, open-source and public datasets are used. After filling out the Preliminary Ethics Self-Assessment Form, it is determined that a full Ethics Application needs to be submitted and approved by the Ethics Committee.\\
-
-The approval letter from the University of St Andrew's Teaching and Research Ethics Committee concerning the ethical application submitted for this research project can be found in Appendix~\ref{ch:appendix-ethical-approval-letter}.
+The deep learning model aimed to be implemented during this project will require real-life data to learn its underlying patterns in order to be able to detect cases of breast cancer in mammograms and to evaluate its performance. Therefore, the main ethical concern when using sensitive medical data such as  mammograms is whether it can be traced back to the original patient. As a result, fully anonymous, open-source and public datasets are used. A full Ethics Application to the University of St Andrew's Teaching and Research Ethics Committee was therefore submitted at the early stages of the project and later approved. The approval letter from the committee can be found in Appendix~\ref{ch:appendix-ethical-approval-letter}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Datasets used}
 
-This project will make use of two open-source anonymised public datasets that have been approved by the University of St Andrew's Teaching and Research Ethics Committee for use in this project.
+This project will make use of two open-sourced anonymised public datasets that have been approved by the University of St Andrew's Teaching and Research Ethics Committee for use in this project.
 
 \subsection{CBIS-DDSM}
 
-The ``Curated Breast Imaging Subset of DDSM'' dataset \citep{Lee2017} is available online from The Cancer Imaging Archive \citep{Clark2013}. The dataset contains a total of 10,239 images gathered from 1,566 patients across 6,775 studies \citep{Lee2017}. This dataset is an updated subset of the older DDSM dataset \citep{DDSMdataset2001}, containing only cases with benign and malignant tumours (no normal cases).\\
-
-The dataset contains two different types of mammograms that show different information: calcification VS masses, as well as two different views that are used in most routine mammogram X-ray scans: bilateral craniocaudal (CC) and mediolateral oblique (MLO). 
+The ``Curated Breast Imaging Subset of DDSM'' (CBIS-DDSM) dataset \citep{Lee2017} is available online from The Cancer Imaging Archive \citep{Clark2013}. The dataset contains a total of 10,239 images in Digital Imaging and Communications in Medicine format (DICOM) gathered from 1,566 patients across 6,775 studies \citep{Lee2017}. This dataset is an updated subset of the older DDSM dataset \citep{DDSMdataset2001}, containing only abnormal cases with benign and malignant tumours (no normal cases). The dataset encloses two different types of mammograms that show different information: calcification VS masses, as well as two different views that are used in most routine mammogram X-ray scans: bilateral craniocaudal (CC) and mediolateral oblique (MLO). 
 
 \subsection{mini-MIAS}
 
-The ``mini-MIAS'' database, a smaller dataset of mammograms containing 322 images in Portable Gray Map (PGM) format with associated ground truth data \citep{Suckling1994}.
+The ``mini-MIAS'' database is a smaller dataset of mammograms containing 322 images in Portable Gray Map (PGM) format with associated ground truth data \citep{Suckling1994}. From a clinical point of view, this dataset is interesting as it contains the same abnormal cases as the CBIS-DDSM dataset, and normal cases well. However, its smaller size means that image processing techniques will have to be carried out to feed enough data into the deep learning model.
