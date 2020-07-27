@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from numpy.random import seed
 from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
-from tensorflow import set_random_seed
 
 import config
 
@@ -13,7 +12,7 @@ def set_random_seeds() -> None:
     :return: None.
     """
     seed(config.RANDOM_SEED)  # NumPy
-    set_random_seed(config.RANDOM_SEED)  # Tensorflow
+    tf.random.set_seed(config.RANDOM_SEED)  # Tensorflow
 
 
 def print_runtime(text: str, runtime: float) -> None:

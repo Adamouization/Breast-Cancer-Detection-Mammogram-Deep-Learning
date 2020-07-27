@@ -10,6 +10,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 import config
+from cnn_models.inceptionv3 import create_inceptionv3_model
 from cnn_models.vgg19 import create_vgg19_model
 from cnn_models.vgg19_common import create_vgg19_model_common
 from data_visualisation.plots import *
@@ -38,7 +39,7 @@ class CNN_Model:
         elif self.model_name == "ResNet":
             pass
         elif self.model_name == "Inception":
-            pass
+            self._model = create_inceptionv3_model(self.num_classes)
         elif self.model_name == "Xception":
             pass
 
@@ -59,28 +60,29 @@ class CNN_Model:
         if self.model_name == "VGG":
             self._model.layers[1].trainable = False
             layer_name = self._model.layers[1].name
-        elif self.model_name == "VGG-common":
+        elif self.model_name == "VGG-common" or self.model_name == "Inception":
             self._model.layers[0].trainable = False
             layer_name = self._model.layers[0].name
+        
         if config.verbose_mode:
             print("Freezing '{}' layers".format(layer_name))
 
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
-        self.compile_model(1e-3)
-        self.fit_model(X_train, X_val, y_train, y_val, True)
+        self.compile_model(1e-1)
+        self.fit_model(X_train, X_val, y_train, y_val, is_frozen_layers=True)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Initial_training", is_frozen_layers=True)
 
         # Unfreeze all layers.
         if self.model_name == "VGG":
             self._model.layers[1].trainable = True
-        elif self.model_name == "VGG-common":
+        elif self.model_name == "VGG-common" or self.model_name == "Inception":
             self._model.layers[0].trainable = True
         if config.verbose_mode:
             print("Unfreezing '{}' layers (all layers now unfrozen)".format(layer_name))
 
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
-        self.compile_model(3e-5)  # Very low learning rate.
+        self.compile_model(1e-4)  # Very low learning rate.
         self.fit_model(X_train, X_val, y_train, y_val, is_frozen_layers=False)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Fine_tuning_training", False)
@@ -151,7 +153,7 @@ class CNN_Model:
             self.history = self._model.fit(
                 x=X_train,
                 validation_data=X_val,
-                epochs=config.max_epochs,
+                epochs=max_epochs,
                 callbacks=[
                     EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True),
                     ReduceLROnPlateau(patience=5)]
@@ -168,7 +170,7 @@ class CNN_Model:
             self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=config.batch_size)
         elif config.dataset == "CBIS-DDSM":
             self.prediction = self._model.predict(x=x_values)
-        # print(self.prediction)
+        print(self.prediction)
 
     def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str) -> None:
         """

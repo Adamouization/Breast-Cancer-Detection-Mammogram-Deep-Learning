@@ -68,7 +68,7 @@ def preprocess_image(image_path: str) -> np.ndarray:
     :param image_path: The path to the image to preprocess.
     :return: The pre-processed image in NumPy array format.
     """
-    if config.model == "VGG":
+    if config.model == "VGG" or config.model == "Inception":
         target_size = (config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"])
     elif config.model == "VGG-common":
         target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])

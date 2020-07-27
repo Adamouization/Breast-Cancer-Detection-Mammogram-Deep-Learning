@@ -8,19 +8,6 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import config
 
 
-def get_data_augmentation_iterator():
-    return ImageDataGenerator(
-        featurewise_center=True,
-        featurewise_std_normalization=True,
-        rotation_range=25,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        brightness_range=[0.05,0.2],
-        zoom_range=[0.05,0.2],
-        horizontal_flip=True,
-        validation_split=0.25
-    )
-
 def generate_image_transforms(images, labels):
     """
     Oversample data by transforming existing images.
@@ -32,12 +19,15 @@ def generate_image_transforms(images, labels):
     images_with_transforms = images
     labels_with_transforms = labels
 
-    available_transforms = {'rotate': random_rotation,
-                            'noise': random_noise,
-                            'horizontal_flip': horizontal_flip}
+    available_transforms = {
+        'rotate': random_rotation,
+        'noise': random_noise,
+        'horizontal_flip': horizontal_flip,
+        'shear': random_shearing
+    }
 
     class_balance = get_class_balances(labels)
-    max_count = max(class_balance)
+    max_count = max(class_balance)  # Balance classes.
     to_add = [max_count - i for i in class_balance]
 
     for i in range(len(to_add)):
@@ -53,7 +43,8 @@ def generate_image_transforms(images, labels):
             transformed_image = create_individual_transform(indiv_class_images[k % len(indiv_class_images)],
                                                             available_transforms)
             
-            if config.model == "VGG":
+
+            if config.model == "VGG" or config.model == "Inception":
                 transformed_image = transformed_image.reshape(1, config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"], 1)
             elif config.model == "VGG-common":
                 transformed_image = transformed_image.reshape(1, config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"], 1)
@@ -72,7 +63,7 @@ def random_rotation(image_array: np.ndarray):
     :param image_array: input image
     :return: randomly rotated image
     """
-    random_degree = random.uniform(-20, 20)
+    random_degree = random.uniform(-180, 180)
     return sk.transform.rotate(image_array, random_degree)
 
 
@@ -94,6 +85,11 @@ def horizontal_flip(image_array: np.ndarray):
     :return: horizantally flipped image
     """
     return image_array[:, ::-1]
+
+def random_shearing(image_array: np.ndarray):
+    random_degree = random.uniform(-0.1, 0.1)
+    tf = sk.transform.AffineTransform(shear=random_degree)
+    return sk.transform.warp(image_array, tf, order=1, preserve_range=True, mode='wrap')
 
 
 def create_individual_transform(image: np.array, transforms: dict):

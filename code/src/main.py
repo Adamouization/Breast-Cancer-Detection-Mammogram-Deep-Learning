@@ -41,10 +41,6 @@ def main() -> None:
             # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
 
-            # Data augmentation.
-            if config.dataset == "mini-MIAS":
-                X_train, y_train = generate_image_transforms(X_train, y_train)
-
             # Train CNN model.
             if not config.is_grid_search:
                 # Create CNN model and split training/validation set (75/25% split).
@@ -52,6 +48,15 @@ def main() -> None:
                 X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
                                                                           dataset=X_train,
                                                                           labels=y_train)
+                
+                # Data augmentation.
+                if config.dataset == "mini-MIAS":
+                    X_train, y_train = generate_image_transforms(X_train, y_train)
+                
+                # Fit model.
+                if config.verbose_mode:
+                    print("Training set size: {}".format(X_train.shape))
+                    print("Validation set size: {}".format(X_val.shape))
                 model.train_model(X_train, X_val, y_train, y_val)
 
             # Fine-tune hyperparameters using grid search.
