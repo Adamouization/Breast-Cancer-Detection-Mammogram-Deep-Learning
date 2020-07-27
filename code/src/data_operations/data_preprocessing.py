@@ -25,7 +25,6 @@ def import_minimias_dataset(data_dir: str, label_encoder) -> (np.ndarray, np.nda
     if not config.is_roi:
         # Loop over the image paths and update the data and labels lists with the pre-processed images & labels.
         for image_path in list(paths.list_images(data_dir)):
-            print(image_path)
             images.append(preprocess_image(image_path))
             labels.append(image_path.split(os.path.sep)[-2])  # Extract label from path.
     else:
@@ -79,6 +78,8 @@ def preprocess_image(image_path: str) -> np.ndarray:
             target_size = (config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"])
         elif config.model == "VGG-common":
             target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])
+        elif config.model == "CNN":
+            target_size = (config.ROI_IMG_SIZE['HEIGHT'], config.ROI_IMG_SIZE["WIDTH"])
         image = load_img(image_path, color_mode="grayscale", target_size=target_size)
     
     # Do not resize if using cropped ROI image.

@@ -10,6 +10,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 import config
+from cnn_models.basic_cnn import create_basic_cnn_model
 from cnn_models.inceptionv3 import create_inceptionv3_model
 from cnn_models.vgg19 import create_vgg19_model
 from cnn_models.vgg19_common import create_vgg19_model_common
@@ -42,6 +43,9 @@ class CNN_Model:
             self._model = create_inceptionv3_model(self.num_classes)
         elif self.model_name == "Xception":
             pass
+        elif self.model_name == "CNN":
+            self._model = create_basic_cnn_model(self.num_classes)
+            
 
     def train_model(self, X_train, X_val, y_train, y_val) -> None:
         """

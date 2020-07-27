@@ -1,6 +1,7 @@
 import argparse
 import time
 
+import numpy as np
 from tensorflow.keras.models import load_model
 
 from cnn_models.cnn_model import CNN_Model
@@ -45,13 +46,16 @@ def main() -> None:
             if not config.is_grid_search:
                 # Create CNN model and split training/validation set (75/25% split).
                 model = CNN_Model(config.model, l_e.classes_.size)
-                X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
+                X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.20,
                                                                           dataset=X_train,
                                                                           labels=y_train)
                 
                 # Data augmentation.
                 if config.dataset == "mini-MIAS":
                     X_train, y_train = generate_image_transforms(X_train, y_train)
+                    np.random.shuffle(y_train)
+                    
+                print(l_e.inverse_transform(np.argmax(y_train, axis=1)))
                 
                 # Fit model.
                 if config.verbose_mode:
