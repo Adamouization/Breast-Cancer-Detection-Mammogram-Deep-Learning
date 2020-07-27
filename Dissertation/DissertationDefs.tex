@@ -17,6 +17,7 @@
 \usepackage{subcaption}         % subfigures to have multiple images on the same line
 \usepackage{tabto}              % use tabs
 \usepackage{minted}             % code listings
+\usepackage[intoc]{nomencl}     % acronyms
 \usepackage[nottoc]{tocbibind}  % add bibliography to toc
 \usepackage[export]{adjustbox}  % allows figures to be positioned (left-center-right)
 \usepackage[english]{babel}
@@ -59,6 +60,10 @@
     tabsize=4
 }
 \lstset{style=mystyle}
+
+%% Acronyms
+\makenomenclature
+\renewcommand{\nomname}{List of Acronyms}
 
 %% Definitions to provide layout in the dissertation title pages
 \newenvironment{spaced}[1]
