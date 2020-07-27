@@ -19,6 +19,10 @@ INCEPTION_IMG_SIZE = {
     "WIDTH": 299
 }
 XCEPTION_IMG_SIZE = INCEPTION_IMG_SIZE
+ROI_IMG_SIZE = {
+    "HEIGHT": 224,
+    "WIDTH": 224
+}
 
 
 # Variables set by command line arguments/flags
@@ -30,4 +34,5 @@ batch_size = 2              # Batch size.
 max_epoch_frozen = 100      # Max number of epochs when original CNN layers are frozen.
 max_epoch_unfrozen = 50     # Max number of epochs when original CNN layers are unfrozen.
 is_grid_search = False      # Run the grid search algorithm to determine the optimal hyper-parameters for the model.
+is_roi = False              # Use cropped version of the images
 verbose_mode = False        # Boolean used to print additional logs for debugging purposes.

@@ -44,7 +44,9 @@ def generate_image_transforms(images, labels):
                                                             available_transforms)
             
 
-            if config.model == "VGG" or config.model == "Inception":
+            if config.is_roi:
+                transformed_image = transformed_image.reshape(1, config.ROI_IMG_SIZE['HEIGHT'], config.ROI_IMG_SIZE["WIDTH"], 1)
+            elif config.model == "VGG" or config.model == "Inception":
                 transformed_image = transformed_image.reshape(1, config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"], 1)
             elif config.model == "VGG-common":
                 transformed_image = transformed_image.reshape(1, config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"], 1)

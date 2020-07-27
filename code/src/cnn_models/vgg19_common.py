@@ -19,7 +19,10 @@ def create_vgg19_model_common(num_classes: int):
     :return: The VGG19 model.
     """
     # Reconfigure single channel input into a greyscale 3 channel input
-    img_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
+    if config.is_roi:
+        img_input = Input(shape=(config.ROI_IMG_SIZE['HEIGHT'], config.ROI_IMG_SIZE['WIDTH'], 1))
+    else:
+        img_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
     img_conc = Concatenate()([img_input, img_input, img_input])
 
     # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.

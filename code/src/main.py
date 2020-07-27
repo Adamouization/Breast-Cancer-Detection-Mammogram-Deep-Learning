@@ -150,6 +150,11 @@ def parse_command_line_arguments() -> None:
                         help="Include this flag to run the grid search algorithm to determine the optimal "
                              "hyperparameters for the CNN model."
                         )
+    parser.add_argument("-roi", "--roi",
+                        action="store_true",
+                        default=False,
+                        help="Include this flag to use a cropped version of the images around the ROI. Only use with 'mini-MIAS' dataset."
+                        )
     parser.add_argument("-v", "--verbose",
                         action="store_true",
                         help="Verbose mode: include this flag additional print statements for debugging purposes."
@@ -168,6 +173,7 @@ def parse_command_line_arguments() -> None:
     config.max_epoch_frozen = args.max_epoch_frozen
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
     config.is_grid_search = args.gridsearch
+    config.is_roi = args.roi
     config.verbose_mode = args.verbose
 
     if config.verbose_mode:
