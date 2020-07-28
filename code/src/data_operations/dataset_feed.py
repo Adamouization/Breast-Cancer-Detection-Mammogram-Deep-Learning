@@ -34,7 +34,7 @@ def parse_function(filename, label):
     image = tfio.image.decode_dicom_image(image_bytes, color_dim = True, dtype=tf.uint16)
     as_png = tf.image.encode_png(image[0])
     decoded_png = tf.io.decode_png(as_png, channels=1)
-    image = tf.image.resize(decoded_png, [config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"]])
+    image = tf.image.resize(decoded_png, [config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"]])
     image /= 255
 
     return image, label

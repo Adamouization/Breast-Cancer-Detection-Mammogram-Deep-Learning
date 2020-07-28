@@ -36,20 +36,26 @@ def create_vgg19_model_common(num_classes: int):
     # Flatten layer to convert each input into a 1D array (no parameters in this layer, just simple pre-processing).
     model.add(Flatten())
 
+    fully_connected = Sequential(name="Fully_Connected")
     # Fully connected layers.
-    model.add(Dropout(0.2, name="Dropout_Regularisation_1"))
-    model.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
-    model.add(Dropout(0.2, name="Dropout_Regularisation_2"))
-    model.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
+    #fully_connected.add(Dropout(0.2, name="Dropout_Regularisation_1"))
+    fully_connected.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
+    #fully_connected.add(Dropout(0.2, name="Dropout_Regularisation_2"))
+    fully_connected.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
 
     # Final output layer that uses softmax activation function (because the classes are exclusive).
     if num_classes == 2:
-        model.add(Dense(1, activation='sigmoid', name='Output'))
+        fully_connected.add(Dense(1, activation='sigmoid', name='Output'))
     else:
-        model.add(Dense(num_classes, activation='softmax', name='Output'))
+        fully_connected.add(Dense(num_classes, activation='softmax', name='Output'))
+        
+    model.add(fully_connected)
 
     # Print model details if running in debug mode.
     if config.verbose_mode:
+        print("CNN Model used:")
         print(model.summary())
+        print("Fully connected layers:")
+        print(fully_connected.summary())
 
     return model

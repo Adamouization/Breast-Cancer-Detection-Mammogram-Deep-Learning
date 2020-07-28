@@ -16,6 +16,10 @@ def generate_image_transforms(images, labels):
     :param labels: input labels
     :return: updated list of images and labels with extra transformed images and labels
     """
+    augmentation_multiplier = 1
+    if config.dataset == "mini-MIAS-binary":
+        augmentation_multiplier = 2
+    
     images_with_transforms = images
     labels_with_transforms = labels
 
@@ -27,7 +31,7 @@ def generate_image_transforms(images, labels):
     }
 
     class_balance = get_class_balances(labels)
-    max_count = max(class_balance)  # Balance classes.
+    max_count = max(class_balance) * augmentation_multiplier # Balance classes.
     to_add = [max_count - i for i in class_balance]
 
     for i in range(len(to_add)):
@@ -120,9 +124,18 @@ def get_class_balances(y_vals):
     :param y_vals: labels
     :return: array count of each class
     """
-    num_classes = len(y_vals[0])
-    counts = np.zeros(num_classes)
-    for y_val in y_vals:
-        for i in range(num_classes):
-            counts[i] += y_val[i]
-    return (counts.tolist())
+    if config.dataset == "mini-MIAS":
+        num_classes = len(y_vals[0])
+        counts = np.zeros(num_classes)
+        for y_val in y_vals:
+            for i in range(num_classes):
+                counts[i] += y_val[i]
+    elif config.dataset == "mini-MIAS-binary":
+        num_classes = 2
+        counts = np.zeros(num_classes)
+        for y_val in y_vals:
+            if y_val == 0:
+                counts[0] += 1
+            elif y_val == 1:
+                counts[1] +=1
+    return counts.tolist()

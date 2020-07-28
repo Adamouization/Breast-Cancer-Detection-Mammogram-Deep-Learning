@@ -4,6 +4,7 @@ from imutils import paths
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.utils import class_weight
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from tensorflow.keras.utils import to_categorical
 
@@ -124,6 +125,19 @@ def dataset_stratified_split(split: float, dataset: np.ndarray, labels: np.ndarr
                                                         random_state=config.RANDOM_SEED,
                                                         shuffle=True)
     return train_X, test_X, train_Y, test_Y
+
+
+def calculate_class_weights(y_train, label_encoder):
+    if label_encoder.classes_.size != 2:
+        y_train = label_encoder.inverse_transform(np.argmax(y_train, axis=1))
+    weights = class_weight.compute_class_weight("balanced",
+                                                np.unique(y_train),
+                                                y_train)
+    class_weights = dict(enumerate(weights))
+    if config.verbose_mode:
+        print("Class weights: {}".format(str(class_weights)))
+    return None
+    #return class_weights
 
 
 def crop_roi_image(data_dir):
