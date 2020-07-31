@@ -2,6 +2,7 @@ import json
 import ssl
 
 import numpy as np
+import pandas as pd
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, log_loss, make_scorer
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
@@ -14,6 +15,7 @@ from cnn_models.basic_cnn import create_basic_cnn_model
 from cnn_models.inceptionv3 import create_inceptionv3_model
 from cnn_models.vgg19 import create_vgg19_model
 from cnn_models.vgg19_common import create_vgg19_model_common
+from data_visualisation.csv_report import *
 from data_visualisation.plots import *
 from data_visualisation.roc_curves import *
 
@@ -176,7 +178,7 @@ class CNN_Model:
             self.prediction = self._model.predict(x=x_values)
         #print(self.prediction)
 
-    def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str) -> None:
+    def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str, runtime) -> None:
         """
         Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.
         Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
@@ -197,24 +199,10 @@ class CNN_Model:
         # Calculate accuracy.
         accuracy = float('{:.4f}'.format(accuracy_score(y_true_inv, y_pred_inv)))
         print("Accuracy = {}\n".format(accuracy))
-
-        # Print and save classification report for precision, recall and f1 score metrics.
-        print(classification_report(y_true_inv, y_pred_inv, target_names=label_encoder.classes_))
-        report_df = pd.DataFrame(classification_report(y_true_inv, y_pred_inv, target_names=label_encoder.classes_,
-                                                       output_dict=True)).transpose()
-        report_df.append({'accuracy': accuracy}, ignore_index=True)
-        report_df.to_csv(
-            "../output/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_report.csv".format(config.dataset,
-                                                                                                             config.mammogram_type,
-                                                                                                             config.model,
-                                                                                                             config.learning_rate,
-                                                                                                             config.batch_size,
-                                                                                                             config.max_epoch_frozen,
-                                                                                                             config.max_epoch_unfrozen,
-                                                                                                             config.is_roi),
-            index=False,
-            header=True
-        )
+    
+        # Generate CSV report.
+        generate_csv_report(y_true_inv, y_pred_inv, label_encoder, accuracy)
+        generate_csv_metadata(runtime)
 
         # Plot confusion matrix and normalised confusion matrix.
         cm = confusion_matrix(y_true_inv, y_pred_inv)  # Calculate CM with original label of classes

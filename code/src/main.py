@@ -24,14 +24,14 @@ def main() -> None:
     parse_command_line_arguments()
     print_num_gpus_available()
 
-    # Start recording time.
-    start_time = time.time()
-
     # Create label encoder.
     l_e = create_label_encoder()
 
     # Run in training mode.
     if config.run_mode == "train":
+        
+        # Start recording time.
+        start_time = time.time()
 
         # Multi-class classification (mini-MIAS dataset)
         if config.dataset == "mini-MIAS":
@@ -84,7 +84,7 @@ def main() -> None:
                 # Create CNN model and split training/validation set (80/20% split).
                 model = CNN_Model(config.model, l_e.classes_.size)
                 #model.load_minimias_weights()
-                model.load_minimias_fc_weights()
+                #model.load_minimias_fc_weights()
                                     
                 # Fit model.
                 if config.verbose_mode:
@@ -111,8 +111,8 @@ def main() -> None:
             print_error_message()
 
         # Save the model and its weights/biases.
-        model.save_model()
-        model.save_weights()
+        #model.save_model()
+        #model.save_weights()
 
     elif config.run_mode == "test":
         model = load_model(
@@ -124,20 +124,23 @@ def main() -> None:
                                                                                                                  config.max_epoch_frozen,
                                                                                                                  config.max_epoch_unfrozen,
                                                                                                                  config.is_roi))
+    
+    runtime = round(time.time() - start_time, 2)
+    print_runtime("Training", runtime)   
+    
     # Evaluate model results.
     print_cli_arguments()
     if config.dataset == "mini-MIAS":
         model.make_prediction(X_val)
-        model.evaluate_model(y_val, l_e, 'N-B-M')
+        model.evaluate_model(y_val, l_e, 'N-B-M', runtime)
     elif config.dataset == "mini-MIAS-binary":
         model.make_prediction(X_val)
-        model.evaluate_model(y_val, l_e, 'B-M')
+        model.evaluate_model(y_val, l_e, 'B-M', runtime)
     elif config.dataset == "CBIS-DDSM":
         model.make_prediction(validation_dataset)
-        model.evaluate_model(y_val, l_e, 'B-M')
+        model.evaluate_model(y_val, l_e, 'B-M', runtime)
 
-    # Print training runtime.
-    print_runtime("Total", round(time.time() - start_time, 2))
+    
 
 
 def parse_command_line_arguments() -> None:
