@@ -65,9 +65,8 @@ def main() -> None:
                 class_weights = calculate_class_weights(y_train, l_e)
                 
                 # Data augmentation.
-                if config.dataset == "mini-MIAS":
-                    X_train, y_train = generate_image_transforms(X_train, y_train)
-                    np.random.shuffle(y_train)
+                X_train, y_train = generate_image_transforms(X_train, y_train)
+                np.random.shuffle(y_train)
                                     
                 # Fit model.
                 if config.verbose_mode:
@@ -94,7 +93,8 @@ def main() -> None:
             # Train CNN model.
             if not config.is_grid_search:
                 # Create CNN model and split training/validation set (80/20% split).
-                model = CNN_Model(config.model, l_e.classes_.size)            
+                model = CNN_Model(config.model, l_e.classes_.size)
+                model.load_minimias_weights()
                                     
                 # Fit model.
                 if config.verbose_mode:
@@ -113,6 +113,7 @@ def main() -> None:
             
             # Create and train CNN model.
             model = CNN_Model(config.model, l_e.classes_.size)
+            model.load_minimias_weights()
             model.train_model(train_dataset, validation_dataset, None, None, None)
 
         else:
