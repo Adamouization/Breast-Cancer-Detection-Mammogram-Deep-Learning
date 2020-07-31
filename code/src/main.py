@@ -23,17 +23,6 @@ def main() -> None:
     set_random_seeds()
     parse_command_line_arguments()
     print_num_gpus_available()
-    
-    w_b = np.load(
-        "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}.npy".format(
-            config.dataset,
-            config.model,
-            config.batch_size,
-            config.max_epoch_frozen,
-            config.max_epoch_unfrozen
-        )
-    )
-    print(w_b)
 
     # Start recording time.
     start_time = time.time()
@@ -94,7 +83,7 @@ def main() -> None:
             if not config.is_grid_search:
                 # Create CNN model and split training/validation set (80/20% split).
                 model = CNN_Model(config.model, l_e.classes_.size)
-                model.load_minimias_weights()
+                #model.load_minimias_weights()
                                     
                 # Fit model.
                 if config.verbose_mode:
@@ -124,8 +113,15 @@ def main() -> None:
         model.save_fully_connected_layers_weights()
 
     elif config.run_mode == "test":
-        model = load_model("../saved_models/dataset-{}_model-{}_imagesize-{}.h5".format(config.dataset, config.model,
-                                                                                        config.image_size))
+        model = load_model(
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_saved-model.h5".format(config.dataset,
+                                                                                                                 config.mammogram_type,
+                                                                                                                 config.model,
+                                                                                                                 config.learning_rate,
+                                                                                                                 config.batch_size,
+                                                                                                                 config.max_epoch_frozen,
+                                                                                                                 config.max_epoch_unfrozen,
+                                                                                                                 config.is_roi))
     # Evaluate model results.
     print_cli_arguments()
     if config.dataset == "mini-MIAS":
@@ -167,6 +163,11 @@ def parse_command_line_arguments() -> None:
                              "otherwise load a previously trained model for predictions. Must be either 'train' or "
                              "'test'. Defaults to 'train'."
                         )
+    parser.add_argument("-lr", "--learning-rate",
+                        type=float,
+                        default=1e-3,
+                        help="The learning rate for the non-ImageNet-pre-trained layers. Defaults to 1e-3."
+                        )
     parser.add_argument("-b", "--batchsize",
                         type=int,
                         default=2,
@@ -205,6 +206,9 @@ def parse_command_line_arguments() -> None:
     config.mammogram_type = args.mammogramtype
     config.model = args.model
     config.run_mode = args.runmode
+    if args.learning_rate <= 0:
+        print_error_message()
+    config.learning_rate = args.learning_rate
     if args.batchsize <= 0 or args.batchsize >= 25:
         print_error_message()
     config.batch_size = args.batchsize

@@ -71,7 +71,7 @@ class CNN_Model:
             print("Freezing '{}' layers".format(layer_name))
 
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
-        self.compile_model(1e-2)
+        self.compile_model(config.learning_rate)
         self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=True)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Initial_training", is_frozen_layers=True)
@@ -85,7 +85,7 @@ class CNN_Model:
             print("Unfreezing '{}' layers (all layers now unfrozen)".format(layer_name))
 
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
-        self.compile_model(1e-3)  # Very low learning rate.
+        self.compile_model(1e-5)  # Very low learning rate.
         self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=False)
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Fine_tuning_training", False)
@@ -204,13 +204,14 @@ class CNN_Model:
                                                        output_dict=True)).transpose()
         report_df.append({'accuracy': accuracy}, ignore_index=True)
         report_df.to_csv(
-            "../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}_report.csv".format(
-                config.dataset,
-                config.model,
-                config.batch_size,
-                config.max_epoch_frozen,
-                config.max_epoch_unfrozen
-            ),
+            "../output/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_report.csv".format(config.dataset,
+                                                                                                             config.mammogram_type,
+                                                                                                             config.model,
+                                                                                                             config.learning_rate,
+                                                                                                             config.batch_size,
+                                                                                                             config.max_epoch_frozen,
+                                                                                                             config.max_epoch_unfrozen,
+                                                                                                             config.is_roi),
             index=False,
             header=True
         )
@@ -254,12 +255,14 @@ class CNN_Model:
         """
         # Scratch space
         self._model.save(
-            "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}.h5".format(
-                config.dataset,
-                config.model,
-                config.batch_size,
-                config.max_epoch_frozen,
-                config.max_epoch_unfrozen)
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_saved-model.h5".format(config.dataset,
+                                                                                                                 config.mammogram_type,
+                                                                                                                 config.model,
+                                                                                                                 config.learning_rate,
+                                                                                                                 config.batch_size,
+                                                                                                                 config.max_epoch_frozen,
+                                                                                                                 config.max_epoch_unfrozen,
+                                                                                                                 config.is_roi)
         )
 
     def save_fully_connected_layers_weights(self) -> None:
@@ -268,13 +271,17 @@ class CNN_Model:
         :return: None
         """
         if self.model_name == "VGG-common":
-            self._model.save_weights("/cs/scratch/agj6/saved_models/weights-dataset-{}_model-{}_b-{}_e1-{}_e2-{}.h5".format(
-                config.dataset,
+            self._model.save_weights(
+                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_weights.h5".format(
+                    config.dataset,
+                    config.mammogram_type,
                     config.model,
+                    config.learning_rate,
                     config.batch_size,
                     config.max_epoch_frozen,
-                    config.max_epoch_unfrozen
-            ))
+                    config.max_epoch_unfrozen,
+                    config.is_roi)
+            )
 #             weights_and_biases = self._model.layers[2].get_weights()
 #             np.save(
 #                 "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}".format(
@@ -288,14 +295,17 @@ class CNN_Model:
         # BigTMP save: /cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
         
     def load_minimias_weights(self) -> None:
-        self._model.load_weights("/cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}.h5".format(
-            config.dataset,
-            config.model,
-            config.batch_size,
-            config.max_epoch_frozen,
-            config.max_epoch_unfrozen
-        ))
-#         weights_and_biases = self._model.layers[2].get_weights()
+        self._model.load_weights(
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_weights.h5".format(
+                    config.dataset,
+                    config.mammogram_type,
+                    config.model,
+                    config.learning_rate,
+                    config.batch_size,
+                    config.max_epoch_frozen,
+                    config.max_epoch_unfrozen,
+                    config.is_roi)
+        )
 
     @property
     def model(self):

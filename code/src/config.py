@@ -30,6 +30,7 @@ dataset = "mini-MIAS"       # The dataset to use.
 mammogram_type = "all"      # The type of mammogram (Calc or Mass).
 model = "VGG"               # The model to use.
 run_mode = "training"       # The type of running mode, either training or testing.
+learning_rate = 1e-3        # The learning rate with the pre-trained ImageNet layers frozen.
 batch_size = 2              # Batch size.
 max_epoch_frozen = 100      # Max number of epochs when original CNN layers are frozen.
 max_epoch_unfrozen = 50     # Max number of epochs when original CNN layers are unfrozen.
