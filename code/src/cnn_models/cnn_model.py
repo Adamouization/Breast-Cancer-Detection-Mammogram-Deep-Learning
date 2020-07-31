@@ -265,14 +265,14 @@ class CNN_Model:
                                                                                                                  config.is_roi)
         )
 
-    def save_fully_connected_layers_weights(self) -> None:
+    def save_weights(self) -> None:
         """
-        Save the weights and biases of the fully connected layers in numpy format.
+        Save the weights and biases of the fully connected layers in numpy format and the entire weights in h5 format.
         :return: None
         """
         if self.model_name == "VGG-common":
             self._model.save_weights(
-                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_weights.h5".format(
+                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_all_weights.h5".format(
                     config.dataset,
                     config.mammogram_type,
                     config.model,
@@ -282,21 +282,27 @@ class CNN_Model:
                     config.max_epoch_unfrozen,
                     config.is_roi)
             )
-#             weights_and_biases = self._model.layers[2].get_weights()
-#             np.save(
-#                 "/cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}".format(
-#                     config.dataset,
-#                     config.model,
-#                     config.batch_size,
-#                     config.max_epoch_frozen,
-#                     config.max_epoch_unfrozen),
-#                 weights_and_biases)
+            print("layer name")
+            print(self._model.layers[2].name)
+            weights_and_biases = self._model.layers[2].get_weights()
+            np.save(
+                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_fc_weights.npy".format(
+                        config.dataset,
+                        config.mammogram_type,
+                        config.model,
+                        config.learning_rate,
+                        config.batch_size,
+                        config.max_epoch_frozen,
+                        config.max_epoch_unfrozen,
+                        config.is_roi),
+                weights_and_biases
+            )
         # Local save: ../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
         # BigTMP save: /cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
         
     def load_minimias_weights(self) -> None:
         self._model.load_weights(
-            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_weights.h5".format(
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_all_weights.h5".format(
                     config.dataset,
                     config.mammogram_type,
                     config.model,
@@ -306,6 +312,22 @@ class CNN_Model:
                     config.max_epoch_unfrozen,
                     config.is_roi)
         )
+    
+    def load_minimias_fc_weights(self) -> None:
+        weights = np.load(
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_fc_weights.npy".format(
+                config.dataset,
+                config.mammogram_type,
+                config.model,
+                config.learning_rate,
+                config.batch_size,
+                config.max_epoch_frozen,
+                config.max_epoch_unfrozen,
+                config.is_roi)
+        )
+#         weights = loaded_weights_and_biases[0]
+#         biases = loaded_weights_and_biases[1]
+        self._model.layers[2].set_weights(weights)
 
     @property
     def model(self):

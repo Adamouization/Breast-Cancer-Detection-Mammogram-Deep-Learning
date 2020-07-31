@@ -84,6 +84,7 @@ def main() -> None:
                 # Create CNN model and split training/validation set (80/20% split).
                 model = CNN_Model(config.model, l_e.classes_.size)
                 #model.load_minimias_weights()
+                model.load_minimias_fc_weights()
                                     
                 # Fit model.
                 if config.verbose_mode:
@@ -102,7 +103,8 @@ def main() -> None:
             
             # Create and train CNN model.
             model = CNN_Model(config.model, l_e.classes_.size)
-            model.load_minimias_weights()
+            #model.load_minimias_weights()
+            model.load_minimias_fc_weights()
             model.train_model(train_dataset, validation_dataset, None, None, None)
 
         else:
@@ -110,7 +112,7 @@ def main() -> None:
 
         # Save the model and its weights/biases.
         model.save_model()
-        model.save_fully_connected_layers_weights()
+        model.save_weights()
 
     elif config.run_mode == "test":
         model = load_model(
