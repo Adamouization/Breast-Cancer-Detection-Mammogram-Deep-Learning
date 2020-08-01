@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from numpy.random import seed
 from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
+from tensorflow.keras.models import load_model
 
 import config
 
@@ -84,7 +85,8 @@ def save_output_figure(title: str) -> None:
     :return: None
     """
     plt.savefig(
-        "../output/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}.png".format(config.dataset,
+        "../output/{}_dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}.png".format(config.run_mode,
+                                                                                                        config.dataset,
                                                                                                      config.mammogram_type,
                                                                                                      config.model,
                                                                                                      config.learning_rate,
@@ -93,4 +95,16 @@ def save_output_figure(title: str) -> None:
                                                                                                      config.max_epoch_unfrozen,
                                                                                                      config.is_roi,
                                                                                                      title))  # bbox_inches='tight'
-                                                                    
+
+def load_trained_model():
+    print("Loading trained model")
+    return load_model(
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_saved-model.h5".format(config.dataset,
+                 config.mammogram_type,
+                 config.model,
+                 config.learning_rate,
+                 config.batch_size,
+                 config.max_epoch_frozen,
+                 config.max_epoch_unfrozen,
+                 config.is_roi)
+    )

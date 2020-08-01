@@ -22,7 +22,8 @@ def generate_csv_report(y_true_inv, y_pred_inv, label_encoder, accuracy) -> None
     
     # Save report.
     report_df.to_csv(
-        "../output/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_report.csv".format(config.dataset,
+        "../output/{}_dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_report.csv".format(config.run_mode,
+                                                                                                            config.dataset,
                                                                                                          config.mammogram_type,
                                                                                                          config.model,
                                                                                                          config.learning_rate,
@@ -59,7 +60,8 @@ def generate_csv_metadata(runtime) -> None:
     
     # Save report.
     metadata_df.to_csv(
-        "../output/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_metadata.csv".format(config.dataset,
+        "../output/{}_dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_metadata.csv".format(config.run_mode,
+                                                                                                              config.dataset,
                                                                                                          config.mammogram_type,
                                                                                                          config.model,
                                                                                                          config.learning_rate,

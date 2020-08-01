@@ -62,6 +62,25 @@ def import_cbisddsm_training_dataset(label_encoder):
     return list_IDs, labels
 
 
+def import_cbisddsm_testing_dataset(label_encoder):
+    """
+    Import the testing dataset getting the image paths (downloaded on BigTMP) and encoding the labels.
+    :param label_encoder: The label encoder.
+    :return: Two arrays, one for the image paths and one for the encoded labels.
+    """
+    cbis_ddsm_path = str()
+    if config.mammogram_type == "calc":
+        cbis_ddsm_path = "../data/CBIS-DDSM/calc-test.csv"
+    elif config.mammogram_type == "mass":
+        cbis_ddsm_path = "../data/CBIS-DDSM/mass-test.csv"
+    else:
+        cbis_ddsm_path = "../data/CBIS-DDSM/testing.csv"
+    df = pd.read_csv(cbis_ddsm_path)
+    list_IDs = df['img_path'].values
+    labels = encode_labels(df['label'].values, label_encoder)
+    return list_IDs, labels
+
+
 def preprocess_image(image_path: str) -> np.ndarray:
     """
     Pre-processing steps:

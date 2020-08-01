@@ -333,3 +333,52 @@ class CNN_Model:
         :return: None
         """
         pass
+
+
+def _test_model(y_true: list, predictions, label_encoder: LabelEncoder, classification_type: str, runtime):
+    # Inverse transform y_true and y_pred from one-hot-encoding to original label.
+    if label_encoder.classes_.size == 2:
+        y_true_inv = y_true
+        y_pred_inv = np.round_(predictions, 0)
+    else:
+        y_true_inv = label_encoder.inverse_transform(np.argmax(y_true, axis=1))
+        y_pred_inv = label_encoder.inverse_transform(np.argmax(predictions, axis=1))
+
+    # Calculate accuracy.
+    accuracy = float('{:.4f}'.format(accuracy_score(y_true_inv, y_pred_inv)))
+    print("Accuracy = {}\n".format(accuracy))
+
+    # Generate CSV report.
+    generate_csv_report(y_true_inv, y_pred_inv, label_encoder, accuracy)
+    generate_csv_metadata(runtime)
+
+    # Plot confusion matrix and normalised confusion matrix.
+    cm = confusion_matrix(y_true_inv, y_pred_inv)  # Calculate CM with original label of classes
+    plot_confusion_matrix(cm, 'd', label_encoder, False)
+    # Calculate normalized confusion matrix with original label of classes.
+    cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    cm_normalized[np.isnan(cm_normalized)] = 0
+    plot_confusion_matrix(cm_normalized, '.2f', label_encoder, True)
+
+    # Plot ROC curve.
+    if label_encoder.classes_.size == 2:  # binary classification
+        plot_roc_curve_binary(y_true, predictions)
+    elif label_encoder.classes_.size >= 2:  # multi classification
+        plot_roc_curve_multiclass(y_true, predictions, label_encoder)
+
+    # Compare results with other similar papers' result.
+    with open(
+            'data_visualisation/other_paper_results.json') as config_file:  # Load other papers' results from JSON.
+        data = json.load(config_file)
+
+    dataset_key = config.dataset
+    if config.dataset == "mini-MIAS-binary":
+        dataset_key = "mini-MIAS"
+
+    df = pd.DataFrame.from_records(data[dataset_key][classification_type],
+                                   columns=['paper', 'accuracy'])  # Filter data by dataset and classification type.
+    new_row = pd.DataFrame({'paper': 'Dissertation', 'accuracy': accuracy},
+                           index=[0])  # Add model result into dataframe to compare.
+    df = pd.concat([new_row, df]).reset_index(drop=True)
+    df['accuracy'] = pd.to_numeric(df['accuracy'])  # Digitize the accuracy column.
+    plot_comparison_chart(df)

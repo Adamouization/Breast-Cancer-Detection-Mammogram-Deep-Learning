@@ -2,15 +2,14 @@ import argparse
 import time
 
 import numpy as np
-from tensorflow.keras.models import load_model
 
-from cnn_models.cnn_model import CNN_Model
+from cnn_models.cnn_model import CNN_Model, _test_model
 import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import calculate_class_weights, dataset_stratified_split, \
-    import_cbisddsm_training_dataset, import_minimias_dataset
+    import_cbisddsm_testing_dataset, import_cbisddsm_training_dataset, import_minimias_dataset
 from data_operations.data_transformations import generate_image_transforms
-from utils import create_label_encoder, print_cli_arguments, print_error_message, \
+from utils import create_label_encoder, load_trained_model,  print_cli_arguments, print_error_message, \
     print_num_gpus_available, print_runtime, set_random_seeds
 
 
@@ -29,6 +28,8 @@ def main() -> None:
 
     # Run in training mode.
     if config.run_mode == "train":
+        
+        print("-- Training model --\n")
         
         # Start recording time.
         start_time = time.time()
@@ -71,7 +72,7 @@ def main() -> None:
                 #model.grid_search(X_train, y_train)
         
         # Binary classification (binarised mini-MIAS dataset)
-        if config.dataset == "mini-MIAS-binary":
+        elif config.dataset == "mini-MIAS-binary":
             # Import entire dataset.
             images, labels = import_minimias_dataset(data_dir="../data/{}/images_processed".format(config.dataset),
                                                      label_encoder=l_e)
@@ -104,43 +105,54 @@ def main() -> None:
             # Create and train CNN model.
             model = CNN_Model(config.model, l_e.classes_.size)
             #model.load_minimias_weights()
-            model.load_minimias_fc_weights()
+            #model.load_minimias_fc_weights()
             model.train_model(train_dataset, validation_dataset, None, None, None)
-
-        else:
-            print_error_message()
-
+        
+        # Save training runtime.
+        runtime = round(time.time() - start_time, 2)
+        
         # Save the model and its weights/biases.
-        #model.save_model()
-        #model.save_weights()
+        model.save_model()
+        model.save_weights()
+        
+        # Evaluate training results.
+        print_cli_arguments()
+        if config.dataset == "mini-MIAS":
+            model.make_prediction(X_val)
+            model.evaluate_model(y_val, l_e, 'N-B-M', runtime)
+        elif config.dataset == "mini-MIAS-binary":
+            model.make_prediction(X_val)
+            model.evaluate_model(y_val, l_e, 'B-M', runtime)
+        elif config.dataset == "CBIS-DDSM":
+            model.make_prediction(validation_dataset)
+            model.evaluate_model(y_val, l_e, 'B-M', runtime)
+        print_runtime("Training", runtime)
 
+    # Run in testing mode.
     elif config.run_mode == "test":
-        model = load_model(
-            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_saved-model.h5".format(config.dataset,
-                                                                                                                 config.mammogram_type,
-                                                                                                                 config.model,
-                                                                                                                 config.learning_rate,
-                                                                                                                 config.batch_size,
-                                                                                                                 config.max_epoch_frozen,
-                                                                                                                 config.max_epoch_unfrozen,
-                                                                                                                 config.is_roi))
-    
-    runtime = round(time.time() - start_time, 2)
-    print_runtime("Training", runtime)   
-    
-    # Evaluate model results.
-    print_cli_arguments()
-    if config.dataset == "mini-MIAS":
-        model.make_prediction(X_val)
-        model.evaluate_model(y_val, l_e, 'N-B-M', runtime)
-    elif config.dataset == "mini-MIAS-binary":
-        model.make_prediction(X_val)
-        model.evaluate_model(y_val, l_e, 'B-M', runtime)
-    elif config.dataset == "CBIS-DDSM":
-        model.make_prediction(validation_dataset)
-        model.evaluate_model(y_val, l_e, 'B-M', runtime)
-
-    
+        
+        print("-- Testing model --\n")
+        
+        # Start recording time.
+        start_time = time.time()
+        
+        # Test multi-class classification (mini-MIAS dataset).
+        if config.dataset == "mini-MIAS":
+            pass
+        # Test binary classification (binarised mini-MIAS dataset).
+        elif config.dataset == "mini-MIAS-binary":
+            pass
+        
+        # Test binary classification (CBIS-DDSM dataset).
+        elif config.dataset == "CBIS-DDSM":
+            images, labels = import_cbisddsm_training_dataset(l_e)
+            train_dataset = create_dataset(images, labels)
+            model = load_trained_model()
+            predictions = model.predict(x=train_dataset)
+            runtime = round(time.time() - start_time, 2)
+            _test_model(labels, predictions, l_e, 'B-M', runtime)
+        
+        print_runtime("Testing", runtime)
 
 
 def parse_command_line_arguments() -> None:
