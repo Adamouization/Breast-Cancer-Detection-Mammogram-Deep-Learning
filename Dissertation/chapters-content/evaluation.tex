@@ -51,3 +51,11 @@ Potential future comparisons:
     \item Using transfer learning (pre-trained model on ImageNet)
     \item Using different types of mammograms (calcifications only, masses only, both)
 \end{itemize}
+
+\subsection{Dataset Transfer Learning}
+
+Train model on small binarised mini-MIAS dataset, dropping all normal cases and retaining only benign and malignant cases).\\
+
+Accuracy not improved, loss is immediately optimal, so perhaps does not  get chance to explore new positions from random weight initialisation.\\
+
+Same speed as without transfer learning, just 1-2 epochs less for large errors, but it is the number of maximum  epochs and early stopping conditions that dictate the runtime.

@@ -40,10 +40,10 @@ Logically, the next step in the evolution of breast cancer detection systems is 
 % 2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Machine Learning Algorithms \& BCD Applications}
+\section{Machine Learning Tasks \& Algorithms}
 \label{sec:litreview-MLmodel-BCDapplications}
 
-\subsection{Machine Learning algorithms \& tasks for BCD}
+\subsection{Machine Learning Applications to Breast Cancer Detection}
 
 \subsubsection{Types of machine learning algorithms}
 
@@ -57,7 +57,7 @@ Among the aforementioned types of machine learning algorithms, the most pertinen
 
 Two types of machine learning tasks are very relevant to medical imagery analysis, including mammogram analysis for breast cancer detection: \textit{detection} (classification) and \textit{segmentation} \citep{Litjens2017}. 
 
-\paragraph{Classification} corresponds to the classification of a medical image or exam, which is an interpretation that used to be fully carried out by a radiologist before the appearance of CAD systems (see Section~\ref{sec:litreview-bcd-early-cad}). Concerning the task of breast cancer detection using datasets like the ``Curated Breast Imaging Subset of DDSM'' \citep{Lee2017}, the classification is usually binary, classifying a tumour found in a mammogram as either ``benign'' or ``malignant''. However, when using more complex datasets like the ``Digital Database for Screening Mammography'' \citep{DDSMdataset2001}, the classification may become multi-class, classifying a mammogram either as ``normal'', ``benign'' or ``malignant'' \citep{Litjens2017}. An example of a classification between benign and malignant mammograms can be found in Figure~\ref{fig:classification_example}, reinforcing the complexity that interpreting mammograms brings to radiologists and the need for accurate and reliable CAD systems.
+\paragraph{Detection} corresponds to the classification of a medical image or exam, which is an interpretation that used to be fully carried out by a radiologist before the appearance of CAD systems (see Section~\ref{sec:litreview-bcd-early-cad}). The classification can be either binary or multi-class depending on the data used. With datasets like the ``Curated Breast Imaging Subset of DDSM'' \citep{Lee2017}, the classification is binary as mammograms can only be classified as either ``benign'' or ``malignant''. However, when using datasets like the ``Digital Database for Screening Mammography'' \citep{DDSMdataset2001}, the classification becomes more interesting from a clinical point of  view as mammograms can either be classified as ``normal'', ``benign'' or ``malignant'' \citep{Litjens2017}. An example of a classification between benign and malignant mammograms can be found in Figure~\ref{fig:classification_example}, reinforcing the complexity that comes with interpreting mammograms for radiologists and the need for accurate and reliable CAD systems to improve the prediction accuracies.
 
 \begin{figure}[h]
 \centering
@@ -73,26 +73,26 @@ Two types of machine learning tasks are very relevant to medical imagery analysi
   \caption{A malignant mammogram.}
   \label{fig:classification_malignant}
 \end{subfigure}
-\caption{\label{fig:classification_example}Example of a breast mammogram classification, showing benign (left) and malignant (right) mammograms. Images retrieved from the ``mini-MIAS'' database (Suckling, 1994).}
+\caption{\label{fig:classification_example}Example of a breast mammogram classification, showing benign (left) and malignant (right) mammograms. Images retrieved from the mini-MIAS dataset (Suckling, 1994).}
 \end{figure}
 
-\paragraph{Segmentation} corresponds to the classification of each pixel in the image based on the class of the object the pixels belongs to, without distinguishing objects from the same class. All objects belonging to the same class will be classified in the same grouping of pixels \citep{Geron2019}. In breast cancer detection, segmentation can be used to highlight masses such as calcifications, cysts or fibroadenomas \citep{breastcancerorg2018} in mammograms, as shown in Figure~\ref{fig:segmentation_example} where mammograms are pre-processed before being segmented, revealing potential masses in the image \citep{Pereira2014}.\\
+\paragraph{Segmentation} corresponds to the classification of each pixel in the image based on the class of the object the pixels belongs to, without distinguishing objects from the same class. All objects belonging to the same class will be classified in the same grouping of pixels \citep{Geron2019}. In breast cancer detection, segmentation can be used to highlight masses such as calcifications, cysts or fibroadenomas \citep{breastcancerorg2018} in mammograms by separating the masses from the background. An example is shown in Figure~\ref{fig:segmentation_example}, where mammograms are partitioned into non-overlapping segments, revealing potential masses in the image \citep{Punitha2018}.\\
 
 \begin{figure}[h]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/original-mammogram.jpg}
+  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/segmentation_example_original.jpg}
   \caption{Original mammogram images.}
   \label{fig:original-mammogram}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/segmented-mammogram.jpg}
+  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/segmentation_example_segmented.jpg}
   \caption{Segmented mammogram images.}
   \label{fig:segmented-mammogram}
 \end{subfigure}
-\caption{\label{fig:segmentation_example}Example of a breast mammogram segmentation, showing the raw mammogram (left) and the segmented image (right), depicting a large mass (see inside red area). Images retrieved from Pereira et al. (2014).}
+\caption{\label{fig:segmentation_example}Example of a breast mammogram segmentation, showing the original mammogram (left) and the segmented image (right), depicting large masses. Images retrieved from Punithaet al. (2018).}
 \end{figure}
 
 Other machine learning tasks that have been used in medical imagery analysis consist of content-based image retrieval (retrieving similar images from a database) or image enhancement (erasing obstructing elements from an image and increasing quality) \citep{Litjens2017}, but will not be further explored as they are not directly relevant to the task of breast cancer detection. Indeed, the task of classification (detection) can be used to interpret whether a breast is affected by cancer through the analysis of databases of mammograms, while the task of segmentation can be used to localise a tumour within a breast by finding regions that may correspond to masses, pinpointing potential danger areas that may lead to cancerous cells.
@@ -113,7 +113,7 @@ k-Nearest Neighbours (kNN) is one of the simplest machine learning algorithms an
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=0.4\textwidth]{Dissertation/figures/litsurvey/knn.png}}
-\caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for a test data sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure retrieved online from T. Srivastava (\url{https://www.analyticsvidhya.com/blog/2018/03/introduction-k-neighbours-algorithm-clustering}).}
+\caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for a test data sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure retrieved online from T. Srivastava (\url{https://tinyurl.com/y3jqco49}).}
 \end{figure}
 
 Generally used as an initial learning algorithm to experiment with new datasets, the kNN algorithm has been tested on distinctive datasets of mammograms for breast cancer detection, including the ``Wisconsin Breast Cancer Wisconsin Dataset'' \citep{Wolberg1995} and the ``Digital Database for Screening Mammography'' \citep{DDSMdataset2001} datasets. Despite all papers finding that a value of $k=1$ seemed to yield the most accuracy, the 1-NN classifiers often underperforms compared to other classifiers mentioned further below, especially compared to SVMs and ANNs. Indeed, final model accuracies are on average 1-2\% lower than the most accurate solution found \citep{Yue2018, Asri2016, Montazeri2016}. Nevertheless, the results achieved by kNN are useful when used as a basic benchmark before testing more advanced models, which are described below.
@@ -151,9 +151,10 @@ An SVM consist of a \textit{maximal margin classifier}, which aims to find the h
 \caption{\label{fig:litsurvey-svm-example}Example of a SVM classifier's maximum margin hyperplane found to separate benign and malignant tumours based on two extracted features from a dataset of mammograms: the size of the bare nuclei and the uniformity of the cell size. Figure created by Yue et al. (2018).}
 \end{figure}
 
-Many kernels can be chosen for SVM classification (e.g. Polynomial kernel for image processing, Radial Basis Function (RBF) or Gaussian kernels for general tasks when there is no prior knowledge of the data), heavily influencing its performance \citep{amari1999improving}. For the task of breast cancer detection, SVMs using RBF kernels outperformed Polynomial kernels accuracies by over 1\% \citep{Osareh2010} and are chosen over other kernels \citep{Asri2016}. Overall, SVMs seem to  adapt better to the features extracted from mammograms, outperforming the previously mentioned methods by  2-4\% in some cases \citep{Asri2016}, and performing similarly to hybrid systems that combine various techniques \citep{Yue2018}.
+Many kernels can be chosen for SVM classification (e.g. Polynomial kernel for image processing, Radial Basis Function (RBF) or Gaussian kernels for general tasks when there is no prior knowledge of the data), heavily influencing its performance \citep{amari1999improving}. For the task of breast cancer detection, SVMs using RBF kernels outperformed Polynomial kernels accuracies by over 1\% \citep{Osareh2010} and are chosen over other kernels \citep{Asri2016}. Overall, SVMs seem to  adapt better to the features extracted from mammograms, outperforming the previously mentioned methods by  2-4\% in some cases \citep{Asri2016}, and performing similarly to hybrid systems that combine various techniques \citep{Yue2018}. When applied to commonly used mammogram datasets such as CBIS-DDSM, SVMs coupled with gray-level co-occurence matrices (GLCM) achieved 63.03\% accuracy \citep{Sarosa2018}.
 
 \subsubsection{Artificial Neural Networks}
+\label{sec:litsurvey-anns}
 
 Artificial Neural Networks form the basis of contemporary deep learning and are at the heart of the techniques mentioned in Section~\ref{sec:litsurvey-DLtechniques-CNN}. Originally inspired by the neuron connections found in the human brain \citep{mcculloch1943logical}, ANNs correspond to a collection of neurons (units) that ``fire'' an output if the linear sum of its weighted inputs tops a threshold. These neurons are placed in hierarchical layers (input, hidden and output layers) which are connected via weighted links, leading to \textit{fully connected} neural network when all the neurons from one layer communicate with all the neurons in the following layer. Input layer neurons accept the feature vectors $\textbf{x}$, hidden layer neurons process the data and output layer neurons represent an outcome for the classification \citep{russell2002artificial}. Figure~\ref{fig:litsurvey-ann-example} depicts an example fully-connected ANN used to classify benign and malignant tumours using six input neurons, eight hidden neurons and one output neuron.\\
 
@@ -190,30 +191,56 @@ The next step towards the evolution of these supervised learning algorithms is t
 
 \subsection{Convolution Neural Networks}
 
-\subsubsection{Motivation for CNNs over MLPs}
+\subsubsection{Motivation for CNNs over traditional neural networks}
 
-visual cortex\\
+CNNs are a type of neural network inspired by the human visual cortex, where neurons have local receptive fields that only react to visual stimuli originating from a region of the visual field. The combination of all receptive fields covered by overlapping neurons form the whole visual field \citep{Geron2019}. This architecture makes them very efficient at performing complex visual tasks, marked by the first milestone for CNNs with the LeNet-5 architecture trained to recognise handwritten bank cheque digits \citep{LeCun1998}.\\
 
-memory requirements: mention number of neuron connections between fully-connected vs convolution layers
+CNNs differ from traditional ``shallow'' ANNs as they are not fully connected. Indeed, CNNs are partially connected, with neurons in one layer only connected to a few neurons from the previous layer, meaning that they can work with large images \cite{Geron2019}. In a fully-connected neural network with only 100 neurons in the first layer, a 1,000 x 1,000-pixel image would already have 100,000,000 connections\footnote{$1000 \cdot 1,000 = 1,000,000$ px; $1,000,000$px $\cdot 100$ neurons $= 100,000,000$ connections.} in that first layer alone. CNNs nowadays can work with images thousands of pixel large, including the ones found in mammogram datasets described in Chapter~\ref{ch:chapter-ethics-datasets}, processing them much faster than traditional machine learning methods.
 
 \subsubsection{CNN Structure}
 
-Convolutional Neural Networks correspond to a stack of convolutional layers separated by pooling layers that are followed by a fully connected network for classification.
+The structure of CNNs builds on top of the concepts of traditional ANNs (see Section~\ref{sec:litsurvey-anns}) by piling stack of convolutional layers and pooling layers that are followed by a fully connected network for classification (see Figure~\ref{fig:litsurvey-CNN-example}). The goal of the convolutional and pooling layers is to reduce the input images into a form that simple enough to be processed by other algorithms (the fully connected layers), retaining only useful information from the original image \citep{Shen2017}.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/CNN example.png}}
-\caption{\label{fig:litsurvey-CNN-example}Example of a CNN. Figure retrieved from Sumit Saha (\url{https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53}) and modified in PhotoShop.}
+\caption{\label{fig:litsurvey-CNN-example}Example of a typical CNN adapted for multi-class breast cancer detection. Figure retrieved from S. Saha (\url{https://tinyurl.com/y9mmosuq}) and amended in Photoshop.}
 \end{figure}
 
 \paragraph{Convolution Layers \& Feature Maps}
 
-TODO
+Neurons in the first convolutional layers are only connected to pixels in their receptive fields and not connected to every pixel in the image. Similarly, neurons in deeper convolutional layers are only connected to neurons in a small zone from the previous layer. This allows the CNN to first focus on low-level features, which are progressively assembled into high-level features as the CNN gets deeper. The more the receptive fields are spaced out (defined as the stride), the smaller the next layer will be, thus considerably reducing the complexity of the CNN \citep{Geron2019}. Convolution is the mathematical operation that slides a moving a filter $f$ over an image $I$ to calculate a weighted sum (see Equation~\ref{eq:2d-convolution}). This 2D operation is possible in CNNs as layers are represented in 2D space and do not need to be flattened into a 1D array like with traditional neural networks, thus preserving the spatial information of images \citep{szeliski2010computer}.
+
+\begin{equation}
+\label{eq:2d-convolution}
+    \hat{I}(x,y)=(I*f)(x,y)=\sum_{k}\sum_{l}I(k,l)\cdot f(x-k, y-l)
+\end{equation}
+
+The weights of the neurons in a convolutional layers correspond to the filters, which are learned during the training phase by using optimisation techniques such as gradient descent. These filters allow a layer of neurons to highlight the image areas that activate the filter the most. As each layer has multiple filters, different features can be simultaneously detected in the layer's input.\\
+
+feature maps
 
 \paragraph{Pooling Layers}
 
-TODO
+Pooling layers are similar to convolutional layers as neurons are only connected to neurons from a small region in the previous layer. The difference is that this layer is not trainable as its neurons have no weights. Indeed, it is only used to downsample the image as it traverses the network in order to diminish the load on the GPU. It does so by calculating an aggregate of its inputs based on a function, which can either be a maximum or an average function (see Figure~\ref{fig:litsurvey-max-vs-avg-pooling}). \textit{Maximum pooling} returns the maximum value of the covered portion of the image, whereas \textit{average pooling} returns the average of all values. Maximum pooling is the preferred option in CNNs as it retains the strongest features only and acts as a noise suppressant by discarding noisy activations \citep{Geron2019}.\\
 
-\subsubsection{CNN Architectures applied to BCD}
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/max-vs-avg-pooling.png}}
+\caption{\label{fig:litsurvey-max-vs-avg-pooling}Difference between max pooling and average pooling (left) to downsample an image (right). Figure retrieved from W. Ong (\url{https://tinyurl.com/y25cke6l}) and amended in Photoshop.}
+\end{figure}
+
+Other benefits of pooling layers are the lower memory usage and the number of trainable parameters linked to smaller images, and especially the invariance it provides to the CNN as it will not break down when fed images that contain features of different sizes than the ones seen in the training dataset \citep{Shen2017}.
+
+\paragraph{Fully connected layers \& Activation functions}
+
+Similarly to ANNs, activation functions are used to connect the convolutional and spooling layers. The most common activation function used in CNNs is the Rectified Linear Unit (ReLU).\\
+
+At the end of the stack of convolutional and spooling layers, a fully connected MLP is placed. This dense neural network takes the flattened output of the convolutional and spooling layers (transformed from 2D to 1D), and performs the traditional classification tasks it was designed for using the features learned by the convolutional layers in a condensed  format. Depending on the number of classes to predict, a softmax activation can be used for multi-class classification or a sigmoid for binary classification.
+
+\subsection{Applications to Breast Cancer Detection}
+
+\subsubsection{CNN Architectures}
+
+Applying VGG and ResNet CNN models to the task of breast cancer detection on the CBIS-DDSM
 
 Evolution of CNNs (first CNN used, first CNN applied to medical imagery analysis, famous architectures e.g. LeNet-5, AlexNet, GoogLeNet, VGGNet, ResNet, Xception, SENet
 
@@ -225,33 +252,36 @@ Evolution of CNNs (first CNN used, first CNN applied to medical imagery analysis
 % Explore the techniques used in deep learning (techniques, databases, processing, libraries, output metrics, etc.)\\
 % Explore the deep learning model that will be explored by each dissertation
 
-\subsection{Rise of Deep Learning in Medical Imagery Analysis}
+\subsubsection{Rise of Deep Learning in Medical Imagery Analysis}
 
-\subsubsection{Transfer Learning}
+\paragraph{Main Challenges}
 
-TODO
+Implementing deep learning models requires a lot of data to achieve acceptable performance levels. However, labelled datasets are not always abundantly available as it requires a lot of time and resources to engineer large datasets with millions of images \citep{Krizhevsky2012} like ImageNet, which contains over 15 million high definition images from 15,000 different classes \citep{Deng2010}. With databases of mammograms barely exceeding 10,000 images, one of the challenges in implementing a deep learning CAD system is to overcome the small amount of data while avoiding overfitting it.
 
-\subsubsection{Technological Advances}
+\paragraph{Transfer Learning}
 
-\paragraph{Hardware advances}
+A commonly used deep learning technique when only a little amount of data is available is transfer learning, which makes use of CNN models pre-trained on large general datasets. The knowledge gathered by high-performing CNNs in other general domains that have larger datasets can be transferred to a related domain such as medical imagery \citep{Falconi2019}.\\
 
-GPUs
+These models are designed to classify millions of images across thousands of different classes and can easily be adapted to any classification task by replacing the dense output layer that makes the actual prediction with a layer containing one neuron per class to predict. In the case of breast cancer detection, this would result in an output layer with three neurons, one for normal cases, one for benign cases and the other for malignant cases \citep{Geron2019}. Falconi et al. demonstrated how transfer learning from general domain datasets such as ImageNet could be transferred to the domain of mammograms using datasets  such as CBIS-DDSM, reaching accuracies of 78.4\% with the ResNet-50 model \citep{Falconi2019}.\\
 
-\paragraph{Software advanced}
+Shen et al. showed how using common CNN architectures such as VGG or ResNet pre-trained on ImageNet resulted in small accuracy increases. For instance, the accuracy improves by 2-27\% based on the number of patches used \cite{Shen2017}, while Diaz et al. demonstrated how two ResNet-50 models were tested with different weight initialisation: one on ImageNet weights and the other with random weights using the CBIS-DDSM dataset. The model using transfer learning achieved  84\% accuracy compared to 75\% accuracy \citep{Diaz2018}, clearly depicting the advantage of using CNNs with pre-trained weights. 
 
-(libraries)
+\paragraph{Data Augmentation}
 
-\subsection{Current Limitations \& Challenges}
+Another technique to counter small datasets is data augmentation, often used in parallel with transfer learning. The data is ``augmented'' by artificially creating similar realistic variants of the images found in the training set, considerably increasing the training set size. A varying amount of affine transformations can be applied to each image such as translation (shifting), rotation, scaling, shear, horizontal/vertical flips, brightness and contrast increases, etc.\\
 
-\begin{itemize}
-    \item Amount of data required
-    \item overfitting (regularisation and dropout)
-\end{itemize}
+Chen et al. show how applying data augmentation using affine transformations increases the accuracy from 83.6\% to 88.14\% using a ResNet-50 model \citep{Chen2019}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 4 - CHAPTER SUMMARY
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Regularisation Techniques}
 
-\section{Chapter Summary}
+Although the previous technique can be considered as regularisation as it  helps reduce overfitting, the most common regularisation technique is dropout.
 
-Todo: review.
+\paragraph{Technological Advances}
+
+The main contributor to the rise of deep learning is linked to the large scale spread and availability of  Graphical Processing Units (GPU) in recent years. GPUs are much more powerful than the general-purpose Central Processing Units (CPU), as they can process large amounts of data in parallel. Originally designed for computer graphics in video games, GPUs have been found to be extremely efficient for large-matrix operations, rendering them vital in the field of deep learning \citep{Caulfield2009}. GPU-computing libraries such as CUDA or OpenCL make it possible to use the processing power of GPUs, leading to compute times that are 10 to 30 times faster than CPUs \citep{Litjens2017}.\\
+
+However, GPUs are complicated to use efficiently from a low-level perspective, which is why the collection of open-source software libraries available online is essential for the rise of deep learning. These libraries allow high-level GPU-efficient implementations of the most important deep learning methods and operations, allowing focus to be placed on efficiently implementing deep learning pipelines rather than low-level GPU optimisations \citep{Litjens2017}. The most popular packages nowadays include Tensorflow \citep{tensorflow2015-whitepaper} coupled with Keras \citep{chollet2015keras} and PyTorch \citep{pytorch}.\\
+
+Implementing CNNs entails another drawback linked to the memory requirements (RAM) and the use of GPUs. Indeed, input data, neuron weights and biases all need to be stored in memory as the data propagates through the neural network, especially during training as the data needs to be retained during back-propagation to calculate the error gradients \citep{Geron2019}. For GPU optimisation, this data is formatted as dense vectors for parallel processing optimisations, which can increase local RAM requirements to over 7.5GB for a CNN like ResNet-50 \citep{Hanlon2016}.\\
+
+Without the rise of popularity in GPUs and software libraries to take advantage of the additional processing power offered by GPUs, and the increase in other computing resources such as the amount of GPU and RAM, deep learning would have been successfully applied to fields such as medical imagery analysis nowadays.
