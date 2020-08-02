@@ -4,14 +4,16 @@ The deep learning model aimed to be implemented during this project will require
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Datasets used}
+\section{Datasets Description}
 
 This project will make use of two open-sourced anonymised public datasets that have been approved by the University of St Andrew's Teaching and Research Ethics Committee for use in this project.
 
 \subsection{CBIS-DDSM}
 
-The ``Curated Breast Imaging Subset of DDSM'' (CBIS-DDSM) dataset \citep{Lee2017} is available online from The Cancer Imaging Archive \citep{Clark2013}. The dataset contains a total of 10,239 images in Digital Imaging and Communications in Medicine format (DICOM) gathered from 1,566 patients across 6,775 studies \citep{Lee2017}. This dataset is an updated subset of the older DDSM dataset \citep{DDSMdataset2001}, containing only abnormal cases with benign and malignant tumours (no normal cases). The dataset encloses two different types of mammograms that show different information: calcification VS masses, as well as two different views that are used in most routine mammogram X-ray scans: bilateral craniocaudal (CC) and mediolateral oblique (MLO). Each view is treated as a separate image due to the limited number of samples.
+The ``Curated Breast Imaging Subset of DDSM'' (CBIS-DDSM) dataset \citep{Lee2017} is available online from The Cancer Imaging Archive \citep{Clark2013}. The dataset contains a total of 10,239 images in Digital Imaging and Communications in Medicine format (DICOM) gathered from 1,566 patients across 6,775 studies \citep{Lee2017}. This dataset is an updated subset of the older DDSM dataset \citep{DDSMdataset2001}, containing only abnormal cases with benign and malignant tumours (no normal cases).\\
+
+The dataset encloses two different types of mammograms that show different information: calcification VS masses, as well as two different views that are used in most routine mammogram X-ray scans: bilateral craniocaudal (CC) and mediolateral oblique (MLO).
 
 \subsection{mini-MIAS}
 
-The ``mini-MIAS'' database is a smaller dataset of mammograms containing 322 images in Portable Gray Map (PGM) format with associated ground truth data \citep{Suckling1994}. From a clinical point of view, this dataset is interesting as it contains the same abnormal cases as the CBIS-DDSM dataset, and normal cases well. However, its smaller size means that image processing techniques will have to be carried out to feed enough data into the deep learning model.
+The ``mini Mammography Image Analysis Society'' dataset (mini-MIAS) is a smaller dataset of mammograms containing 322 images in greyscale Portable Gray Map (PGM) format with associated ground truth data \citep{Suckling1994} and images all reduced to uniform size of 1024 x 1024 pixels \citep{Vishrutha2014}.
