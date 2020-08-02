@@ -1,6 +1,6 @@
 \section{Installation Instructions}
 
-Start by cloning the GitHub repository:
+Start by cloning the GitHub repository (either the common or the individual code):
 
 \begin{lstlisting}
 cd ~/Projects
@@ -30,21 +30,23 @@ source /Breast-Cancer-Detection-Code/tf2/venv/bin/activate
 Run the code:
 
 \begin{lstlisting}
-main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-gs] [-v]
+main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-lr LEARNING_RATE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-gs] [-roi] [-v]
 \end{lstlisting}
 
 where:
 \begin{itemize}
     \item \textit{-h} is a  flag for help on how to run the code.
-    \item \textit{DATASET} is the dataset to use. Must be either \textit{mini-MIAS} or \textit{CBIS-DDMS}.
+    \item \textit{DATASET} is the dataset to use. Must be either \textit{mini-MIAS}, \textit{mini-MIAS-binary} or \textit{CBIS-DDMS}.
     \item \textit{MAMMOGRAMTYPE} is the type of mammogram to use. Can be either \textit{calc}, \textit{mass} or \textit{all}.
-    \item \textit{MODEL} is the model to use. Must be either \textit{VGG}, \textit{ResNet}, \textit{Inception} or \textit{Xception}. Default value is \textit{VGG}.
-    \item \textit{RUNMODE} is the mode to run in (\textit{train} or \textit{test}). Default value is \textit{train}.
-    \item \textit{BATCHSIZE} is the batch size to use when training the model. Defaults to \textit{2}.
-    \item \textit{MAXEPOCHFROZEN} is the maximum number of epochs in the first training phrase (with frozen layers). Defaults to \textit{100}.
-    \item \textit{MAXEPOCHUNFROZEN} is the maximum number of epochs in the second training phrase (with unfrozen layers). Defaults to \textit{50}.
-    \item \textit{-gs} is a flag to run the grid search algorithm to determine the optimal hyperparameters for the CNN model.
-    \item \textit{-v} is a flag controlling verbose mode, which prints additional statements for debugging purposes.
+    \item \textit{MODEL} is the model to use. Must be either \textit{VGG}, \textit{VGG-common}, \textit{Inception} or \textit{CNN}. Default value is \textit{VGG-common}.
+    \item \textit{RUNMODE} is the learning rate used for the all the non-pre-trained ImageNet layers. Defaults to 1e-3. Must be a float.
+    \item \textit{LEARNING\_RATE} is the batch size to use when training the model. Defaults to \textit{2}. Must be a positive integer.
+    \item \textit{BATCHSIZE} is the batch size to use when training the model. Defaults to \textit{2}. Must be a positive integer.
+    \item \textit{MAXEPOCHFROZEN} is the maximum number of epochs in the first training phrase (with frozen layers). Defaults to \textit{100}. Must be a positive integer.
+    \item \textit{MAXEPOCHUNFROZEN} is the maximum number of epochs in the second training phrase (with unfrozen layers). Defaults to \textit{50}. Must be a positive integer.
+    \item \textit{-gs} is a flag to run the grid search algorithm to determine the optimal hyperparameters for the CNN model. Defaults to \textit{False}.
+    \item \textit{-roi} is a flag to use only cropped versions of the images around the ROI. Only usable with mini-MIAS dataset. Defaults to \textit{False}.
+    \item \textit{-v} is a flag controlling verbose mode, which prints additional statements for debugging purposes. Defaults to \textit{False}.
 \end{itemize}
 
 Set the \textit{PYTHONHASHSEED} environment variable to 0 before the program starts for reproducible results (e.g. when using hash-based operations):
