@@ -49,7 +49,7 @@ The deep learning pipeline implemented for the task of breast cancer detection c
     \end{itemize}
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=1.1\textwidth]{Dissertation/figures/design/design flowchart.png}}
+\centerline{\includegraphics[width=1.1\textwidth]{figures/design/design flowchart.png}}
 \caption{\label{fig:design-flowchart}High-level flowchart of the breast cancer detection deep learning pipeline to implement. Created using Draw.io.}
 \end{figure}
 
@@ -69,13 +69,13 @@ As this is a classification task, it is essential to visualise the distribution 
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=0.94\textwidth]{Dissertation/figures/design/mini-mias-balance.png}
+  \includegraphics[width=0.94\textwidth]{figures/design/mini-mias-balance.png}
   \caption{mini-MIAS class distribution.}
   \label{fig:design-mini-mias-balance}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Dissertation/figures/design/cbis-ddsm-balance.png}
+  \includegraphics[width=\textwidth]{figures/design/cbis-ddsm-balance.png}
   \caption{CBIS-DDSM class distribution.}
   \label{fig:cbis-ddsm-balance}
 \end{subfigure}
@@ -101,7 +101,7 @@ The mini-MIAS dataset is very small in size (339 Mb before pre-processing, 202 M
 
 As the labels for each mammogram are in categorical string format, they must be encoded into a numerical format. One-hot encoding is therefore chosen as it suits the sparse representation of the data, which is made up of only two or three target categories, depending on the dataset being used. The one-hot encodings of the labels can be seen in Table~\ref{tab:label-encoding-example}.
 
-\input{Dissertation/tables/label-conversion-example}
+\input{tables/label-conversion-example}
 
 %%%%%%%%%%%%%%%%%%%%
 

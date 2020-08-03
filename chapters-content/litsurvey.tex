@@ -20,7 +20,7 @@ Due to the invasive nature of biopsies, it is ideal for patients to use medical 
 To assist radiologists in their interpretations of mammograms, Computer-Assisted Detection/Diagnosis (CAD) software have been employed since the 1970s. However, pre-1990s CAD systems were very primitive and did not offer much more knowledge than the expert radiologists' knowledge. These unsophisticated ``expert'' systems consisted of manually processing and modelling pixels to construct rule-based systems that mainly used \textit{if-else-then} statements \citep{Litjens2017}, highlighting their inadequacy to learn how to recognise patterns that can be used to detect breast cancer.
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/bcd_timeline.png}}
+\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/bcd_timeline.png}}
 \caption{\label{fig:litsurvey-bcd-timeline}Timeline of the evolution of breast cancer detection systems synthesising the information described in Sections~\ref{sec:litreview-bcd-medical-imagery}~and~\ref{sec:litreview-bcd-early-cad}. Created using draw.io.}
 \end{figure}
 
@@ -63,13 +63,13 @@ Two types of machine learning tasks are very relevant to medical imagery analysi
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=0.5\textwidth]{Dissertation/figures/litsurvey/classification_benign.png}
+  \includegraphics[width=0.5\textwidth]{figures/litsurvey/classification_benign.png}
   \caption{A benign mammogram.}
   \label{fig:classification_benign}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=0.5\textwidth]{Dissertation/figures/litsurvey/classification_malignant.png}
+  \includegraphics[width=0.5\textwidth]{figures/litsurvey/classification_malignant.png}
   \caption{A malignant mammogram.}
   \label{fig:classification_malignant}
 \end{subfigure}
@@ -82,13 +82,13 @@ Two types of machine learning tasks are very relevant to medical imagery analysi
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/segmentation_example_original.jpg}
+  \includegraphics[width=0.52\textwidth]{figures/litsurvey/segmentation_example_original.jpg}
   \caption{Original mammogram images.}
   \label{fig:original-mammogram}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=0.52\textwidth]{Dissertation/figures/litsurvey/segmentation_example_segmented.jpg}
+  \includegraphics[width=0.52\textwidth]{figures/litsurvey/segmentation_example_segmented.jpg}
   \caption{Segmented mammogram images.}
   \label{fig:segmented-mammogram}
 \end{subfigure}
@@ -112,7 +112,7 @@ k-Nearest Neighbours (kNN) is one of the simplest machine learning algorithms an
 \end{equation}
 
 \begin{figure}[h]
-\centerline{\includegraphics[width=0.4\textwidth]{Dissertation/figures/litsurvey/knn.png}}
+\centerline{\includegraphics[width=0.4\textwidth]{figures/litsurvey/knn.png}}
 \caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for a test data sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure retrieved online from T. Srivastava (\url{https://tinyurl.com/y3jqco49}).}
 \end{figure}
 
@@ -137,7 +137,7 @@ This assumption leads to a naive model that despite not learning the data's unde
 Unlike kNN and NB, the decision tree algorithm is a simple yet powerful one that fits the data. It works like a flowchart mapping samples' input feature vectors attributes and values, creating a tree made up of different types of nodes. Each non-leaf nodes tests one of the feature vectors attributes, branching out to a deeper node based on the attribute's value. Once a leaf node is reached after multiple tests, a classification decision is made \citep{quinlan2014c4}. An example of a decision tree applied to breast cancer detection can be found in Figure~\ref{fig:litsurvey-dt-example}, illustrating how attributes and their values are used to classify a tumour as benign or malignant.\\
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=0.65\textwidth]{Dissertation/figures/litsurvey/dt.png}}
+\centerline{\includegraphics[width=0.65\textwidth]{figures/litsurvey/dt.png}}
 \caption{\label{fig:litsurvey-dt-example}Example of a decision tree classifier distinguishing between benign and malignant tumours based on three extracted features from a dataset of mammograms: the size of the bare nuclei, the thickness of the clump and the uniformity of the cell size. Figure created by Yue et al. (2018).}
 \end{figure}
 
@@ -151,7 +151,7 @@ The extra complexity offered by decision trees such as the C4.5 classifier does 
 An SVM consist of a \textit{maximal margin classifier}, which aims to find the hyperplane that separates two classes the most, and the \textit{kernel trick}, used to separate non-linear data. In Figure~\ref{fig:litsurvey-svm-example}, a visual example of a maximum margin hyperplane to separate linearly separable benign and malignant tumours is shown.\\
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=0.6\textwidth]{Dissertation/figures/litsurvey/svm.png}}
+\centerline{\includegraphics[width=0.6\textwidth]{figures/litsurvey/svm.png}}
 \caption{\label{fig:litsurvey-svm-example}Example of a SVM classifier's maximum margin hyperplane found to separate benign and malignant tumours based on two extracted features from a dataset of mammograms: the size of the bare nuclei and the uniformity of the cell size. Figure created by Yue et al. (2018).}
 \end{figure}
 
@@ -167,7 +167,7 @@ Compared to the previously mentioned ML methods, SVMs seem to learn the extracte
 ANNs form the basis of contemporary deep learning and are at the heart of the techniques mentioned in Section~\ref{sec:litsurvey-DLtechniques-CNN}. Originally inspired by the neuron connections found in the human brain \citep{mcculloch1943logical}, ANNs correspond to a collection of neurons (units) that ``fire'' an output if the linear sum of its weighted inputs tops a threshold. These neurons are placed in hierarchical layers (input, hidden and output layers) which are connected via weighted links, leading to \textit{fully connected} neural network when all the neurons from one layer communicate with all the neurons in the following layer. Input layer neurons accept the feature vectors $\textbf{x}$, hidden layer neurons process the data and output layer neurons represent an outcome for the classification \citep{russell2002artificial}. Figure~\ref{fig:litsurvey-ann-example} depicts an example fully-connected ANN used to classify benign and malignant tumours using six input neurons, eight hidden neurons and one output neuron.\\
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/ann.png}}
+\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/ann.png}}
 \caption{\label{fig:litsurvey-ann-example}Example of an ANN classifier distinguishing between benign and malignant tumours based on eight extracted features from a dataset of mammograms. Figure created by Yue et al. (2018).}
 \end{figure}
 
@@ -210,7 +210,7 @@ CNNs differ from traditional ``shallow'' ANNs as they are not fully connected. I
 The structure of CNNs builds on top of the concepts of traditional ANNs (see Section~\ref{sec:litsurvey-anns}) by piling stack of convolutional layers and pooling layers that are followed by a fully connected network for classification (see Figure~\ref{fig:litsurvey-CNN-example}). The goal of the convolutional and pooling layers is to reduce the input images into a form that simple enough to be processed by other algorithms (the fully connected layers), retaining only useful information from the original image \citep{Shen2017}.
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/CNN example.png}}
+\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/CNN example.png}}
 \caption{\label{fig:litsurvey-CNN-example}Example of a typical CNN adapted for multi-class breast cancer detection. Figure retrieved from S. Saha (\url{https://tinyurl.com/y9mmosuq}) and amended in Photoshop.}
 \end{figure}
 
@@ -232,7 +232,7 @@ feature maps
 Pooling layers are similar to convolutional layers as neurons are only connected to neurons from a small region in the previous layer. The difference is that this layer is not trainable as its neurons have no weights. Indeed, it is only used to downsample the image as it traverses the network in order to diminish the load on the GPU. It does so by calculating an aggregate of its inputs based on a function, which can either be a maximum or an average function (see Figure~\ref{fig:litsurvey-max-vs-avg-pooling}). \textit{Maximum pooling} returns the maximum value of the covered portion of the image, whereas \textit{average pooling} returns the average of all values. Maximum pooling is the preferred option in CNNs as it retains the strongest features only and acts as a noise suppressant by discarding noisy activations \citep{Geron2019}.\\
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=\textwidth]{Dissertation/figures/litsurvey/max-vs-avg-pooling.png}}
+\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/max-vs-avg-pooling.png}}
 \caption{\label{fig:litsurvey-max-vs-avg-pooling}Difference between max pooling and average pooling (left) to downsample an image (right). Figure retrieved from W. Ong (\url{https://tinyurl.com/y25cke6l}) and amended in Photoshop.}
 \end{figure}
 

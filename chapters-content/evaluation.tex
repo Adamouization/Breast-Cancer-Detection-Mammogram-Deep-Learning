@@ -7,7 +7,7 @@ All results from the common pipeline were tested on the validation sets to avoid
 On the mini-MIAS dataset (multi-class classification problem), an accuracy of 50\% was achieved, with a confusion matrix (see Figure~\ref{fig:evaluation-common-CM-norm_basic-model_mini-MIAS-dataset}) indicating that the CNN is confusing cancerous cases together (benign and malignant), but can tell normal cases apart.
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=0.8\textwidth]{Dissertation/figures/evaluation/common/CM-norm_basic-model_mini-MIAS-dataset.png}}
+\centerline{\includegraphics[width=0.8\textwidth]{figures/evaluation/common/CM-norm_basic-model_mini-MIAS-dataset.png}}
 \caption{\label{fig:evaluation-common-CM-norm_basic-model_mini-MIAS-dataset}Normalised confusion matrix of the classification results after training on the mini-MIAS dataset.}
 \end{figure}
 
@@ -19,13 +19,13 @@ On the CBIS-DDSM dataset (binary classification problem), an accuracy of 65.36\%
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Dissertation/figures/evaluation/common/CM-norm_basic-model_CBIS-DDSM-dataset-Calc.png}
+  \includegraphics[width=\textwidth]{figures/evaluation/common/CM-norm_basic-model_CBIS-DDSM-dataset-Calc.png}
   \caption{Mammograms with calcifications (70.36\%).}
   \label{fig:evaluation-cbisddsm-common-calc}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Dissertation/figures/evaluation/common/CM-norm_basic-model_CBIS-DDSM-dataset-Mass.png}
+  \includegraphics[width=\textwidth]{figures/evaluation/common/CM-norm_basic-model_CBIS-DDSM-dataset-Mass.png}
   \caption{Mammograms with masses (68.2\%).}
   \label{fig:evaluation-cbisddsm-common-mass}
 \end{subfigure}
@@ -41,7 +41,7 @@ Minor optimisation attempts such as adding additional convolutional layers betwe
 Using more advanced models than VGG19, which is a sequential CNN, such as InceptionV3, yielded poor results and required much longer training times. Indeed, the evolution of the validation loss visualised in Figure~\ref{fig:evaluation-individual-inceptionv3-poor-training}  confirms that  the InceptionV3 model highly overfits the data, suggested an urgent need for regularisation techniques such as Dropout.\\
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=0.8\textwidth]{Dissertation/figures/evaluation/individual/InceptionV3-poor-training.png}}
+\centerline{\includegraphics[width=0.8\textwidth]{figures/evaluation/individual/InceptionV3-poor-training.png}}
 \caption{\label{fig:evaluation-individual-inceptionv3-poor-training}Evolution of validation loss during training of the InceptionV3 model on the CBIS-DDSM dataset.}
 \end{figure}
 
