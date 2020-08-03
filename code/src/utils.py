@@ -75,7 +75,8 @@ def print_cli_arguments() -> None:
     print("Batch size: {}".format(config.batch_size))
     print("Max number of epochs when original CNN layers are frozen: {}".format(config.max_epoch_frozen))
     print("Max number of epochs when original CNN layers are unfrozen: {}".format(config.max_epoch_unfrozen))
-    print("Verbose mode: {}\n".format(config.verbose_mode))
+    print("Verbose mode: {}".format(config.verbose_mode))
+    print("Experiment name: {}\n".format(config.name))
 
 
 def save_output_figure(title: str) -> None:
@@ -85,7 +86,7 @@ def save_output_figure(title: str) -> None:
     :return: None
     """
     plt.savefig(
-        "../output/{}_dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}.png".format(config.run_mode,
+        "../output/{}_dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_{}.png".format(config.run_mode,
                                                                                                         config.dataset,
                                                                                                      config.mammogram_type,
                                                                                                      config.model,
@@ -94,17 +95,19 @@ def save_output_figure(title: str) -> None:
                                                                                                      config.max_epoch_frozen,
                                                                                                      config.max_epoch_unfrozen,
                                                                                                      config.is_roi,
+                                                                                                           config.name,
                                                                                                      title))  # bbox_inches='tight'
 
 def load_trained_model():
     print("Loading trained model")
     return load_model(
-            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_saved-model.h5".format(config.dataset,
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_saved-model.h5".format(config.dataset,
                  config.mammogram_type,
                  config.model,
                  config.learning_rate,
                  config.batch_size,
                  config.max_epoch_frozen,
                  config.max_epoch_unfrozen,
-                 config.is_roi)
+                 config.is_roi,
+                                                                                                                                        config.name)
     )

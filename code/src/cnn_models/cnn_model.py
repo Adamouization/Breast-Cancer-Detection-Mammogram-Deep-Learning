@@ -243,14 +243,15 @@ class CNN_Model:
         """
         # Scratch space
         self._model.save(
-            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_saved-model.h5".format(config.dataset,
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_saved-model.h5".format(config.dataset,
                                                                                                                  config.mammogram_type,
                                                                                                                  config.model,
                                                                                                                  config.learning_rate,
                                                                                                                  config.batch_size,
                                                                                                                  config.max_epoch_frozen,
                                                                                                                  config.max_epoch_unfrozen,
-                                                                                                                 config.is_roi)
+                                                                                                                 config.is_roi,
+                                                                                                                                        config.name)
         )
 
     def save_weights(self) -> None:
@@ -260,7 +261,7 @@ class CNN_Model:
         """
         if self.model_name == "VGG-common":
             self._model.save_weights(
-                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_all_weights.h5".format(
+                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_all_weights.h5".format(
                     config.dataset,
                     config.mammogram_type,
                     config.model,
@@ -268,13 +269,14 @@ class CNN_Model:
                     config.batch_size,
                     config.max_epoch_frozen,
                     config.max_epoch_unfrozen,
-                    config.is_roi)
+                    config.is_roi,
+                config.name)
             )
             print("layer name")
             print(self._model.layers[2].name)
             weights_and_biases = self._model.layers[2].get_weights()
             np.save(
-                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_fc_weights.npy".format(
+                "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_fc_weights.npy".format(
                         config.dataset,
                         config.mammogram_type,
                         config.model,
@@ -282,15 +284,17 @@ class CNN_Model:
                         config.batch_size,
                         config.max_epoch_frozen,
                         config.max_epoch_unfrozen,
-                        config.is_roi),
+                        config.is_roi,
+                config.name),
                 weights_and_biases
             )
         # Local save: ../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
         # BigTMP save: /cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
         
     def load_minimias_weights(self) -> None:
+        print("Loading all layers mini-MIAS-binary weights from h5 file.")
         self._model.load_weights(
-            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_all_weights.h5".format(
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_all_weights.h5".format(
                     config.dataset,
                     config.mammogram_type,
                     config.model,
@@ -298,12 +302,14 @@ class CNN_Model:
                     config.batch_size,
                     config.max_epoch_frozen,
                     config.max_epoch_unfrozen,
-                    config.is_roi)
+                    config.is_roi, 
+                config.name)
         )
     
     def load_minimias_fc_weights(self) -> None:
+        print("Loading only FC layers mini-MIAS-binary weights from npy file.")
         weights = np.load(
-            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_fc_weights.npy".format(
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_fc_weights.npy".format(
                 config.dataset,
                 config.mammogram_type,
                 config.model,
@@ -311,7 +317,8 @@ class CNN_Model:
                 config.batch_size,
                 config.max_epoch_frozen,
                 config.max_epoch_unfrozen,
-                config.is_roi)
+                config.is_roi,
+            config.name)
         )
 #         weights = loaded_weights_and_biases[0]
 #         biases = loaded_weights_and_biases[1]

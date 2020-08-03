@@ -104,8 +104,8 @@ def main() -> None:
             
             # Create and train CNN model.
             model = CNN_Model(config.model, l_e.classes_.size)
+            model.load_minimias_fc_weights()
             #model.load_minimias_weights()
-            #model.load_minimias_fc_weights()
             model.train_model(train_dataset, validation_dataset, None, None, None)
         
         # Save training runtime.
@@ -145,10 +145,10 @@ def main() -> None:
         
         # Test binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
-            images, labels = import_cbisddsm_training_dataset(l_e)
-            train_dataset = create_dataset(images, labels)
+            images, labels = import_cbisddsm_testing_dataset(l_e)
+            test_dataset = create_dataset(images, labels)
             model = load_trained_model()
-            predictions = model.predict(x=train_dataset)
+            predictions = model.predict(x=test_dataset)
             runtime = round(time.time() - start_time, 2)
             _test_model(labels, predictions, l_e, 'B-M', runtime)
         
@@ -217,6 +217,10 @@ def parse_command_line_arguments() -> None:
                         action="store_true",
                         help="Verbose mode: include this flag additional print statements for debugging purposes."
                         )
+    parser.add_argument("-n", "--name",
+                        default="",
+                        help="The name of the experiment being tested. Defaults to an empty string."
+                        )
 
     args = parser.parse_args()
     config.dataset = args.dataset
@@ -236,6 +240,7 @@ def parse_command_line_arguments() -> None:
     config.is_grid_search = args.gridsearch
     config.is_roi = args.roi
     config.verbose_mode = args.verbose
+    config.name = args.name
 
     if config.verbose_mode:
         print_cli_arguments()

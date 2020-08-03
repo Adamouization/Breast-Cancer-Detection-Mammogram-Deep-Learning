@@ -37,3 +37,4 @@ max_epoch_unfrozen = 50     # Max number of epochs when original CNN layers are 
 is_grid_search = False      # Run the grid search algorithm to determine the optimal hyper-parameters for the model.
 is_roi = False              # Use cropped version of the images
 verbose_mode = False        # Boolean used to print additional logs for debugging purposes.
+name = ""                   # Name of experiment.

@@ -49,6 +49,7 @@ def import_cbisddsm_training_dataset(label_encoder):
     :param label_encoder: The label encoder.
     :return: Two arrays, one for the image paths and one for the encoded labels.
     """
+    print("Importing CBIS-DDSM training set")
     cbis_ddsm_path = str()
     if config.mammogram_type == "calc":
         cbis_ddsm_path = "../data/CBIS-DDSM/calc-training.csv"
@@ -68,6 +69,7 @@ def import_cbisddsm_testing_dataset(label_encoder):
     :param label_encoder: The label encoder.
     :return: Two arrays, one for the image paths and one for the encoded labels.
     """
+    print("Importing CBIS-DDSM testing set")
     cbis_ddsm_path = str()
     if config.mammogram_type == "calc":
         cbis_ddsm_path = "../data/CBIS-DDSM/calc-test.csv"
