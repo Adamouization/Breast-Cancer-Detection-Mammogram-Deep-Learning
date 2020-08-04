@@ -6,7 +6,7 @@ https://www.tensorflow.org/io/tutorials/dicom
 import tensorflow as tf
 import tensorflow_io as tfio
 
-image_bytes = tf.io.read_file('/Downloads/1-1.dcm')
+image_bytes = tf.io.read_file('~/Downloads/1-1.dcm')
 
 image = tfio.image.decode_dicom_image(image_bytes, dtype=tf.uint16)
 

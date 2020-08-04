@@ -104,7 +104,7 @@ def main() -> None:
             
             # Create and train CNN model.
             model = CNN_Model(config.model, l_e.classes_.size)
-            model.load_minimias_fc_weights()
+            #model.load_minimias_fc_weights()
             #model.load_minimias_weights()
             model.train_model(train_dataset, validation_dataset, None, None, None)
         

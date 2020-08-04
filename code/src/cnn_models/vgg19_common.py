@@ -25,8 +25,10 @@ def create_vgg19_model_common(num_classes: int):
         img_input = Input(shape=(config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE['WIDTH'], 1))
     img_conc = Concatenate()([img_input, img_input, img_input])
 
-    # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.
+    # Generate a VGG19 model with random weights, input as given above, excluded fully connected layers.
     model_base = VGG19(include_top=False, weights=None, input_tensor=img_conc)
+    
+    # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.
     #model_base = VGG19(include_top=False, weights="imagenet", input_tensor=img_conc)
 
     # Add fully connected layers
