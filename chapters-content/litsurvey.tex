@@ -194,7 +194,7 @@ The next step for these supervised learning algorithms is to move away from feat
 % 3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Deep Learning techniques \& CNNs}
+\section{CNNs \& Deep Learning techniques}
 \label{sec:litsurvey-DLtechniques-CNN}
 
 \subsection{Convolution Neural Networks}
@@ -214,18 +214,16 @@ The structure of CNNs builds on top of the concepts of traditional ANNs (see Sec
 \caption{\label{fig:litsurvey-CNN-example}Example of a typical CNN adapted for multi-class breast cancer detection. Figure retrieved from S. Saha (\url{https://tinyurl.com/y9mmosuq}) and amended in Photoshop.}
 \end{figure}
 
-\paragraph{Convolution Layers \& Feature Maps}
+\paragraph{Convolution Layers}
 
-Neurons in the first convolutional layers are only connected to pixels in their receptive fields and not connected to every pixel in the image. Similarly, neurons in deeper convolutional layers are only connected to neurons in a small zone from the previous layer. This allows the CNN to first focus on low-level features, which are progressively assembled into high-level features as the CNN gets deeper. The more the receptive fields are spaced out (defined as the stride), the smaller the next layer will be, thus considerably reducing the complexity of the CNN \citep{Geron2019}. Convolution is the mathematical operation that slides a moving a filter $f$ over an image $I$ to calculate a weighted sum (see Equation~\ref{eq:2d-convolution}). This 2D operation is possible in CNNs as layers are represented in 2D space and do not need to be flattened into a 1D array like with traditional neural networks, thus preserving the spatial information of images \citep{szeliski2010computer}.
+Neurons in the first convolutional layers are only connected to pixels in their receptive fields and not connected to every pixel in the image. Similarly, neurons in deeper convolutional layers are only connected to neurons in a small zone from the previous layer. This allows the CNN to first focus on low-level features, which are progressively assembled into high-level features as the CNN gets deeper. The more the receptive fields are spaced out (referred to as the stride), the smaller the next layer will be, thus considerably reducing the complexity of the CNN \citep{Geron2019}. Convolution is the mathematical operation that slides a moving a filter $f$ over an image $I$ to calculate a weighted sum (see Equation~\ref{eq:2d-convolution}). This 2D operation is possible in CNNs as layers are represented in 2D space and do not need to be flattened into a 1D array like with traditional neural networks, thus preserving the spatial information of images \citep{szeliski2010computer}.
 
 \begin{equation}
 \label{eq:2d-convolution}
     \hat{I}(x,y)=(I*f)(x,y)=\sum_{k}\sum_{l}I(k,l)\cdot f(x-k, y-l)
 \end{equation}
 
-The weights of the neurons in a convolutional layers correspond to the filters, which are learned during the training phase by using optimisation techniques such as gradient descent. These filters allow a layer of neurons to highlight the image areas that activate the filter the most. As each layer has multiple filters, different features can be simultaneously detected in the layer's input.\\
-
-feature maps
+The weights of the neurons in a convolutional layers correspond to the filters, which are learned during the training phase by using optimisation techniques such as gradient descent. These filters allow a layer of neurons to highlight the areas of the image that activate the filter the most. As each layer has multiple filters, different features can be simultaneously detected in the layer's input. The result of each filter on a convolutional layer's input (the output of the previous layer) corresponds to a feature map. These multiple features maps are all stacked together to form the convolutional layer's output.
 
 \paragraph{Pooling Layers}
 
@@ -233,7 +231,7 @@ Pooling layers are similar to convolutional layers as neurons are only connected
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{figures/litsurvey/max-vs-avg-pooling.png}}
-\caption{\label{fig:litsurvey-max-vs-avg-pooling}Difference between max pooling and average pooling (left) to downsample an image (right). Figure retrieved from W. Ong (\url{https://tinyurl.com/y25cke6l}) and amended in Photoshop.}
+\caption{\label{fig:litsurvey-max-vs-avg-pooling}Difference between max pooling and average pooling using a 2x2 window and stride 2 (left) to downsample an image (right). Figure retrieved from W. Ong (\url{https://tinyurl.com/y25cke6l}) and amended in Photoshop.}
 \end{figure}
 
 Other benefits of pooling layers are the lower memory usage and the number of trainable parameters linked to smaller images, and especially the invariance it provides to the CNN as it will not break down when fed images that contain features of different sizes than the ones seen in the training dataset \citep{Shen2017}.
@@ -242,15 +240,11 @@ Other benefits of pooling layers are the lower memory usage and the number of tr
 
 Similarly to ANNs, activation functions are used to connect the convolutional and spooling layers. The most common activation function used in CNNs is the Rectified Linear Unit (ReLU).\\
 
-At the end of the stack of convolutional and spooling layers, a fully connected MLP is placed. This dense neural network takes the flattened output of the convolutional and spooling layers (transformed from 2D to 1D), and performs the traditional classification tasks it was designed for using the features learned by the convolutional layers in a condensed  format. Depending on the number of classes to predict, a softmax activation can be used for multi-class classification or a sigmoid for binary classification.
-
-\subsection{Applications to Breast Cancer Detection}
+At the end of the stack of convolutional and spooling layers, a fully connected MLP is placed. This dense neural network takes the flattened output of the stacked convolutional and spooling layers (which are transformed from 2D to 1D), and performs the classification tasks by using the features learned by the convolutional layers in a condensed format. Depending on the number of classes to predict, a softmax activation can be used for multi-class classification or a sigmoid for binary classification.
 
 \subsubsection{CNN Architectures}
 
-Applying VGG and ResNet CNN models to the task of breast cancer detection on the CBIS-DDSM
-
-Evolution of CNNs (first CNN used, first CNN applied to medical imagery analysis, famous architectures e.g. LeNet-5, AlexNet, GoogLeNet, VGGNet, ResNet, Xception, SENet
+CNN models such as AlexNet and VGG19, which have won the ImageNet challenge in 2012 and 2014, remain very popular nowadays especially in domains like medical imagery analysis. Indeed, the complexity of the most recent models like GoogLeNet or ResNet is not worth the gains in terms of performance and computing resources usage as these are not important in medical data, only the accuracy of the predictions matters \citep{Litjens2017}.
 
 % \begin{itemize}
 %     \item Deep Neural Networks
@@ -260,13 +254,13 @@ Evolution of CNNs (first CNN used, first CNN applied to medical imagery analysis
 % Explore the techniques used in deep learning (techniques, databases, processing, libraries, output metrics, etc.)\\
 % Explore the deep learning model that will be explored by each dissertation
 
-\subsubsection{Rise of Deep Learning in Medical Imagery Analysis}
+\subsection{Rise of Deep Learning in Breast Cancer Detection}
 
-\paragraph{Main Challenges}
+\subsubsection{Main Challenges}
 
-Implementing deep learning models requires a lot of data to achieve acceptable performance levels. However, labelled datasets are not always abundantly available as it requires a lot of time and resources to engineer large datasets with millions of images \citep{Krizhevsky2012} like ImageNet, which contains over 15 million high definition images from 15,000 different classes \citep{Deng2010}. With databases of mammograms barely exceeding 10,000 images, one of the challenges in implementing a deep learning CAD system is to overcome the small amount of data while avoiding overfitting it.
+Implementing deep learning models requires a lot of data to achieve acceptable performance levels. However, labelled datasets are not always abundantly available as it requires a lot of time and computing resources to engineer large datasets with millions of images \citep{Krizhevsky2012} like ImageNet, which contains over 15 million high definition images from 15,000 different classes \citep{Deng2010}. With databases of mammograms barely exceeding 10,000 images, one of the challenges in implementing a deep learning CAD system is to gain access to the computing resources to process the data and implement the model, as well as overcome the problem of small amounts of data while avoiding overfitting it.
 
-\paragraph{Transfer Learning}
+\subsubsection{Transfer Learning}
 
 A commonly used deep learning technique when only a little amount of data is available is transfer learning, which makes use of CNN models pre-trained on large general datasets. The knowledge gathered by high-performing CNNs in other general domains that have larger datasets can be transferred to a related domain such as medical imagery \citep{Falconi2019}.\\
 
@@ -274,18 +268,32 @@ These models are designed to classify millions of images across thousands of dif
 
 Shen et al. showed how using common CNN architectures such as VGG or ResNet pre-trained on ImageNet resulted in small accuracy increases. For instance, the accuracy improves by 2-27\% based on the number of patches used \citep{Shen2017}, while Diaz et al. demonstrated how two ResNet-50 models were tested with different weight initialisation: one on ImageNet weights and the other with random weights using the CBIS-DDSM dataset. The model using transfer learning achieved  84\% accuracy compared to 75\% accuracy \citep{Diaz2018}, clearly depicting the advantage of using CNNs with pre-trained weights. 
 
+\subsubsection{Regularisation Techniques}
+
+The drawback of the power showcased by deep neural networks such as CNNs is their tendency to overfit. This translated to new regularisation techniques other than the traditional $l_1$ or $l_2$ regularisations to be introduced to further prevent overfitting.
+
 \paragraph{Data Augmentation}
 \label{sec:litsurvey-data-augmentation}
 
-Another technique to counter small datasets is data augmentation, often used in parallel with transfer learning. The data is ``augmented'' by artificially creating similar realistic variants of the images found in the training set, considerably increasing the training set size. A varying amount of affine transformations can be applied to each image such as translation (shifting), rotation, scaling, shear, horizontal/vertical flips, brightness and contrast increases, etc.\\
+Another technique to counter small datasets is data augmentation, often used when attempting to learn a small dataset using complex deep learning models that have a large number of parameters, which may naturally lead to overfitting \citep{Jadoon2017}. The data is ``augmented'' by artificially creating similar realistic variants of the images found in the training set, considerably increasing the training set size. A varying amount of affine transformations can be applied to each image such as translation (shifting), rotation, scaling, shear, horizontal/vertical flips, brightness and contrast increases, etc. \citep{Geron2019}. Chen et al. show how applying data augmentation using affine transformations increases the accuracy from 83.6\% to 88.14\% using a ResNet-50 model \citep{Chen2019}.
 
-Chen et al. show how applying data augmentation using affine transformations increases the accuracy from 83.6\% to 88.14\% using a ResNet-50 model \citep{Chen2019}.
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/Data augmentation example.png}}
+\caption{\label{fig:litsurvey-Data augmentation example}Example of affine transforms applied to a mammogram to generate new images. Original image retrieved from the mini-MIAS dataset \citep{Suckling1994}, transforms applied in Photoshop and diagram created in Draw.io.}
+\end{figure}
 
-\paragraph{Regularisation Techniques}
+\paragraph{Dropout}
 
-Although the previous technique can be considered as regularisation as it  helps reduce overfitting, the most common regularisation technique is dropout.
+Although the previous data augmentation technique can be considered as regularisation as it  helps reduce overfitting, the most common and popular regularisation technique for deep neural networks is dropout. Simply implementing dropout in any CNN has been proven to boost the accuracy by 1 to 2\% \citep{Geron2019} at the cost of training time, even for state-of-the-art neural networks tested on large datasets like ImageNet \citep{Srivastava2014}. Despite training times being increased by 2 to 3 times, the gains in accuracy compensate for the extra time required to train the models implementing dropout.\\
 
-\paragraph{Technological Advances}
+Dropout works by randomly ignoring neurons in any layer (except the output layer) during the forward and backward passes of training, including its input and output connection weights, which helps prevents neurons from from co-adapting too much with their neighbours and overfitting the data as they now have to be useful on their own. Essentially, new thinner networks are created at each training step (see Figure~\ref{fig:litsurvey-dropout}), and identical networks will never be sampled in the same training phases as there are $2^N$ possible networks, where $N$ is the number of dropable neurons. The number of neurons dropped in a layer is controlled by the dropout rate hyperparameter $p$, dictating the probability of a neuron being dropped. During testing, the neurons are no longer dropped, and an averaged ensemble of all the thinner trained networks is used. This leads to models that generalise better thanks to neurons that are less sensitive to noise and small changes in the input \citep{Srivastava2014}.
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/dropout.png}}
+\caption{\label{fig:litsurvey-dropout}Example of standard neural network (left) and a neural network with dropout applied (right). Figure retrieved from Srivastava et al. (2014).}
+\end{figure}
+
+\subsubsection{Technological Advances}
 
 The main contributor to the rise of deep learning is linked to the large scale spread and availability of  Graphical Processing Units (GPU) in recent years. GPUs are much more powerful than the general-purpose Central Processing Units (CPU), as they can process large amounts of data in parallel. Originally designed for computer graphics in video games, GPUs have been found to be extremely efficient for large-matrix operations, rendering them vital in the field of deep learning \citep{Caulfield2009}. GPU-computing libraries such as CUDA or OpenCL make it possible to use the processing power of GPUs, leading to compute times that are 10 to 30 times faster than CPUs \citep{Litjens2017}.\\
 
