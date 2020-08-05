@@ -26,7 +26,7 @@ def create_vgg19_model_common(num_classes: int):
     img_conc = Concatenate()([img_input, img_input, img_input])
 
     # Generate a VGG19 model with random weights, input as given above, excluded fully connected layers.
-    model_base = VGG19(include_top=False, weights=None, input_tensor=img_conc)
+    model_base = VGG19(include_top=False, weights="imagenet", input_tensor=img_conc)
     
     # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.
     #model_base = VGG19(include_top=False, weights="imagenet", input_tensor=img_conc)
@@ -41,16 +41,16 @@ def create_vgg19_model_common(num_classes: int):
 
     fully_connected = Sequential(name="Fully_Connected")
     # Fully connected layers.
-    fully_connected.add(Dropout(0.2, name="Dropout_Regularisation_1"))
+    fully_connected.add(Dropout(0.2, name="Dropout_1"))
     fully_connected.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
-    fully_connected.add(Dropout(0.2, name="Dropout_Regularisation_2"))
+    #fully_connected.add(Dropout(0.2, name="Dropout_2"))
     fully_connected.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
 
     # Final output layer that uses softmax activation function (because the classes are exclusive).
     if num_classes == 2:
-        fully_connected.add(Dense(1, activation='sigmoid', name='Output'))
+        fully_connected.add(Dense(1, activation='sigmoid', kernel_initializer="random_uniform", name='Output'))
     else:
-        fully_connected.add(Dense(num_classes, activation='softmax', name='Output'))
+        fully_connected.add(Dense(num_classes, activation='softmax', kernel_initializer="random_uniform", name='Output'))
         
     model.add(fully_connected)
 

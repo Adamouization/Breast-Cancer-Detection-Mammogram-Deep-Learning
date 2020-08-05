@@ -106,6 +106,11 @@ def main() -> None:
             model = CNN_Model(config.model, l_e.classes_.size)
             #model.load_minimias_fc_weights()
             #model.load_minimias_weights()
+            
+            # Fit model.
+            if config.verbose_mode:
+                    print("Training set size: {}".format(X_train.shape[0]))
+                    print("Validation set size: {}".format(X_val.shape[0]))
             model.train_model(train_dataset, validation_dataset, None, None, None)
         
         # Save training runtime.
@@ -138,7 +143,14 @@ def main() -> None:
         
         # Test multi-class classification (mini-MIAS dataset).
         if config.dataset == "mini-MIAS":
-            pass
+            images, labels = import_minimias_dataset(data_dir="../data/{}/images_processed".format(config.dataset),
+                                                     label_encoder=l_e)
+            _, X_test, _, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
+            model = load_trained_model()
+            predictions = model.predict(x=X_test)
+            runtime = round(time.time() - start_time, 2)
+            _test_model(y_test, predictions, l_e, 'N-B-M', runtime)
+        
         # Test binary classification (binarised mini-MIAS dataset).
         elif config.dataset == "mini-MIAS-binary":
             pass

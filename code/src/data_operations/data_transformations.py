@@ -18,7 +18,7 @@ def generate_image_transforms(images, labels):
     """
     augmentation_multiplier = 1
     if config.dataset == "mini-MIAS-binary":
-        augmentation_multiplier = 2
+        augmentation_multiplier = 3
     
     images_with_transforms = images
     labels_with_transforms = labels

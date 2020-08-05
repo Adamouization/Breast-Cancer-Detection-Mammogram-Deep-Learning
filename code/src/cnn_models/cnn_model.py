@@ -68,13 +68,13 @@ class CNN_Model:
         elif self.model_name == "VGG-common" or self.model_name == "Inception":
             self._model.layers[0].trainable = False
             layer_name = self._model.layers[0].name
-        
         if config.verbose_mode:
             print("Freezing '{}' layers".format(layer_name))
 
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
         self.compile_model(config.learning_rate)
         self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=True)
+        
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Initial_training", is_frozen_layers=True)
 
@@ -89,8 +89,9 @@ class CNN_Model:
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
         self.compile_model(1e-5)  # Very low learning rate.
         self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=False)
+        
         # Plot the training loss and accuracy.
-        plot_training_results(self.history, "Fine_tuning_training", False)
+        plot_training_results(self.history, "Fine_tuning_training", is_frozen_layers=False)
 
     def compile_model(self, learning_rate) -> None:
         """
@@ -121,10 +122,10 @@ class CNN_Model:
         """
         if is_frozen_layers:
             max_epochs = config.max_epoch_frozen
-            patience = config.max_epoch_frozen / 10
+            patience = int(config.max_epoch_frozen / 10)
         else:
             max_epochs = config.max_epoch_unfrozen
-            patience = config.max_epoch_unfrozen / 10
+            patience = int(config.max_epoch_unfrozen / 10)
 
         if config.dataset == "mini-MIAS":
             self.history = self._model.fit(
@@ -138,7 +139,7 @@ class CNN_Model:
                 epochs=max_epochs,
                 callbacks=[
                     EarlyStopping(monitor='val_categorical_accuracy', patience=patience, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=5)
+                    ReduceLROnPlateau(patience=int(patience/2))
                 ]
             )
         elif config.dataset == "mini-MIAS-binary":
@@ -151,8 +152,8 @@ class CNN_Model:
                 validation_steps=len(X_val) // config.batch_size,
                 epochs=max_epochs,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=5)
+                    EarlyStopping(monitor='val_binary_accuracy', patience=patience, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=int(patience/2))
                 ]
             )
         elif config.dataset == "CBIS-DDSM":
@@ -161,11 +162,12 @@ class CNN_Model:
                 validation_data=X_val,
                 epochs=max_epochs,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=5)]
+                    EarlyStopping(monitor='val_binary_accuracy', patience=patience, restore_best_weights=True),
+                    ReduceLROnPlateau(patience=int(patience/2))
+                ]
             )
 
-    def make_prediction(self, x_values):
+    def make_prediction(self, x):
         """
         Makes a prediction using unseen data.
         Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
@@ -173,9 +175,9 @@ class CNN_Model:
         :return: The model predictions (not probabilities).
         """
         if config.dataset == "mini-MIAS" or config.dataset == "mini-MIAS-binary":
-            self.prediction = self._model.predict(x=x_values.astype("float32"), batch_size=config.batch_size)
+            self.prediction = self._model.predict(x=x.astype("float32"), batch_size=config.batch_size)
         elif config.dataset == "CBIS-DDSM":
-            self.prediction = self._model.predict(x=x_values)
+            self.prediction = self._model.predict(x=x)
         #print(self.prediction)
 
     def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str, runtime) -> None:

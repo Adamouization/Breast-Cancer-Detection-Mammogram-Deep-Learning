@@ -19,7 +19,7 @@ def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised
     """
     title = str()
     if is_normalised:
-        title = "Confusion Matrix Normalised"
+        title = "Normalised Confusion Matrix"
         vmax = 1  # Y scale.
     elif not is_normalised:
         title = "Confusion Matrix"
@@ -79,24 +79,65 @@ def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     :param hist_input: The training history.
     :param plot_name: The plot name.
     """
-    title = "Training Loss and Accuracy on Dataset"
+    title = "Training Loss on {}".format(config.dataset)
     if not is_frozen_layers:
-        title += " (all layers unfrozen)"
+        title += " (unfrozen layers)"
 
+    fig = plt.figure() 
     n = len(hist_input.history["loss"])
     plt.style.use("ggplot")
     plt.figure()
-    plt.plot(np.arange(0, n), hist_input.history["loss"], label="train_loss")
-    plt.plot(np.arange(0, n), hist_input.history["val_loss"], label="val_loss")
-    if config.dataset == "mini-MIAS":
-        plt.plot(np.arange(0, n), hist_input.history["categorical_accuracy"], label="train_acc")
-        plt.plot(np.arange(0, n), hist_input.history["val_categorical_accuracy"], label="val_acc")
-    elif config.dataset == "CBIS-DDSM":
-        plt.plot(np.arange(0, n), hist_input.history["binary_accuracy"], label="train_acc")
-        plt.plot(np.arange(0, n), hist_input.history["val_loss"], label="val_loss")
+    plt.plot(np.arange(0, n), hist_input.history["loss"], label="train set")
+    plt.plot(np.arange(0, n), hist_input.history["val_loss"], label="validation set")
     plt.title(title)
-    plt.xlabel("Epoch #")
-    plt.ylabel("Loss/Accuracy")
-    plt.legend(loc="lower left")
-    save_output_figure(plot_name)
+    plt.xlabel("Epochs")
+    plt.ylabel("Cross entropy loss")
+    # plt.ylim(0, 1.5)
+    plt.legend(loc="upper right")
+    plt.savefig("../output/dataset-{}_model-{}_{}-Loss.png".format(config.dataset, config.model, plot_name))
     plt.show()
+    
+    title = "Training Accuracy on {}".format(config.dataset)
+    if not is_frozen_layers:
+        title += " (unfrozen layers)"
+
+    fig = plt.figure() 
+    n = len(hist_input.history["loss"])
+    plt.style.use("ggplot")
+    plt.figure()
+    
+    if config.dataset == "mini-MIAS":
+        plt.plot(np.arange(0, n), hist_input.history["categorical_accuracy"], label="train set")
+        plt.plot(np.arange(0, n), hist_input.history["val_categorical_accuracy"], label="validation set")
+    elif config.dataset == "CBIS-DDSM" or config.dataset == "mini-MIAS-binary":
+        plt.plot(np.arange(0, n), hist_input.history["binary_accuracy"], label="train set")
+        plt.plot(np.arange(0, n), hist_input.history["val_binary_accuracy"], label="validation set")
+    plt.title(title)
+    plt.xlabel("Epochs")
+    plt.ylabel("Accuracy")
+    plt.ylim(0, 1.1)
+    plt.legend(loc="upper right")
+    plt.savefig("../output/dataset-{}_model-{}_{}-Accuracy.png".format(config.dataset, config.model, plot_name))
+    plt.show()
+    
+#     title = "Training Loss and Accuracy on Dataset"
+#     if not is_frozen_layers:
+#         title += " (all layers unfrozen)"
+
+#     n = len(hist_input.history["loss"])
+#     plt.style.use("ggplot")
+#     plt.figure()
+#     plt.plot(np.arange(0, n), hist_input.history["loss"], label="train_loss")
+#     plt.plot(np.arange(0, n), hist_input.history["val_loss"], label="val_loss")
+#     if config.dataset == "mini-MIAS":
+#         plt.plot(np.arange(0, n), hist_input.history["categorical_accuracy"], label="train_acc")
+#         plt.plot(np.arange(0, n), hist_input.history["val_categorical_accuracy"], label="val_acc")
+#     elif config.dataset == "CBIS-DDSM":
+#         plt.plot(np.arange(0, n), hist_input.history["binary_accuracy"], label="train_acc")
+#         plt.plot(np.arange(0, n), hist_input.history["val_loss"], label="val_loss")
+#     plt.title(title)
+#     plt.xlabel("Epoch #")
+#     plt.ylabel("Loss/Accuracy")
+#     plt.legend(loc="upper right")
+#     save_output_figure(plot_name)
+#     plt.show()
