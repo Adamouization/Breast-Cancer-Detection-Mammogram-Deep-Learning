@@ -1,10 +1,5 @@
 import json
-import ssl
 
-import numpy as np
-import pandas as pd
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, log_loss, make_scorer
-from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
 from tensorflow.keras.metrics import CategoricalAccuracy, BinaryAccuracy
 from tensorflow.keras.optimizers import Adam
@@ -20,12 +15,12 @@ from data_visualisation.plots import *
 from data_visualisation.roc_curves import *
 
 
-class CNN_Model:
+class CnnModel:
 
     def __init__(self, model_name: str, num_classes: int):
         """
-        Function to create a CNN model object and instantiate a CNN model containing a pre-trained CNN architecture 
-        with custom convolution layers at the  top and fully connected layers at the end.
+        Function to create instantiate a CNN model containing a pre-trained CNN architecture with custom convolution
+        layers at the top and fully connected layers at the end.
         :param model_name: The name of the CNN model to use.
         :param num_classes: The number of classes (labels).
         :return: None.
@@ -35,6 +30,7 @@ class CNN_Model:
         self.history = None
         self.prediction = None
 
+        # Create model.
         if self.model_name == "VGG":
             self._model = create_vgg19_model(self.num_classes)
         elif self.model_name == "VGG-common":
@@ -46,18 +42,19 @@ class CNN_Model:
         elif self.model_name == "Xception":
             pass
         elif self.model_name == "CNN":
-            self._model = create_basic_cnn_model(self.num_classes)            
+            self._model = create_basic_cnn_model(self.num_classes)
 
     def train_model(self, X_train, X_val, y_train, y_val, class_weights) -> None:
         """
         Function to train network in two steps:
             * Train network with initial pre-trained CNN's layers frozen.
             * Unfreeze all layers and retrain with smaller learning rate.
-        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+        Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
         :param X_train: training input
         :param X_val: training outputs
         :param y_train: validation inputs
         :param y_val: validation outputs
+        :param class_weights: dict containing class weights
         :return: None
         """
         # Freeze pre-trained CNN model layers: only train fully connected layers.
@@ -74,7 +71,7 @@ class CNN_Model:
         # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
         self.compile_model(config.learning_rate)
         self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=True)
-        
+
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Initial_training", is_frozen_layers=True)
 
@@ -89,14 +86,14 @@ class CNN_Model:
         # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
         self.compile_model(1e-5)  # Very low learning rate.
         self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=False)
-        
+
         # Plot the training loss and accuracy.
         plot_training_results(self.history, "Fine_tuning_training", is_frozen_layers=False)
 
     def compile_model(self, learning_rate) -> None:
         """
-        Compile the Keras CNN model.
-        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+        Compile the CNN model.
+        Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
         :param learning_rate: The initial learning rate for the optimiser.
         :return: None
         """
@@ -111,14 +108,15 @@ class CNN_Model:
 
     def fit_model(self, X_train, X_val, y_train, y_val, class_weights, is_frozen_layers: bool) -> None:
         """
-        Fit the Keras CNN model and plot the training evolution.
+        Fit the CNN model and plot the training evolution.
         Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
-        :param X_train:
-        :param X_val:
-        :param y_train:
-        :param y_val:
-        :param is_frozen_layers:
-        :return:
+        :param X_train: training input
+        :param X_val: training outputs
+        :param y_train: validation inputs
+        :param y_val: validation outputs
+        :param class_weights: dict containing class weights
+        :param is_frozen_layers: boolean specifying whether layers are frozen or not
+        :return: None
         """
         if is_frozen_layers:
             max_epochs = config.max_epoch_frozen
@@ -131,7 +129,7 @@ class CNN_Model:
             self.history = self._model.fit(
                 x=X_train,
                 y=y_train,
-                #class_weight=class_weights,
+                # class_weight=class_weights,
                 batch_size=config.batch_size,
                 steps_per_epoch=len(X_train) // config.batch_size,
                 validation_data=(X_val, y_val),
@@ -139,7 +137,7 @@ class CNN_Model:
                 epochs=max_epochs,
                 callbacks=[
                     EarlyStopping(monitor='val_categorical_accuracy', patience=patience, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=int(patience/2))
+                    ReduceLROnPlateau(patience=int(patience / 2))
                 ]
             )
         elif config.dataset == "mini-MIAS-binary":
@@ -153,7 +151,7 @@ class CNN_Model:
                 epochs=max_epochs,
                 callbacks=[
                     EarlyStopping(monitor='val_binary_accuracy', patience=patience, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=int(patience/2))
+                    ReduceLROnPlateau(patience=int(patience / 2))
                 ]
             )
         elif config.dataset == "CBIS-DDSM":
@@ -163,31 +161,32 @@ class CNN_Model:
                 epochs=max_epochs,
                 callbacks=[
                     EarlyStopping(monitor='val_binary_accuracy', patience=patience, restore_best_weights=True),
-                    ReduceLROnPlateau(patience=int(patience/2))
+                    ReduceLROnPlateau(patience=int(patience / 2))
                 ]
             )
 
     def make_prediction(self, x):
         """
         Makes a prediction using unseen data.
-        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
-        :param x_values: The input.
-        :return: The model predictions (not probabilities).
+        Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
+        :param x: The input.
+        :return: The model predictions (labels, not probabilities).
         """
         if config.dataset == "mini-MIAS" or config.dataset == "mini-MIAS-binary":
             self.prediction = self._model.predict(x=x.astype("float32"), batch_size=config.batch_size)
         elif config.dataset == "CBIS-DDSM":
             self.prediction = self._model.predict(x=x)
-        #print(self.prediction)
+        # print(self.prediction)
 
     def evaluate_model(self, y_true: list, label_encoder: LabelEncoder, classification_type: str, runtime) -> None:
         """
         Evaluate model performance with accuracy, confusion matrix, ROC curve and compare with other papers' results.
-        Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+        Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
         :param y_true: Ground truth of the data in one-hot-encoding type.
         :param label_encoder: The label encoder for y value (label).
         :param classification_type: The classification type. Ex: N-B-M: normal, benign and malignant; B-M: benign and
         malignant.
+        :param runtime: Runtime in seconds.
         :return: None.
         """
         # Inverse transform y_true and y_pred from one-hot-encoding to original label.
@@ -201,7 +200,7 @@ class CNN_Model:
         # Calculate accuracy.
         accuracy = float('{:.4f}'.format(accuracy_score(y_true_inv, y_pred_inv)))
         print("Accuracy = {}\n".format(accuracy))
-    
+
         # Generate CSV report.
         generate_csv_report(y_true_inv, y_pred_inv, label_encoder, accuracy)
         generate_csv_metadata(runtime)
@@ -239,21 +238,22 @@ class CNN_Model:
 
     def save_model(self) -> None:
         """
-        Saves the model in h5 format.
+        Saves the full model in h5 format.
         Currently saves in lab machines scratch space.
         :return: None
         """
         # Scratch space
         self._model.save(
-            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_saved-model.h5".format(config.dataset,
-                                                                                                                 config.mammogram_type,
-                                                                                                                 config.model,
-                                                                                                                 config.learning_rate,
-                                                                                                                 config.batch_size,
-                                                                                                                 config.max_epoch_frozen,
-                                                                                                                 config.max_epoch_unfrozen,
-                                                                                                                 config.is_roi,
-                                                                                                                                        config.name)
+            "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_saved-model.h5".format(
+                config.dataset,
+                config.mammogram_type,
+                config.model,
+                config.learning_rate,
+                config.batch_size,
+                config.max_epoch_frozen,
+                config.max_epoch_unfrozen,
+                config.is_roi,
+                config.name)
         )
 
     def save_weights(self) -> None:
@@ -272,81 +272,98 @@ class CNN_Model:
                     config.max_epoch_frozen,
                     config.max_epoch_unfrozen,
                     config.is_roi,
-                config.name)
+                    config.name)
             )
             print("layer name")
             print(self._model.layers[2].name)
             weights_and_biases = self._model.layers[2].get_weights()
             np.save(
                 "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_fc_weights.npy".format(
-                        config.dataset,
-                        config.mammogram_type,
-                        config.model,
-                        config.learning_rate,
-                        config.batch_size,
-                        config.max_epoch_frozen,
-                        config.max_epoch_unfrozen,
-                        config.is_roi,
-                config.name),
+                    config.dataset,
+                    config.mammogram_type,
+                    config.model,
+                    config.learning_rate,
+                    config.batch_size,
+                    config.max_epoch_frozen,
+                    config.max_epoch_unfrozen,
+                    config.is_roi,
+                    config.name),
                 weights_and_biases
             )
         # Local save: ../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
         # BigTMP save: /cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
-        
+
     def load_minimias_weights(self) -> None:
         print("Loading all layers mini-MIAS-binary weights from h5 file.")
-        self._model.load_weights("/cs/scratch/agj6/saved_models/dataset-mini-MIAS-binary_mammogramtype-all_model-VGG-common_lr-0.001_b-8_e1-1_e2-1_roi-False_proto_all_weights.h5")
-#         self._model.load_weights(
-#             "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_all_weights.h5".format(
-#                     config.dataset,
-#                     config.mammogram_type,
-#                     config.model,
-#                     config.learning_rate,
-#                     config.batch_size,
-#                     config.max_epoch_frozen,
-#                     config.max_epoch_unfrozen,
-#                     config.is_roi, 
-#                 config.name)
-#         )
-    
+        self._model.load_weights(
+            "/cs/scratch/agj6/saved_models/dataset-mini-MIAS-binary_mammogramtype-all_model-VGG-common_lr-0.001_b-8_e1-1_e2-1_roi-False_proto_all_weights.h5"
+        )
+        # self._model.load_weights(
+        #     "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_all_weights.h5".format(
+        #         config.dataset,
+        #         config.mammogram_type,
+        #         config.model,
+        #         config.learning_rate,
+        #         config.batch_size,
+        #         config.max_epoch_frozen,
+        #         config.max_epoch_unfrozen,
+        #         config.is_roi,
+        #         config.name)
+        # )
+
     def load_minimias_fc_weights(self) -> None:
         print("Loading only FC layers mini-MIAS-binary weights from npy file.")
-        weights = np.load("/cs/scratch/agj6/saved_models/dataset-mini-MIAS-binary_mammogramtype-all_model-VGG-common_lr-0.001_b-8_e1-1_e2-1_roi-False_proto_fc_weights.npy")
-#         weights = np.load(
-#             "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_fc_weights.npy".format(
-#                 config.dataset,
-#                 config.mammogram_type,
-#                 config.model,
-#                 config.learning_rate,
-#                 config.batch_size,
-#                 config.max_epoch_frozen,
-#                 config.max_epoch_unfrozen,
-#                 config.is_roi,
-#             config.name)
-#         )
-#         weights = loaded_weights_and_biases[0]
-#         biases = loaded_weights_and_biases[1]
+        weights = np.load(
+            "/cs/scratch/agj6/saved_models/dataset-mini-MIAS-binary_mammogramtype-all_model-VGG-common_lr-0.001_b-8_e1-1_e2-1_roi-False_proto_fc_weights.npy"
+        )
+        # weights = np.load(
+        #     "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_fc_weights.npy".format(
+        #         config.dataset,
+        #         config.mammogram_type,
+        #         config.model,
+        #         config.learning_rate,
+        #         config.batch_size,
+        #         config.max_epoch_frozen,
+        #         config.max_epoch_unfrozen,
+        #         config.is_roi,
+        #     config.name)
+        # )
+        # weights = loaded_weights_and_biases[0]
+        # biases = loaded_weights_and_biases[1]
         self._model.layers[2].set_weights(weights)
 
-    @property
-    def model(self):
-        """
-        CNN model getter.
-        :return: the model.
-        """
-        return self._model
 
-    @model.setter
-    def model(self, value) -> None:
-        """
-        CNN model setter.
-        :param value:
-        :return: None
-        """
-        pass
+@property
+def model(self):
+    """
+    CNN model getter.
+    :return: the model.
+    """
+    return self._model
 
 
-def _test_model(y_true: list, predictions, label_encoder: LabelEncoder, classification_type: str, runtime):
+@model.setter
+def model(self, value) -> None:
+    """
+    CNN model setter.
+    :param value:
+    :return: None
+    """
+    pass
+
+
+def test_model_evaluation(y_true: list, predictions, label_encoder: LabelEncoder, classification_type: str,
+                          runtime) -> None:
+    """
+    Function to evaluate a loaded model not instantiated with the CnnModel class.
+    :param y_true: Ground truth of the data in one-hot-encoding type.
+    :param predictions: Labels predicted.
+    :param label_encoder: The label encoder for y value (label).
+    :param classification_type: The classification type. Ex: N-B-M: normal, benign and malignant; B-M: benign and
+    malignant.
+    :param runtime: Runtime in seconds.
+    :return: None.
+    """
     # Inverse transform y_true and y_pred from one-hot-encoding to original label.
     if label_encoder.classes_.size == 2:
         y_true_inv = y_true

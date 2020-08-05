@@ -19,7 +19,7 @@ def generate_image_transforms(images, labels):
     augmentation_multiplier = 1
     if config.dataset == "mini-MIAS-binary":
         augmentation_multiplier = 3
-    
+
     images_with_transforms = images
     labels_with_transforms = labels
 
@@ -31,7 +31,7 @@ def generate_image_transforms(images, labels):
     }
 
     class_balance = get_class_balances(labels)
-    max_count = max(class_balance) * augmentation_multiplier # Balance classes.
+    max_count = max(class_balance) * augmentation_multiplier  # Balance classes.
     to_add = [max_count - i for i in class_balance]
 
     for i in range(len(to_add)):
@@ -46,14 +46,16 @@ def generate_image_transforms(images, labels):
             a = create_individual_transform(indiv_class_images[k % len(indiv_class_images)], available_transforms)
             transformed_image = create_individual_transform(indiv_class_images[k % len(indiv_class_images)],
                                                             available_transforms)
-            
 
             if config.is_roi or config.model == "CNN":
-                transformed_image = transformed_image.reshape(1, config.ROI_IMG_SIZE['HEIGHT'], config.ROI_IMG_SIZE["WIDTH"], 1)
+                transformed_image = transformed_image.reshape(1, config.ROI_IMG_SIZE['HEIGHT'],
+                                                              config.ROI_IMG_SIZE["WIDTH"], 1)
             elif config.model == "VGG" or config.model == "Inception":
-                transformed_image = transformed_image.reshape(1, config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"], 1)
+                transformed_image = transformed_image.reshape(1, config.MINI_MIAS_IMG_SIZE['HEIGHT'],
+                                                              config.MINI_MIAS_IMG_SIZE["WIDTH"], 1)
             elif config.model == "VGG-common":
-                transformed_image = transformed_image.reshape(1, config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"], 1)
+                transformed_image = transformed_image.reshape(1, config.VGG_IMG_SIZE['HEIGHT'],
+                                                              config.VGG_IMG_SIZE["WIDTH"], 1)
 
             images_with_transforms = np.append(images_with_transforms, transformed_image, axis=0)
             transformed_label = label.reshape(1, len(label))
@@ -91,6 +93,7 @@ def horizontal_flip(image_array: np.ndarray):
     :return: horizantally flipped image
     """
     return image_array[:, ::-1]
+
 
 def random_shearing(image_array: np.ndarray):
     random_degree = random.uniform(-0.1, 0.1)
@@ -137,5 +140,5 @@ def get_class_balances(y_vals):
             if y_val == 0:
                 counts[0] += 1
             elif y_val == 1:
-                counts[1] +=1
+                counts[1] += 1
     return counts.tolist()

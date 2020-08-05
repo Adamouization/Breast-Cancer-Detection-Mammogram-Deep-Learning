@@ -31,15 +31,15 @@ def parse_function(filename, label):
     Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     """
     image_bytes = tf.io.read_file(filename)
-    image = tfio.image.decode_dicom_image(image_bytes, color_dim = True, dtype=tf.uint16)
+    image = tfio.image.decode_dicom_image(image_bytes, color_dim=True, dtype=tf.uint16)
     as_png = tf.image.encode_png(image[0])
     decoded_png = tf.io.decode_png(as_png, channels=1)
     if config.model == "VGG":
         height = config.MINI_MIAS_IMG_SIZE["HEIGHT"]
         width = config.MINI_MIAS_IMG_SIZE["WIDTH"]
     elif config.model == "VGG-common":
-        #height = config.VGG_IMG_SIZE["HEIGHT"]
-        #width = config.VGG_IMG_SIZE["WIDTH"]
+        # height = config.VGG_IMG_SIZE["HEIGHT"]
+        # width = config.VGG_IMG_SIZE["WIDTH"]
         height = config.ROI_IMG_SIZE["HEIGHT"]
         width = config.ROI_IMG_SIZE["WIDTH"]
     elif config.model == "ResNet":

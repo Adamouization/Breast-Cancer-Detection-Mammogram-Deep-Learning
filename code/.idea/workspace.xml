@@ -2,14 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a02b6889-7c63-4ff1-bf81-7e3684b23a3e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/cnn_models/vgg19.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cnn_models/vgg19_common.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cnn_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/cnn_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cnn_models/basic_cnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/basic_cnn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cnn_models/cnn_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/cnn_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cnn_models/vgg19_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/vgg19_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_operations/data_preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/data_preprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_operations/data_transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/data_transformations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_operations/dataset_feed.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/dataset_feed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/grid_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/grid_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_visualisation/csv_report.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_visualisation/csv_report.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_visualisation/plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_visualisation/plots.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grid_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/other/grid_search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,13 +49,13 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/other" />
       <recent name="$PROJECT_DIR$/src/cnn_models" />
       <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/src/other" />
       <recent name="$PROJECT_DIR$/code" />
     </key>
   </component>
@@ -101,7 +106,8 @@
       <workItem from="1594721282853" duration="1457000" />
       <workItem from="1594746667599" duration="2048000" />
       <workItem from="1594975209866" duration="249000" />
-      <workItem from="1595328765528" duration="3724000" />
+      <workItem from="1595328765528" duration="3770000" />
+      <workItem from="1596658503099" duration="1140000" />
     </task>
     <servers />
   </component>
@@ -118,6 +124,10 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722033696" />
+    <state x="100" y="100" width="1480" height="850" key="DiffContextDialog" timestamp="1596659416979">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="100" y="100" width="1480" height="850" key="DiffContextDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1596659416979" />
     <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1594722750739">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -134,12 +144,12 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="1638" height="295" key="GridCell.Tab.0.right/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722750739" />
-    <state x="341" y="132" key="SettingsEditor" timestamp="1595328806019">
+    <state x="341" y="132" key="SettingsEditor" timestamp="1596658524845">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="341" y="145" key="SettingsEditor/-136.-1057.1920.1057/0.23.1680.967@0.23.1680.967" timestamp="1594401724434" />
     <state x="341" y="132" key="SettingsEditor/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594746684573" />
-    <state x="341" y="132" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1595328806019" />
+    <state x="341" y="132" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1596658524845" />
     <state x="628" y="446" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594482471233">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>

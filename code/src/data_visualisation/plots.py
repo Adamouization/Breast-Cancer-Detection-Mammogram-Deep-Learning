@@ -10,7 +10,7 @@ from utils import save_output_figure
 def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised: bool) -> None:
     """
     Plot confusion matrix.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param cm: Confusion matrix array.
     :param fmt: The formatter for numbers in confusion matrix.
     :param label_encoder: The label encoder used to get the number of classes.
@@ -48,7 +48,7 @@ def plot_confusion_matrix(cm: np.ndarray, fmt: str, label_encoder, is_normalised
 def plot_comparison_chart(df: pd.DataFrame) -> None:
     """
     Plot comparison bar chart.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param df: Compare data from json file.
     :return: None.
     """
@@ -83,7 +83,7 @@ def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     if not is_frozen_layers:
         title += " (unfrozen layers)"
 
-    fig = plt.figure() 
+    fig = plt.figure()
     n = len(hist_input.history["loss"])
     plt.style.use("ggplot")
     plt.figure()
@@ -96,16 +96,16 @@ def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     plt.legend(loc="upper right")
     plt.savefig("../output/dataset-{}_model-{}_{}-Loss.png".format(config.dataset, config.model, plot_name))
     plt.show()
-    
+
     title = "Training Accuracy on {}".format(config.dataset)
     if not is_frozen_layers:
         title += " (unfrozen layers)"
 
-    fig = plt.figure() 
+    fig = plt.figure()
     n = len(hist_input.history["loss"])
     plt.style.use("ggplot")
     plt.figure()
-    
+
     if config.dataset == "mini-MIAS":
         plt.plot(np.arange(0, n), hist_input.history["categorical_accuracy"], label="train set")
         plt.plot(np.arange(0, n), hist_input.history["val_categorical_accuracy"], label="validation set")
@@ -119,25 +119,3 @@ def plot_training_results(hist_input, plot_name: str, is_frozen_layers) -> None:
     plt.legend(loc="upper right")
     plt.savefig("../output/dataset-{}_model-{}_{}-Accuracy.png".format(config.dataset, config.model, plot_name))
     plt.show()
-    
-#     title = "Training Loss and Accuracy on Dataset"
-#     if not is_frozen_layers:
-#         title += " (all layers unfrozen)"
-
-#     n = len(hist_input.history["loss"])
-#     plt.style.use("ggplot")
-#     plt.figure()
-#     plt.plot(np.arange(0, n), hist_input.history["loss"], label="train_loss")
-#     plt.plot(np.arange(0, n), hist_input.history["val_loss"], label="val_loss")
-#     if config.dataset == "mini-MIAS":
-#         plt.plot(np.arange(0, n), hist_input.history["categorical_accuracy"], label="train_acc")
-#         plt.plot(np.arange(0, n), hist_input.history["val_categorical_accuracy"], label="val_acc")
-#     elif config.dataset == "CBIS-DDSM":
-#         plt.plot(np.arange(0, n), hist_input.history["binary_accuracy"], label="train_acc")
-#         plt.plot(np.arange(0, n), hist_input.history["val_loss"], label="val_loss")
-#     plt.title(title)
-#     plt.xlabel("Epoch #")
-#     plt.ylabel("Loss/Accuracy")
-#     plt.legend(loc="upper right")
-#     save_output_figure(plot_name)
-#     plt.show()

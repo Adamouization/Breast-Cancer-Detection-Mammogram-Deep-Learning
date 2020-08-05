@@ -3,20 +3,20 @@ import time
 
 import numpy as np
 
-from cnn_models.cnn_model import CNN_Model, _test_model
+from cnn_models.cnn_model import CnnModel, test_model_evaluation
 import config
 from data_operations.dataset_feed import create_dataset
 from data_operations.data_preprocessing import calculate_class_weights, dataset_stratified_split, \
     import_cbisddsm_testing_dataset, import_cbisddsm_training_dataset, import_minimias_dataset
 from data_operations.data_transformations import generate_image_transforms
-from utils import create_label_encoder, load_trained_model,  print_cli_arguments, print_error_message, \
+from utils import create_label_encoder, load_trained_model, print_cli_arguments, print_error_message, \
     print_num_gpus_available, print_runtime, set_random_seeds
 
 
 def main() -> None:
     """
     Program entry point. Parses command line arguments to decide which dataset and model to use.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :return: None.
     """
     set_random_seeds()
@@ -28,9 +28,9 @@ def main() -> None:
 
     # Run in training mode.
     if config.run_mode == "train":
-        
+
         print("-- Training model --\n")
-        
+
         # Start recording time.
         start_time = time.time()
 
@@ -46,18 +46,18 @@ def main() -> None:
             # Train CNN model.
             if not config.is_grid_search:
                 # Create CNN model and split training/validation set (80/20% split).
-                model = CNN_Model(config.model, l_e.classes_.size)
+                model = CnnModel(config.model, l_e.classes_.size)
                 X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
                                                                           dataset=X_train,
                                                                           labels=y_train)
-                
+
                 # Calculate class weights.
                 class_weights = calculate_class_weights(y_train, l_e)
-                
+
                 # Data augmentation.
                 X_train, y_train = generate_image_transforms(X_train, y_train)
                 np.random.shuffle(y_train)
-                                    
+
                 # Fit model.
                 if config.verbose_mode:
                     print("Training set size: {}".format(X_train.shape[0]))
@@ -68,9 +68,9 @@ def main() -> None:
             # Fine-tune hyperparameters using grid search.
             else:
                 pass
-                #fine_tune_hyperparameters(X_train, X_val, y_train, y_val)
-                #model.grid_search(X_train, y_train)
-        
+                # fine_tune_hyperparameters(X_train, X_val, y_train, y_val)
+                # model.grid_search(X_train, y_train)
+
         # Binary classification (binarised mini-MIAS dataset)
         elif config.dataset == "mini-MIAS-binary":
             # Import entire dataset.
@@ -83,10 +83,10 @@ def main() -> None:
             # Train CNN model.
             if not config.is_grid_search:
                 # Create CNN model and split training/validation set (80/20% split).
-                model = CNN_Model(config.model, l_e.classes_.size)
-                #model.load_minimias_weights()
-                #model.load_minimias_fc_weights()
-                                    
+                model = CnnModel(config.model, l_e.classes_.size)
+                # model.load_minimias_weights()
+                # model.load_minimias_fc_weights()
+
                 # Fit model.
                 if config.verbose_mode:
                     print("Training set size: {}".format(X_train.shape[0]))
@@ -101,25 +101,25 @@ def main() -> None:
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=images, labels=labels)
             train_dataset = create_dataset(X_train, y_train)
             validation_dataset = create_dataset(X_val, y_val)
-            
+
             # Create and train CNN model.
-            model = CNN_Model(config.model, l_e.classes_.size)
-            #model.load_minimias_fc_weights()
-            #model.load_minimias_weights()
-            
+            model = CnnModel(config.model, l_e.classes_.size)
+            # model.load_minimias_fc_weights()
+            # model.load_minimias_weights()
+
             # Fit model.
             if config.verbose_mode:
-                    print("Training set size: {}".format(X_train.shape[0]))
-                    print("Validation set size: {}".format(X_val.shape[0]))
+                print("Training set size: {}".format(X_train.shape[0]))
+                print("Validation set size: {}".format(X_val.shape[0]))
             model.train_model(train_dataset, validation_dataset, None, None, None)
-        
+
         # Save training runtime.
         runtime = round(time.time() - start_time, 2)
-        
+
         # Save the model and its weights/biases.
         model.save_model()
         model.save_weights()
-        
+
         # Evaluate training results.
         print_cli_arguments()
         if config.dataset == "mini-MIAS":
@@ -135,12 +135,12 @@ def main() -> None:
 
     # Run in testing mode.
     elif config.run_mode == "test":
-        
+
         print("-- Testing model --\n")
-        
+
         # Start recording time.
         start_time = time.time()
-        
+
         # Test multi-class classification (mini-MIAS dataset).
         if config.dataset == "mini-MIAS":
             images, labels = import_minimias_dataset(data_dir="../data/{}/images_processed".format(config.dataset),
@@ -149,12 +149,12 @@ def main() -> None:
             model = load_trained_model()
             predictions = model.predict(x=X_test)
             runtime = round(time.time() - start_time, 2)
-            _test_model(y_test, predictions, l_e, 'N-B-M', runtime)
-        
+            test_model_evaluation(y_test, predictions, l_e, 'N-B-M', runtime)
+
         # Test binary classification (binarised mini-MIAS dataset).
         elif config.dataset == "mini-MIAS-binary":
             pass
-        
+
         # Test binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
             images, labels = import_cbisddsm_testing_dataset(l_e)
@@ -162,8 +162,8 @@ def main() -> None:
             model = load_trained_model()
             predictions = model.predict(x=test_dataset)
             runtime = round(time.time() - start_time, 2)
-            _test_model(labels, predictions, l_e, 'B-M', runtime)
-        
+            test_model_evaluation(labels, predictions, l_e, 'B-M', runtime)
+
         print_runtime("Testing", runtime)
 
 

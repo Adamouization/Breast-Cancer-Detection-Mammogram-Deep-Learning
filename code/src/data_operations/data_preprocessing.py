@@ -22,7 +22,7 @@ def import_minimias_dataset(data_dir: str, label_encoder) -> (np.ndarray, np.nda
     # Initialise variables.
     images = list()
     labels = list()
-    
+
     if not config.is_roi:
         # Loop over the image paths and update the data and labels lists with the pre-processed images & labels.
         for image_path in list(paths.list_images(data_dir)):
@@ -103,11 +103,11 @@ def preprocess_image(image_path: str) -> np.ndarray:
         elif config.model == "CNN":
             target_size = (config.ROI_IMG_SIZE['HEIGHT'], config.ROI_IMG_SIZE["WIDTH"])
         image = load_img(image_path, color_mode="grayscale", target_size=target_size)
-    
+
     # Do not resize if using cropped ROI image.
     else:
         image = load_img(image_path, color_mode="grayscale")
-    
+
     image = img_to_array(image)
     image /= 255.0
     return image
@@ -116,7 +116,7 @@ def preprocess_image(image_path: str) -> np.ndarray:
 def encode_labels(labels_list: np.ndarray, label_encoder) -> np.ndarray:
     """
     Encode labels using one-hot encoding.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param label_encoder: The label encoder.
     :param labels_list: The list of labels in NumPy array format.
     :return: The encoded list of labels in NumPy array format.
@@ -133,7 +133,7 @@ def dataset_stratified_split(split: float, dataset: np.ndarray, labels: np.ndarr
     """
     Partition the data into training and testing splits. Stratify the split to keep the same class distribution in both
     sets and shuffle the order to avoid having imbalanced splits.
-    Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+    Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
     :param split: Dataset split (e.g. if 0.2 is passed, then the dataset is split in 80%/20%).
     :param dataset: The dataset of pre-processed images.
     :param labels: The list of labels.
@@ -158,7 +158,7 @@ def calculate_class_weights(y_train, label_encoder):
     if config.verbose_mode:
         print("Class weights: {}".format(str(class_weights)))
     return None
-    #return class_weights
+    # return class_weights
 
 
 def crop_roi_image(data_dir):
@@ -167,10 +167,10 @@ def crop_roi_image(data_dir):
     """
     images = list()
     labels = list()
-    
+
     csv_dir = data_dir
     images_dir = data_dir.split("_")[0] + "_png"
-    
+
     df = pd.read_csv('/'.join(csv_dir.split('/')[:-1]) + '/data_description.csv', header=None)
 
     for row in df.iterrows():
@@ -205,23 +205,23 @@ def crop_roi_image(data_dir):
                 if x2 > image.shape[0]:
                     x2 = image.shape[0]
                     x1 = image.shape[0] - 224
-        
+
         # Normal case: crop around centre of image.
         else:
-            y1 = int(image.shape[1]/2 - 112)
-            y2 = int(image.shape[1]/2 + 112)
-            x1 = int(image.shape[0]/2 - 112)
-            x2 = int(image.shape[0]/2 + 112)
-        
+            y1 = int(image.shape[1] / 2 - 112)
+            y2 = int(image.shape[1] / 2 + 112)
+            x1 = int(image.shape[0] / 2 - 112)
+            x2 = int(image.shape[0] / 2 + 112)
+
         # Get label from CSV file.
         label = "normal"
         if str(row[1][3]) == 'B':
             label = "benign"
         elif str(row[1][3]) == 'M':
             label = "malignant"
-        
+
         # Append image and label to lists.
         images.append(image[y1:y2, x1:x2, :])
         labels.append(label)
-    
+
     return images, labels

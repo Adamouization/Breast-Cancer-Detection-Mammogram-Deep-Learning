@@ -1,6 +1,6 @@
 """
 Variables set by the command line arguments dictating which parts of the program to execute.
-Originally written as a group for the common pipeline. Later ammended by Adam Jaamour.
+Originally written as a group for the common pipeline. Later amended by Adam Jaamour.
 """
 
 # Constants
@@ -27,7 +27,6 @@ ROI_IMG_SIZE = {
     "HEIGHT": 224,
     "WIDTH": 224
 }
-
 
 # Variables set by command line arguments/flags
 dataset = "mini-MIAS"       # The dataset to use.
