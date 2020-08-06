@@ -1,39 +1,35 @@
-\section{Datasets}
+Based on the machine learning and deep learning applications to the task of breast cancer detection established in Chapter~\ref{ch:chapter-litsurvey}, and the datasets available for this project, design decisions specific to the deep learning pipeline to implement will be covered, along with the reasoning behind the choice of datasets to use and general considerations.
 
-An early design decision taken as a group consisted in which datasets to use. Two datasets, mini-MIAS and CBIS-DDSM, are used for this project as they have different characteristics.\\
+\section{Datasets Decision}
 
-From a clinical point of view, the mini-MIAS dataset is an interesting dataset as it contains the abnormal cases, like the ones found in the CBIS-DDSM dataset, and normal cases as well. resulting in three classes (normal, benign and malignant cases). Its smaller size makes it useful for initial prototyping, but has the downside of requiring image processing techniques such as data augmentation to generate enough data to feed into the deep learning model.\\
+An early design decision taken as a group consisted in which datasets to use, as Chapter~\ref{ch:chapter-ethics-datasets} revealed that each dataset has different characteristics. Despite being widely used in existing literature (see Chapter~\ref{ch:chapter-litsurvey}), popular feature-based datasets containing extracted mammogram data such as the WBCD dataset \citep{Wolberg1995} will not be used as the objective of using deep learning models such as CNNs is to learn which features to extract by using the raw image in 2D space rather than data flattened into 1D arrays. If extracted features such as the ones from WBCD were used, then already successful machine learning algorithms such as SVMs or DTs could be used instead of deep learning techniques.\\
 
-The CBIS-DDSM dataset was chosen over the DDSM dataset as it is an updated version of the older DDSM dataset, and is curated by a trained mammographer. Additionally, it uses uncompressed images in DICOM format rather than LJPEG format, which is deprecated nowadays, resulting in much better quality. Indeed, the large uncompressed format offered by DICOM means that the mammograms can be fed into the CNN with larger sizes, allowing the model to learn more low-level features. Despite the CBIS-DDSM dataset containing two different types of mammograms (calcification and masses), as well as two different views (CC and MLO), the mammograms in each case are treated as separate individual images due to the limited number of samples available.\\
+From a clinical point of view, the mini-MIAS dataset is an interesting dataset as it contains both abnormal cases and normal cases as well, resulting in three classes (normal, benign and malignant cases). Its smaller size makes it useful for initial prototyping, but has the downside of requiring more image processing techniques such as data augmentation to generate enough data to feed into the deep learning model.\\
 
-Despite being widely used in existing literature (see Chapter~\ref{ch:chapter-litsurvey}), popular feature-based datasets of extracted mammogram data such as the WBCD dataset will not be used as the goal of deep learning models such as CNNs is to learn which features to extract by using the raw image in 2D space. If extracted features such as the ones from WBCD were used, then proven algorithms such as SVMs could be used instead of deep learning techniques.
+The CBIS-DDSM dataset was chosen over the DDSM dataset as it is an updated version of the older DDSM dataset, and is curated by a trained mammographer. Additionally, it uses uncompressed images in DICOM format rather than LJPEG format, which is deprecated nowadays, resulting in much higher quality imagery. Indeed, the large uncompressed format offered by DICOM means that the mammograms can be fed into the CNN with larger sizes, allowing the model to potentially learn more low-level features. Despite the CBIS-DDSM dataset containing two different types of mammograms (calcification and masses), as well as two different views (CC and MLO), the mammograms in each case are treated as separate individual images due to the limited number of samples available.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Deep Learning Pipeline Design Considerations}
+\section{Deep Learning Pipeline Design Analysis}
 
 The deep learning pipeline implemented for the task of breast cancer detection can be broken down in four distinct phases condensed in Figure~\ref{fig:design-flowchart}:
 
 \begin{itemize}
-    \item Data pre-processing: loading one of the datasets in memory and processing them for the classification task (processing images and encoding labels).
-    \item Model training: creating a CNN model and fitting the training data. Fine tuning carried out by testing various combinations of CNN models and hyperparameters.
-    \item Result visualisation: Reporting the numerical predictions and plotting the results.
+    \item \textbf{Data pre-processing}: loading a dataset in memory and processing it to gather the pair of images and labels for the classification task.
+    \item \textbf{Model training}: creating a CNN model that can fit the data to learn the training set samples. Predictions are carried out once the model finished training on the validation and test sets.
+    \item \textbf{Result visualisation}: The model's performance is evaluated by calculating various metrics and plotting predictions.
     \end{itemize}
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=1.1\textwidth]{figures/design/design flowchart.png}}
-\caption{\label{fig:design-flowchart}High-level flowchart of the breast cancer detection deep learning pipeline to implement. Created using Draw.io.}
+\caption{\label{fig:design-flowchart}A high-level flowchart of the breast cancer detection deep learning pipeline to implement.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%
 
 \subsection{Data pre-processing}
-
-\subsubsection{Classification type}
-
-Classification on the mini-MIAS dataset will be a multi-class problem as there are three possible classes (normal, benign and malignant), whereas classification on the CBIS-DDSM dataset will be a binary problem as it only contains abnormal classes (benign and malignant).
 
 \subsubsection{Dataset balance}
 
@@ -56,34 +52,50 @@ As this is a classification task, it is essential to visualise the distribution 
 \caption{\label{fig:design-datasets-balance}Class distribution for the mini-MIAS and the CBIS-DDSM datasets. Histograms generated in Excel.}
 \end{figure}
 
-These bar charts reveal that the mini-MIAS dataset is heavily unbalanced, which must be taken into account to avoid training a biased CNN model. Potential solutions to counter this imbalance would be to either:
+These bar charts reveal that the mini-MIAS dataset is heavily unbalanced as the distribution is not uniform, which must be taken into account to avoid training a biased CNN model. Potential solutions to counter this imbalance would be to either:
 \begin{itemize}
-    \item \textit{undersample} the dataset by dropping images altogether,
+    \item \textit{undersample} the dataset by dropping images altogether;
     \item \textit{oversample} the dataset, which can be achieved via data augmentation,
     \item include \textit{class weights} to give more importance to under-represented classes. 
     %https://datascience.stackexchange.com/questions/13490/how-to-set-class-weights-for-imbalanced-classes-in-keras 
     %https://www.tensorflow.org/tutorials/structured_data/imbalanced_data#class_weights
 \end{itemize}
 
-Undersampling the dataset can be considered as inefficient as it will diminish the number of samples the model could learn from. As the datasets are already very small (maximum of 10,239 images), undersampling would be a poor strategy as it may discard useful features that could be learned. Consequently, oversampling by creating new data resembling the original data is a viable solution as it was proven to increase accuracies (see Section~\ref{sec:litsurvey-data-augmentation}). Alternatively, a cheaper option in terms of computing power that does not require the dataset to be touched would be to add class weights, which will be cause the loss to become a weighted average giving more importance to less frequent classes.
+Undersampling the dataset can be considered as inefficient as it will diminish the number of samples the model could learn from by dropping samples from the majority class \citep{Liu2009}. As the datasets are already very small (maximum of 10,239 images in CBIS-DDSM), undersampling would be a poor strategy as it may discard useful features that could be learned. Consequently, oversampling by creating new artificial images resembling the original data is a viable solution as it was proven to increase accuracies (see Section~\ref{sec:litsurvey-data-augmentation}). Alternatively, a cheaper option in terms of computing power that does not require the dataset to be touched would be to add class weights, which will be cause the loss to become a weighted average giving more importance to less frequent classes \citep{Zhu2018}.
+
+\subsubsection{Dataset split}
+
+The dataset is immediately split in a training and a testing set to avoid any form of data snooping, which corresponds to the poor practice of making design decisions (either voluntary or involuntary) after having viewed the data and detecting patterns that could lead to favouring certain models or hyperparameters above others. Due to small size of the datasets used and to avoid causing further imbalance to the datasets, the splits are not randomly sampled. Instead, stratified sampling is used, which consists of maintaining representative samples from the data in both the training and the testing sets to avoid introducing sampling bias.\\
+
+An 80\%/20\% split, often used in machine learning and seen in breast cancer detection papers \citep{Yue2018}, is used to split the mini-MIAS dataset. The CBIS-DDSM does not need to be manually divided as it was already split with the appropriate stratification when it was built \citep{Lee2017}.\\
+
+After this step, only the training set is considered until the final results evaluations, while the testing set is set aside and forgotten about. The assumption that the data never changes during the development of the project is made, as not using the random generator with a fixed seed would cause different samples to be extracted into the training and testing sets, thus neglecting the results. 
 
 \subsubsection{Data loading}
 
 The mini-MIAS dataset is very small in size (339 Mb before pre-processing, 202 Mb after pre-processing), containing only 322 images. It can therefore be loaded into memory without any data loading optimisation techniques. However, the CBIS-DDSM dataset is much larger, containing 10,239 images that cover 163.6 Gb of disk space. The dataset therefore cannot be loaded in memory in a single import and needs to be loaded in batches to be fed into the CNN sequentially. % mention batches and caching
 
+\subsubsection{Data normalisation}
+
+Observing the pixel intensities of the images found in the datasets, it can be seen that they correspond to integers ranging from 0 to 255. However, because the weights in neural networks are small, having large input values can disrupt and slow down the training. Therefore, normalising the pixel intensities to values in the range of 0 to 1 can help fight this problem by keeping all values in a small scale.
+
 \subsubsection{Label encoding}
 
-As the labels for each mammogram are in categorical string format, they must be encoded into a numerical format. One-hot encoding is therefore chosen when there are more than two  classes as it suits the sparse representation of the data, which is made up of three target categories in the mini-MIAS dataset. The one-hot encodings of the labels can be seen in Table~\ref{tab:one-hot-encoding-example}.
+As the labels for each mammogram are in categorical string format, they must be encoded into a numerical format. On the one hand, due to the sparse nature of the labels (only three categories), one-hot encoding is chosen for the mini-MIAS dataset, where a single digit may have the value 1 while the others remain at value 0 to tell apart the different labels. The one-hot encodings of the labels can be seen in Table~\ref{tab:one-hot-encoding-example}.
+
+% The data must be fed to the neural network in binary form. One-hot encoding is therefore chosen as it suits the sparse representation of the data, which is made up of only five target categories. Only a single digit may have the value 1 in one-hot encoding, while the others remain at value 0 \cite{lec16}. The one-hot encodings of the target categories can be seen in Figure \ref{fig:one_hot_encoding}.
 
 \input{tables/one-hot-encoding-example}
 
-On the other hand in the case of binary datasets, binary encoding can be used instead (see Table~\ref{tab:binary-encoding-example}).
+On the other hand, in the case of binary datasets like CBIS-DDSM, binary encoding can be used instead of one-hot encoding, as seen in Table~\ref{tab:binary-encoding-example}.
 
 \input{tables/binary-encoding-example}
 
 %%%%%%%%%%%%%%%%%%%%
 
 \subsection{Model training}
+
+At this stage, the training data is ready to be fed into the classifiers. The classification models will fit the transformed features from ``\textit{X\_train.csv}'' before making their own predictions, which will be compared with the real labels found in ``\textit{Y\_train.csv}'' for evaluation.\\
 
 To complete:
 \begin{itemize}
@@ -92,6 +104,8 @@ To complete:
     \item Early stopping conditions.
     \item Describe process of using pre-trained weights on ImageNet, freezing this layers and training fully connected layers, then unfreezing the pre-trained model and and learning with at a slower learning rate.
 \end{itemize}
+
+Classification type: Classification on the mini-MIAS dataset will be a multi-class problem as there are three possible classes (normal, benign and malignant), whereas classification on the CBIS-DDSM dataset will be a binary problem as it only contains abnormal classes (benign and malignant).
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -109,9 +123,7 @@ These distribution of the class balance reveal that the mini-MIAS dataset is hea
     F_{1} = \frac{2}{\frac{1}{precision} + \frac{1}{recall}} = \frac{TP}{TP+\frac{FN + FP}{2}}
 \end{equation}
 
-\subsubsection{Visual Metrics}
-
-\paragraph{Confusion matrix} This metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels (the ones found in ``\textit{Y\_train.csv}'') and each column corresponding to a prediction. It is very useful for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications, the confusion matrix can be normalised to show a percentage \cite{Geron2019}.
+\subsubsection{Confusion matrix} This metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels (the ones found in ``\textit{Y\_train.csv}'') and each column corresponding to a prediction. It is very useful for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications, the confusion matrix can be normalised to show a percentage \cite{Geron2019}.
 
 \begin{itemize}
     \item Numerical metrics:
@@ -166,24 +178,24 @@ A Command-Line Interface (CLI) is selected, allowing arguments and flags to be p
 \section{Design Decisions Summary}
 
 \begin{enumerate}
-    \item Programming language:
-    \begin{enumerate}
-        \item Python 3.7
-        \item Open-source frameworks:
-        \begin{itemize}
-            \item Tensorflow \& Keras
-            \item NumPy
-            \item MatplotLib
-        \end{itemize}
-    \end{enumerate} 
-    
     \item Datasets:
     \begin{itemize}
         \item CBIS-DDSM (binary classification)
         \item mini-MIAS (multi-class classification)
     \end{itemize}
     
-    \item Evualuation Metrics:
+    \item Data pre-processing steps:
+    \begin{itemize}
+        \item Data augmentation
+        \item Image normalisation
+    \end{itemize}
+    
+    \item Model training:
+     \begin{enumerate}
+        \item todo
+    \end{enumerate}
+    
+    \item Evaluation Metrics:
     \begin{enumerate}
         \item Numerical metrics:
         \begin{itemize}
@@ -195,7 +207,23 @@ A Command-Line Interface (CLI) is selected, allowing arguments and flags to be p
             \item Confusion matrices (counts and normalised)
             \item Receiver Operating Characteristic (ROC) curve
             \item Aera Under the Curve (AUC)
-    \end{itemize}
+        \end{itemize}
     \end{enumerate}
+    
+    \item Programming language:
+    \begin{enumerate}
+        \item Python 3.7
+        \item Open-source frameworks:
+        \begin{itemize}
+            \item Tensorflow \& Keras
+            \item NumPy
+            \item MatplotLib
+        \end{itemize}
+    \end{enumerate}
+    
+    \item Interface:
+    \begin{itemize}
+        \item Command-Line Interface
+    \end{itemize}
     
 \end{enumerate}

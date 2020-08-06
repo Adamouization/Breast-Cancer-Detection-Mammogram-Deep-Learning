@@ -114,7 +114,11 @@ Regularisation implemented by adding Dropout layers between convolutional layers
 
 Image sizes of 1024x1024px large used and downscaled using convolutional layers. This size was chosen as it is the size of the mini-MIAS dataset images, which will be used to initially train the CNN before training on the large CBIS-DDSM dataset.\\
 
-Heavy code refactoring, moving every CNN-related code to a custom \textit{CNN\_Model} class for more ease of use and less unnecessary code duplication.
+Heavy code refactoring, moving every CNN-related code to a custom \textit{CNN\_Model} class for more ease of use and less unnecessary code duplication.\\
+
+Results reproducibability:
+random seed generator fixed for numpy, TF and dropout layers. Train/test/validation splits one with the random number generator’s seed set to a constant to ensure that it always generates the same shuffle indices when running the code multiple times to ultimately ensure reproducibility
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
