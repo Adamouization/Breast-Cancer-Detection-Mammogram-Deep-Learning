@@ -19,22 +19,18 @@ Due to the invasive nature of biopsies, it is ideal for patients to use medical 
 
 To assist radiologists in their interpretations of mammograms, Computer-Assisted Detection/Diagnosis (CAD) software have been employed since the 1970s. However, pre-1990s CAD systems were very primitive and did not offer much more knowledge than the expert radiologists' knowledge. These unsophisticated ``expert'' systems consisted of manually processing and modelling pixels to construct rule-based systems that mainly used \textit{if-else-then} statements \citep{Litjens2017}, highlighting their inadequacy to learn how to recognise patterns that can be used to detect breast cancer.
 
-\begin{figure}[ht]
-\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/bcd_timeline.png}}
-\caption{\label{fig:litsurvey-bcd-timeline}Timeline of the evolution of breast cancer detection systems synthesising the information described in Sections~\ref{sec:litreview-bcd-medical-imagery}~and~\ref{sec:litreview-bcd-early-cad}. Created using draw.io.}
-\end{figure}
-
 \subsection{Towards Supervised Machine Learning-based Systems}
 
-Towards the late 1990s, supervised machine learning techniques started replacing these expert systems, allowing hidden patterns in the mammograms' data that could not be perceived by radiologists to now be recognised by these new algorithms. Machine learning-based approaches were selected over statistical approaches as they were more performant when dealing with large, complex and high-dimensional datasets \citep{Yue2018}, which is the case of datasets of mammograms. Additionally, machine learning methods were proven to be more suitable for the task of classification than traditional statistics-based approaches such as regression \citep{Paliwal2009}. This marked the shift from CAD systems that were fully designed by humans to systems that were trained on datasets of medical imagery \citep{Litjens2017}.\\
+Towards the late 1990s, supervised machine learning techniques started replacing these expert systems, allowing hidden patterns in the mammograms' data that could not be perceived by radiologists to now be recognised by these new algorithms \citep{Litjens2017}. Machine learning-based approaches were selected over statistical approaches as they were more performant when dealing with large, complex and high-dimensional datasets \citep{Yue2018}, which is the case of datasets of mammograms. Additionally, machine learning methods were proven to be more suitable for the task of classification than traditional statistics-based approaches such as regression \citep{Paliwal2009}. This marked the shift from CAD systems that were fully designed by humans to systems that were trained on datasets of medical imagery \citep{Litjens2017}.\\
 
 However, these machine learning models could not accurately operate on purely raw data such as the full-sized mammogram images. Indeed, all of the machine learning models tested against the task of breast cancer detection required relevant pieces of information to first be extracted from the image to solve the given task, such as k-Nearest Neighbour [kNN], Decision Trees [DT], Naive Bayes [NB] \citep{Asri2016}, Support Vector Machines [SVM] \citep{Ramos-Pollan2012} and Artificial Neural Networks [ANN] \citep{Yue2018}. These important bits of information pulled from the mammograms data correspond to features, and need to be extracted by humans before being fed to the aforementioned models for training. These features range from visual information, such as colours, edges, corners, shapes and textures \citep{Geron2019}, to extracted information, such as the cell size, clump thickness, bare  nuclei, etc. \citep{Yue2018}.\\
 
 Logically, the next step in the evolution of breast cancer detection systems is for the model to learn these features on its own directly from the data rather than being fed hand-extracted features \citep{Yala2019}. Deep learning models, which corresponds to neural networks with hundreds of hidden layers, are based on this concept and are covered in Section~\ref{sec:litsurvey-DLtechniques-CNN}. However, these models have not been successfully implemented until recent years as they require powerful computers, usually equipped with Graphical Processing Units (GPU) to be efficiently trained. This means that until recent years, the machine learning models discussed in Section~\ref{sec:litreview-MLmodel-BCDapplications} have led the field of breast cancer detection, with some manual mammogram interpretations still being carried out by radiologists \citep{Litjens2017}, as depicted in Figure~\ref{fig:litsurvey-bcd-timeline}.
 
-% History of breast cancer detection (leads to)\\
-% Motivation of using ML/DL for breast detection\\
-% Problems with current breast cancer detection systems
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{figures/litsurvey/bcd_timeline.png}}
+\caption{\label{fig:litsurvey-bcd-timeline}Timeline of the evolution of breast cancer detection systems synthesising the information described in Sections~\ref{sec:litreview-bcd-medical-imagery}~and~\ref{sec:litreview-bcd-early-cad}.}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2
@@ -49,7 +45,7 @@ Logically, the next step in the evolution of breast cancer detection systems is 
 
 Machine learning algorithms fall in different categories based on whether human supervision is required or not. The two main types of machine learning algorithms correspond to supervised and unsupervised learning. On the one hand in supervised learning, the dataset is labelled, meaning every sample in the dataset includes a solution \citep{Geron2019}. This label, often noted $y$, is used to make a prediction $\hat{y}$ by fitting the input features $\textbf{x}$ from a training dataset. The goal of a supervised learning algorithm is to determine the optimal parameters $\theta$ for the selected algorithm in order to minimise a loss function defined as $L(y,\hat{y})$, which corresponds to the error between the predicted algorithm's output $\hat{y}$ and the real output $y$ \citep{Litjens2017}. A large variety of loss functions can be used such as the general Mean Squared Error (MSE) and Mean Absolute Error (MAE) loss functions, or more specific loss functions such as the Hinge Loss for SVMs \citep{Geron2019}. The main applications of supervised learning are classification and regression, with the former being the most relevant to breast cancer detection.\\
 
-On the other hand in unsupervised learning, the data is unlabelled, meaning only the input features $\textbf{x}$ are available while the labels $y$ are not \citep{Litjens2017}. This means the algorithm cannot optimise its hyperparameters by minimising a loss function. Instead, the algorithm needs to automatically create clusters in the dataset in order to separate them into different groups. The main applications of unsupervised learning are clustering, anomaly detection, data visualisation and dimensionality reduction \citep{Geron2019}, rendering them irrelevant to the breast cancer detection. Two other categories of machine learning algorithms exist, corresponding to semi-supervised learning and reinforcement learning, but are also irrelevant to the task of detecting breast cancer.\\
+On the other hand in unsupervised learning, the data is unlabelled, meaning only the input features $\textbf{x}$ are available while the labels $y$ are not \citep{Litjens2017}. This means the algorithm cannot optimise its hyperparameters, which correspond its configurations used to define it before training \citep{Bergstra2013}, by minimising a loss function. Instead, the algorithm needs to automatically create clusters in the dataset in order to separate them into different groups. The main applications of unsupervised learning are clustering, anomaly detection, data visualisation and dimensionality reduction \citep{Geron2019}, rendering them irrelevant to the breast cancer detection. Two other categories of machine learning algorithms exist, corresponding to semi-supervised learning and reinforcement learning, but are also irrelevant to the task of detecting breast cancer.\\
 
 Among the aforementioned types of machine learning algorithms, the most pertinent one for the task of breast cancer detection is supervised learning as datasets of mammograms need to contain properly labelled data for each sample, indicating the status of the mammogram i.e. no tumour, benign tumour, malignant tumour \citep{Shen2017}.
 
@@ -143,7 +139,7 @@ Unlike kNN and NB, the decision tree algorithm is a simple yet powerful one that
 
 The most popular implementations of decision trees use entropy-based impurity metrics to generate the tree, such as the ID3, C4.5 and C5.0 decision tree algorithms \citep{Yue2018}. A node reaches an entropy value of 0 when it is ``pure'' i.e. it contains only instances of one class (either only benign or only malignant data samples) \citep{Geron2019}.\\
 
-The extra complexity offered by decision trees such as the C4.5 classifier does do not offer improved results compared to kNN and NB classifiers, with 94.56\% achieved using J48 (Java implementation of C4.5) on the WBCD dataset \citep{Sumbaly2014}, which is still falling short of the performance achieved by SVMs and ANNs, which can exceed the 99\% threshold \citep{Yue2018}. Nevertheless, inserting decision trees into hybrid systems by combining them with other machine learning algorithms such as SVMs and NBs increases the accuracy to 97.13\% on the WBCD dataset \citep{Kumar2017}, which are closer to thos achieved by SVMs and ANNs \citep{Yue2018}. Indeed, these hybrid systems use the advantages of each method, cancelling out the negatives of each, but come at the cost of being complicated to engineer and still requiring handcrafted features to be fed to them as input, which is confirmed by the choice of testing these algorithms on the WBCD dataset rather than datasets containing raw images like DDSM.
+The extra complexity offered by decision trees such as the C4.5 classifier does do not offer improved results compared to kNN and NB classifiers, with 94.56\% achieved using J48 (Java implementation of C4.5) on the WBCD dataset \citep{Sumbaly2014}, which is still falling short of the performance achieved by SVMs and ANNs, which can exceed the 99\% threshold \citep{Yue2018}. Nevertheless, inserting decision trees into hybrid systems by combining them with other machine learning algorithms such as SVMs and NBs increases the accuracy to 97.13\% on the WBCD dataset \citep{Kumar2017}, which are closer to those achieved by SVMs and ANNs \citep{Yue2018}. Indeed, these hybrid systems use the advantages of each method, cancelling out the negatives of each, but come at the cost of being complicated to engineer and still requiring handcrafted features to be fed to them as input, which is confirmed by the choice of testing these algorithms on the WBCD dataset rather than datasets containing raw images like DDSM.
 
 \subsubsection{Support Vector Machines}
 \label{sec:litsurvey-svms}
@@ -155,7 +151,7 @@ An SVM consist of a \textit{maximal margin classifier}, which aims to find the h
 \caption{\label{fig:litsurvey-svm-example}Example of a SVM classifier's maximum margin hyperplane found to separate benign and malignant tumours based on two extracted features from a dataset of mammograms: the size of the bare nuclei and the uniformity of the cell size. Figure created by Yue et al. (2018).}
 \end{figure}
 
-In the case of non-linear data, the training data is mapped to a higher dimension where they can be linearly separated. This is achieved by using the kernel trick, which maps the input feature vector to a higher dimension by using the dot product, but does not carry out the transformation, which would exponentially increase the size of the feature space and consequently the training time \citep{Geron2019}. This kernel trick is what allowed SVMs to become one of the most widely used machine learning models nowadays in many fields including medical imagery analysis \citep{Yue2018}.
+In the case of non-linear data, the training data is mapped to a higher dimension where they can be linearly separated. This is achieved by using the kernel trick, which maps the input feature vector to a higher dimension by using the dot product, but does not carry out the transformation, which would exponentially increase the size of the feature space and consequently the training time \citep{Geron2019}. This kernel trick is what allowed SVMs to become one of the most widely used machine learning models in many fields, including medical imagery analysis, up until today \citep{Yue2018}.
 
 Many kernels can be chosen for SVM classification ranging from Polynomial kernel for image processing to Radial Basis Function (RBF) or Gaussian kernels for general tasks when there is no prior knowledge of the data), heavily influencing its performance \citep{amari1999improving}. For the task of breast cancer detection, RBF outperformed Polynomial kernels on two small datasets\footnote{``Fine needle aspirate of breast lesions'' (FNAB) dataset and ``gene microarrays'' dataset \citep{Osareh2010}.} containing extracted features, with the RBF kernel managing 98.80\% and 96.33\% accuracies on both datasets while Polynomial reached 97.09\% and 95\% accuracies \citep{Osareh2010}, depicting why RBF is often is often chosen over other kernels.\\
 
@@ -211,7 +207,7 @@ The structure of CNNs builds on top of the concepts of traditional ANNs (see Sec
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{figures/litsurvey/CNN example.png}}
-\caption{\label{fig:litsurvey-CNN-example}Example of a typical CNN adapted for multi-class breast cancer detection. Figure retrieved from S. Saha (\url{https://tinyurl.com/y9mmosuq}) and amended in Photoshop.}
+\caption{\label{fig:litsurvey-CNN-example}Example of a typical CNN adapted for multi-class breast cancer detection. Figure adapted from S. Saha (\url{https://tinyurl.com/y9mmosuq}).}
 \end{figure}
 
 \paragraph{Convolution Layers}
@@ -231,7 +227,7 @@ Pooling layers are similar to convolutional layers as neurons are only connected
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{figures/litsurvey/max-vs-avg-pooling.png}}
-\caption{\label{fig:litsurvey-max-vs-avg-pooling}Difference between max pooling and average pooling using a 2x2 window and stride 2 (left) to downsample an image (right). Figure retrieved from W. Ong (\url{https://tinyurl.com/y25cke6l}) and amended in Photoshop.}
+\caption{\label{fig:litsurvey-max-vs-avg-pooling}Difference between max pooling and average pooling using a 2x2 window and stride 2 (left) to downsample an image (right). Figure adapted from W. Ong (\url{https://tinyurl.com/y25cke6l}).}
 \end{figure}
 
 Other benefits of pooling layers are the lower memory usage and the number of trainable parameters linked to smaller images, and especially the invariance it provides to the CNN as it will not break down when fed images that contain features of different sizes than the ones seen in the training dataset \citep{Shen2017}.
@@ -302,3 +298,11 @@ However, GPUs are complicated to use efficiently from a low-level perspective, w
 Implementing CNNs entails another drawback linked to the memory requirements (RAM) and the use of GPUs. Indeed, input data, neuron weights and biases all need to be stored in memory as the data propagates through the neural network, especially during training as the data needs to be retained during back-propagation to calculate the error gradients \citep{Geron2019}. For GPU optimisation, this data is formatted as dense vectors for parallel processing optimisations, which can increase local RAM requirements to over 7.5GB for a CNN like ResNet-50 \citep{Hanlon2016}.\\
 
 Without the rise of popularity in GPUs and software libraries to take advantage of the additional processing power offered by GPUs, and the increase in other computing resources such as the amount of GPU and RAM, deep learning would have been successfully applied to fields such as medical imagery analysis nowadays.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SUMMARY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Summary}
+
+To complete.

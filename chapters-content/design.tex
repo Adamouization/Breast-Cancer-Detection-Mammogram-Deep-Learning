@@ -1,29 +1,3 @@
-\section{General Design Decisions}
-
-\subsection{Programming Language}
-
-Choosing a programming language is one of the most essential aspect to take into account as it is the medium used to transform the system from design to implementation. However, choosing from over 250 different programming languages \citep{tiobe} can be tricky, which is why multiple views have to be evaluated before choosing a programming language. Four popular programming languages are considered for this project: Python, Java, R and  Javascript.\\
-
-The first element to consider is the availability of third-party libraries used for implementing common machine learning methods, as well as data pre-processing, manipulation and visualisation techniques found in deep learning systems to avoid manually implementing them. The most popular libraries nowadays consist of Tensorflow (which is available in Python, R and Javascript) and PyTorch (which is available in Python). Additionally, Compute Unified Device Architecture (CUDA) support for GPU optimisations, CNN support and pre-trained models need to be included for the implementation of the desired deep learning breast cancer detection system, which are available in all libraries.\\
-
-In terms of speed, compiled languages are quicker than interpreted languages. However, the main bottleneck in a deep learning system is the training phase of the model, which mainly relies on the library used rather than the language itself. Therefore, speed is not taken into account. Finally, of all the programming languages mentioned, Python is the favoured one in terms of personal preference, familiarity, and experience, especially when applied to machine learning implementations. Therefore, the wide support for machine learning libraries in Python, coupled with the personal preference for the language, make Python the obvious programming language candidate for this project.\\
-
-For a complete review of the main pros and cons considered between when deciding between Python, Java, R and Javascript, refer to Appendix~\ref{sec:appendix-programming-languages-comparison}.
-
-\subsection{Deep Learning Framework}
-
-Due to the large nature of the datasets and complexity of the deep learning models to implement, powerful computing resources will be used in the form of Graphical Processing Units (GPU). A GeForce GTX 1060 6GB is provided by the School of Computer Science and remotely accessed via SSH to a lab machine equipped with the GPU in question running on CentOS.\\
-
-To make use of the GPU's computing capabilities, deep learning frameworks with CUDA support (for parallel computing) should be used. The two most popular deep learning frameworks nowadays are Tensorflow coupled with Keras, and PyTorch. Tensorflow/Keras being relatively older than PyTorch, have got more online support, which is confirmed by the number of daily downloads Keras has compared to PyTorch (ten times more), as well as the number of mentions in academic papers (see figures  in Appendix~\ref{sec:appendix-keras_vs_pytorch})
-
-\subsection{Interface}
-
-A Command-Line Interface (CLI) is selected, allowing arguments and flags to be passed to execute different sections of the code. Arguments control the dataset to use, the CNN model, and the mode to run in (training or testing). Flags control the verbose mode to print more statements in the terminal for debugging purposed. The full set of instructions to run the code can be found in Appendix~\ref{ch:appendix-usage-instructions}.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Datasets}
 
 An early design decision taken as a group consisted in which datasets to use. Two datasets, mini-MIAS and CBIS-DDSM, are used for this project as they have different characteristics.\\
@@ -32,7 +6,7 @@ From a clinical point of view, the mini-MIAS dataset is an interesting dataset a
 
 The CBIS-DDSM dataset was chosen over the DDSM dataset as it is an updated version of the older DDSM dataset, and is curated by a trained mammographer. Additionally, it uses uncompressed images in DICOM format rather than LJPEG format, which is deprecated nowadays, resulting in much better quality. Indeed, the large uncompressed format offered by DICOM means that the mammograms can be fed into the CNN with larger sizes, allowing the model to learn more low-level features. Despite the CBIS-DDSM dataset containing two different types of mammograms (calcification and masses), as well as two different views (CC and MLO), the mammograms in each case are treated as separate individual images due to the limited number of samples available.\\
 
-Despite being widely used in existing literature (see Chapter~\ref{ch:chapter-litsurvey}), 
+Despite being widely used in existing literature (see Chapter~\ref{ch:chapter-litsurvey}), popular feature-based datasets of extracted mammogram data such as the WBCD dataset will not be used as the goal of deep learning models such as CNNs is to learn which features to extract by using the raw image in 2D space. If extracted features such as the ones from WBCD were used, then proven algorithms such as SVMs could be used instead of deep learning techniques.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,9 +73,13 @@ The mini-MIAS dataset is very small in size (339 Mb before pre-processing, 202 M
 
 \subsubsection{Label encoding}
 
-As the labels for each mammogram are in categorical string format, they must be encoded into a numerical format. One-hot encoding is therefore chosen as it suits the sparse representation of the data, which is made up of only two or three target categories, depending on the dataset being used. The one-hot encodings of the labels can be seen in Table~\ref{tab:label-encoding-example}.
+As the labels for each mammogram are in categorical string format, they must be encoded into a numerical format. One-hot encoding is therefore chosen when there are more than two  classes as it suits the sparse representation of the data, which is made up of three target categories in the mini-MIAS dataset. The one-hot encodings of the labels can be seen in Table~\ref{tab:one-hot-encoding-example}.
 
-\input{tables/label-conversion-example}
+\input{tables/one-hot-encoding-example}
+
+On the other hand in the case of binary datasets, binary encoding can be used instead (see Table~\ref{tab:binary-encoding-example}).
+
+\input{tables/binary-encoding-example}
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -120,9 +98,20 @@ To complete:
 \subsection{Result visualisation}
 \label{sec:design-results-visualisation}
 
-These bar charts reveal that the mini-MIAS dataset is heavily unbalanced, which must be taken into account when analysing the classifiers' scores. Indeed, using an  evaluation metric such as accuracy would be misleading as it would not be representative of how well the classifier fitted the data. For instance, if a dumb classifier that always classified an image as ``normal'' was created, it would achieve 64.28\% accuracy on the mini-MIAS dataset. Therefore, other metrics such as confusion matrices, precision, recall and F1 scores could be used.\\
+These distribution of the class balance reveal that the mini-MIAS dataset is heavily unbalanced, which must be taken into account when analysing the classifiers' scores. Indeed, using an  evaluation metric such as accuracy would be misleading as it would not be representative of how well the classifier fitted the data. For instance, if a dumb classifier that always classified an image as ``normal'' was created, it would achieve 64.28\% accuracy on the mini-MIAS dataset despite  never picking up abnormal cases. Therefore, a mixture of additional metrics should be used to assess how well the model learns the mammograms data and generalises to unseen cases.
 
-Different output metrics are chosen to assess how well the CNN learned the mammograms data and generalises to unseen cases. A combination of numerical metrics and visual metrics are used:
+\subsubsection{F1 Score}
+
+\textit{Precision} corresponds to the number of positive predictions for a class, whereas \textit{recall} is the number of positive instances  that are correctly predicted. Together, they can be combined into a more concise metric, which is the \textit{F1 score} (see Equation \ref{eq:f1-score}). It corresponds to the harmonic mean of precision and recall, meaning that to achieve a high F1 score, both precision and recall must be high (unlike a regular mean). Because when  the precision goes down the recall goes up, and vice versa, the F1 score is a reliable metric to evaluate a classifier since a high F1 score means a balance has been found between precision and recall \cite{Geron2019}.
+
+\begin{equation}
+\label{eq:f1-score}
+    F_{1} = \frac{2}{\frac{1}{precision} + \frac{1}{recall}} = \frac{TP}{TP+\frac{FN + FP}{2}}
+\end{equation}
+
+\subsubsection{Visual Metrics}
+
+\paragraph{Confusion matrix} This metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels (the ones found in ``\textit{Y\_train.csv}'') and each column corresponding to a prediction. It is very useful for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications, the confusion matrix can be normalised to show a percentage \cite{Geron2019}.
 
 \begin{itemize}
     \item Numerical metrics:
@@ -143,3 +132,70 @@ Different output metrics are chosen to assess how well the CNN learned the mammo
         \item Receiver Operating Characteristic (ROC) curve
     \end{itemize}
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{General Design Decisions}
+
+\subsection{Programming Language}
+
+Choosing a programming language is one of the most essential aspect to take into account as it is the medium used to transform the system from design to implementation. However, choosing from over 250 different programming languages \citep{tiobe} can be tricky, which is why multiple views have to be evaluated before choosing a programming language. Four popular programming languages are considered for this project: Python, Java, R and  Javascript.\\
+
+The first element to consider is the availability of third-party libraries used for implementing common machine learning methods, as well as data pre-processing, manipulation and visualisation techniques found in deep learning systems to avoid manually implementing them. The most popular libraries nowadays consist of Tensorflow (which is available in Python, R and Javascript) and PyTorch (which is available in Python). Additionally, Compute Unified Device Architecture (CUDA) support for GPU optimisations, CNN support and pre-trained models need to be included for the implementation of the desired deep learning breast cancer detection system, which are available in all libraries.\\
+
+In terms of speed, compiled languages are quicker than interpreted languages. However, the main bottleneck in a deep learning system is the training phase of the model, which mainly relies on the library used rather than the language itself. Therefore, speed is not taken into account. Finally, of all the programming languages mentioned, Python is the favoured one in terms of personal preference, familiarity, and experience, especially when applied to machine learning implementations. Therefore, the wide support for machine learning libraries in Python, coupled with the personal preference for the language, make Python the obvious programming language candidate for this project.\\
+
+For a complete review of the main pros and cons considered between when deciding between Python, Java, R and Javascript, refer to Appendix~\ref{sec:appendix-programming-languages-comparison}.
+
+\subsection{Deep Learning Framework}
+
+Due to the large nature of the datasets and complexity of the deep learning models to implement, powerful computing resources will be used in the form of Graphical Processing Units (GPU). A GeForce GTX 1060 6GB is provided by the School of Computer Science and remotely accessed via SSH to a lab machine equipped with the GPU in question running on CentOS.\\
+
+To make use of the GPU's computing capabilities, deep learning frameworks with CUDA support (for parallel computing) should be used. The two most popular deep learning frameworks nowadays are Tensorflow coupled with Keras, and PyTorch. Tensorflow/Keras being relatively older than PyTorch, have got more online support, which is confirmed by the number of daily downloads Keras has compared to PyTorch (ten times more), as well as the number of mentions in academic papers (see figures  in Appendix~\ref{sec:appendix-keras_vs_pytorch})
+
+\subsection{Interface}
+
+A Command-Line Interface (CLI) is selected, allowing arguments and flags to be passed to execute different sections of the code. Arguments control the dataset to use, the CNN model, and the mode to run in (training or testing). Flags control the verbose mode to print more statements in the terminal for debugging purposed. The full set of instructions to run the code can be found in Appendix~\ref{ch:appendix-usage-instructions}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Design Decisions Summary}
+
+\begin{enumerate}
+    \item Programming language:
+    \begin{enumerate}
+        \item Python 3.7
+        \item Open-source frameworks:
+        \begin{itemize}
+            \item Tensorflow \& Keras
+            \item NumPy
+            \item MatplotLib
+        \end{itemize}
+    \end{enumerate} 
+    
+    \item Datasets:
+    \begin{itemize}
+        \item CBIS-DDSM (binary classification)
+        \item mini-MIAS (multi-class classification)
+    \end{itemize}
+    
+    \item Evualuation Metrics:
+    \begin{enumerate}
+        \item Numerical metrics:
+        \begin{itemize}
+            \item Overall accuracy
+            \item F1 score
+        \end{itemize}
+        \item Visual metrics:
+        \begin{itemize}
+            \item Confusion matrices (counts and normalised)
+            \item Receiver Operating Characteristic (ROC) curve
+            \item Aera Under the Curve (AUC)
+    \end{itemize}
+    \end{enumerate}
+    
+\end{enumerate}
