@@ -1,12 +1,12 @@
-Based on the machine learning and deep learning applications to the task of breast cancer detection established in Chapter~\ref{ch:chapter-litsurvey}, and the datasets available for this project, design decisions specific to the deep learning pipeline to implement will be covered, along with the reasoning behind the choice of datasets to use and general considerations.
+Based on the machine learning and deep learning applications for the task of breast cancer detection established in Chapter~\ref{ch:chapter-litsurvey}, and the datasets available for this project, design decisions specific to the deep learning pipeline to implement will be covered, along with the reasoning behind the choice of datasets to use and general considerations.
 
 \section{Datasets Decision}
 
 An early design decision taken as a group consisted in which datasets to use, as Chapter~\ref{ch:chapter-ethics-datasets} revealed that each dataset has different characteristics. Despite being widely used in existing literature (see Chapter~\ref{ch:chapter-litsurvey}), popular feature-based datasets containing extracted mammogram data such as the WBCD dataset \citep{Wolberg1995} will not be used as the objective of using deep learning models such as CNNs is to learn which features to extract by using the raw image in 2D space rather than data flattened into 1D arrays. If extracted features such as the ones from WBCD were used, then already successful machine learning algorithms such as SVMs or DTs could be used instead of deep learning techniques.\\
 
-From a clinical point of view, the mini-MIAS dataset is an interesting dataset as it contains both abnormal cases and normal cases as well, resulting in three classes (normal, benign and malignant cases). Its smaller size makes it useful for initial prototyping, but has the downside of requiring more image processing techniques such as data augmentation to generate enough data to feed into the deep learning model.\\
+From a clinical point of view, the mini-MIAS dataset is an interesting dataset as it contains both abnormal cases and normal cases as well, resulting in three classes (normal, benign and malignant cases). Its smaller size makes it useful for initial prototyping, but has the downside of requiring more image processing techniques such as data augmentation to generate enough data to feed into the deep learning model. The different types of breast backgrounds (see Section~\ref{sec:ethics-mini-MIAS-dataset-description}) is not considered during training to avoid further splitting the dataset.\\
 
-The CBIS-DDSM dataset was chosen over the DDSM dataset as it is an updated version of the older DDSM dataset, and is curated by a trained mammographer. Additionally, it uses uncompressed images in DICOM format rather than LJPEG format, which is deprecated nowadays, resulting in much higher quality imagery. Indeed, the large uncompressed format offered by DICOM means that the mammograms can be fed into the CNN with larger sizes, allowing the model to potentially learn more low-level features. Despite the CBIS-DDSM dataset containing two different types of mammograms (calcification and masses), as well as two different views (CC and MLO), the mammograms in each case are treated as separate individual images due to the limited number of samples available.\\
+The CBIS-DDSM dataset was chosen over the DDSM dataset as it is an updated version of the older DDSM dataset, and is curated by a trained mammographer. Additionally, it uses uncompressed images in DICOM format rather than LJPEG format, which is deprecated nowadays, resulting in much higher quality imagery; and is already split in training/testing sets, allowing for accurate performance comparisons with other papers using the same dataset. Indeed, the large uncompressed format offered by DICOM means that the mammograms can be fed into the CNN with larger sizes, allowing the model to potentially learn more low-level features. Despite the CBIS-DDSM dataset containing two different views (CC and MLO), the mammograms in each case are treated as separate individual images due to the limited number of samples available.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,10 +20,10 @@ The deep learning pipeline implemented for the task of breast cancer detection c
     \item \textbf{Data pre-processing}: loading a dataset in memory and processing it to gather the pair of images and labels for the classification task.
     \item \textbf{Model training}: creating a CNN model that can fit the data to learn the training set samples. Predictions are carried out once the model finished training on the validation and test sets.
     \item \textbf{Result visualisation}: The model's performance is evaluated by calculating various metrics and plotting predictions.
-    \end{itemize}
+\end{itemize}
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=1.1\textwidth]{figures/design/design flowchart.png}}
+\centerline{\includegraphics[width=\textwidth]{figures/design/design flowchart.png}}
 \caption{\label{fig:design-flowchart}A high-level flowchart of the breast cancer detection deep learning pipeline to implement.}
 \end{figure}
 
@@ -77,7 +77,12 @@ The mini-MIAS dataset is very small in size (339 Mb before pre-processing, 202 M
 
 \subsubsection{Data normalisation}
 
-Observing the pixel intensities of the images found in the datasets, it can be seen that they correspond to integers ranging from 0 to 255. However, because the weights in neural networks are small, having large input values can disrupt and slow down the training. Therefore, normalising the pixel intensities to values in the range of 0 to 1 can help fight this problem by keeping all values in a small scale.
+Observing the pixel intensities of the images found in the datasets reveal that they correspond to integers ranging from 0 to 255. However, because the weights in neural networks are small, having such large input values can disrupt and slow down the training process, ultimately leading to lower accuracies. Therefore, normalising the pixel intensities to values in the range of 0 to 1 can help fight this problem by ensuring all values are small. An example of the pixel values before and after normalisation can be seen in Figure~\ref{fig:design-Normalisation example}.
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=0.9\textwidth]{figures/design/Normalisation example.png}}
+\caption{\label{fig:design-Normalisation example}Example of the pixels values that make up a mammogram before and after normalisation.}
+\end{figure}
 
 \subsubsection{Label encoding}
 
@@ -95,7 +100,24 @@ On the other hand, in the case of binary datasets like CBIS-DDSM, binary encodin
 
 \subsection{Model training}
 
-At this stage, the training data is ready to be fed into the classifiers. The classification models will fit the transformed features from ``\textit{X\_train.csv}'' before making their own predictions, which will be compared with the real labels found in ``\textit{Y\_train.csv}'' for evaluation.\\
+At this stage, the training data is ready to be fed into the CNN model. The classification models will learn the processed images from the training set loaded in memory before making their own predictions, which will be compared with the ground truth labels for evaluation.
+
+\subsubsection{CNN model selection}
+
+VGG19
+
+\subsubsection{Optimiser}
+
+Adam
+
+\subsection{Transfer Learning}
+
+big then small learning rate
+
+\subsection{Validation set \& Early stopping}
+
+60/20/20
+early stopping (max epochs, patience)
 
 To complete:
 \begin{itemize}
@@ -114,36 +136,26 @@ Classification type: Classification on the mini-MIAS dataset will be a multi-cla
 
 These distribution of the class balance reveal that the mini-MIAS dataset is heavily unbalanced, which must be taken into account when analysing the classifiers' scores. Indeed, using an  evaluation metric such as accuracy would be misleading as it would not be representative of how well the classifier fitted the data. For instance, if a dumb classifier that always classified an image as ``normal'' was created, it would achieve 64.28\% accuracy on the mini-MIAS dataset despite  never picking up abnormal cases. Therefore, a mixture of additional metrics should be used to assess how well the model learns the mammograms data and generalises to unseen cases.
 
+\begin{equation}
+\label{eq:accuracy}
+    Accuracy = \frac{TP + TN}{P +N}
+\end{equation}
+% equation from falconi 2019
+
 \subsubsection{F1 Score}
 
-\textit{Precision} corresponds to the number of positive predictions for a class, whereas \textit{recall} is the number of positive instances  that are correctly predicted. Together, they can be combined into a more concise metric, which is the \textit{F1 score} (see Equation \ref{eq:f1-score}). It corresponds to the harmonic mean of precision and recall, meaning that to achieve a high F1 score, both precision and recall must be high (unlike a regular mean). Because when  the precision goes down the recall goes up, and vice versa, the F1 score is a reliable metric to evaluate a classifier since a high F1 score means a balance has been found between precision and recall \cite{Geron2019}.
+\textit{Precision} corresponds to the number of positive predictions for a class, whereas \textit{recall} is the number of positive instances  that are correctly predicted. Together, they can be combined into a more concise metric, which is the \textit{F1 score} (see Equation \ref{eq:f1-score}). It corresponds to the harmonic mean of precision and recall, meaning that to achieve a high F1 score, both precision and recall must be high (unlike a regular mean). Because the precision goes down the recall goes up, and vice versa, the F1 score is a reliable metric to evaluate a classifier since a high F1 score means a balance has been found between precision and recall \citep{Geron2019}.
 
 \begin{equation}
 \label{eq:f1-score}
     F_{1} = \frac{2}{\frac{1}{precision} + \frac{1}{recall}} = \frac{TP}{TP+\frac{FN + FP}{2}}
 \end{equation}
 
-\subsubsection{Confusion matrix} This metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels (the ones found in ``\textit{Y\_train.csv}'') and each column corresponding to a prediction. It is very useful for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications, the confusion matrix can be normalised to show a percentage \cite{Geron2019}.
+\subsubsection{Confusion matrix} This metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels and each column corresponding to a prediction. It is very useful for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications and compare with other classifiers, the confusion matrix can be normalised to show a percentage rather than a count \citep{Geron2019}.
 
-\begin{itemize}
-    \item Numerical metrics:
-    \begin{itemize}
-        \item Overall accuracy
-        \item Precision
-        \item Recall
-        \item F1 score
-    \end{itemize}
-    \item Visual metrics (plots):
-    \begin{itemize}
-        \item Evolution of training/validation accuracies and losses over the number of epochs
-        \item Confusion matrices
-        \begin{itemize}
-            \item Classification counts
-            \item Normalised (values between 0 and 1)
-        \end{itemize}
-        \item Receiver Operating Characteristic (ROC) curve
-    \end{itemize}
-\end{itemize}
+\subsubsection{ROC curve and AUC}
+
+todo
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

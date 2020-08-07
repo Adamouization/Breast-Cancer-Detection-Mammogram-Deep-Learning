@@ -108,4 +108,6 @@ To assess how the model would react to being fed only specific samples of a sing
 \caption{\label{fig:evaluation-individual-mammogram_types_results}Results from the different mammogram types experiment.}
 \end{figure}
 
-These results show that the model learns the data much better when masses and calcifications are separated, reaching 64.35\% and 66.67\% accuracy respectively on the test set, but only managing 59.44\% when using the full CBIS-DDSM dataset. Indeed, the normalised confusion matrix indicates that all instances are classified as ``benign'' using the full dataset containing both types, which could indicate that the model gets confused when dealing with multiple views.
+These results show that the model learns the data much better when masses and calcifications are separated, reaching 64.35\% and 66.67\% accuracy respectively on the test set, but only managing 59.44\% when using the full CBIS-DDSM dataset. Indeed, the normalised confusion matrix indicates that all instances are classified as ``benign'' using the full dataset containing both types, which could indicate that the model gets confused when dealing with multiple views.\\
+
+Harder to  detect masses than calcifications \citep{Elter2009}.
