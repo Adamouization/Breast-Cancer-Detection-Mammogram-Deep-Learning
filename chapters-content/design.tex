@@ -32,6 +32,7 @@ The deep learning pipeline implemented for the task of breast cancer detection c
 \subsection{Data pre-processing}
 
 \subsubsection{Dataset balance}
+\label{sec:design-dataset-balance}
 
 As this is a classification task, it is essential to visualise the distribution of classes in the datasets to determine whether the data balance is skewed or not (whether some classes are much more frequent than other classes \citep{Geron2019}). The class distributions are plotted in Figure~\ref{fig:design-datasets-balance}.
 
@@ -102,60 +103,108 @@ On the other hand, in the case of binary datasets like CBIS-DDSM, binary encodin
 
 At this stage, the training data is ready to be fed into the CNN model. The classification models will learn the processed images from the training set loaded in memory before making their own predictions, which will be compared with the ground truth labels for evaluation.
 
-\subsubsection{CNN model selection}
+\subsubsection{CNN model}
 
-VGG19
+Due to the small nature of the CBIS-DDSM and mini-MIAS datasets used, state-of-the-art CNN models pre-trained on large general datasets like ImageNet are used rather than creating a CNN from scratch, a technique known as transfer learning that is proven to work on breast cancer detection tasks \citep{Shen2017, Falconi2019}.\\
 
-\subsubsection{Optimiser}
+Different CNN architectures can be used as the base of a custom CNN model tailored for breast cancer detection. This is achieved by using popular CNN architectures available with Keras such as VGG19, ResNet50, InceptionV3, DenseNet121 and MobileNetV2 as the base of the CNN. The fully connected layers of these models, which are designed for general classification of natural images into 1,000 different categories \citep{Krizhevsky2012}, are dropped from the model and replaced with a custom MLP. The fully-connected MLP contains hidden layers and an output layer with different activation functions based on the dataset used.\\
 
-Adam
+If large images are used, then additional convolutional and spooling layers are added before the base model to downsample the image to smaller sizes and learn low-level features, followed by the pre-trained base model, a flatten layer to convert the output from 2D to 1D, and finally the MLP which will make the final prediction. Dropout layers are added in the MLP to avoid over-fitting.
 
-\subsection{Transfer Learning}
+\subsubsection{Model fitting}
 
-big then small learning rate
+\paragraph{Activation functions}
 
-\subsection{Validation set \& Early stopping}
+Different activation functions can be used in the output layer of the CNN (see Figure~\ref{fig:design-activation functions}). Typically, a sigmoid function is used for binary problems or multi-class tasks with non-mutually exclusive classes, as it outputs an independent value between 0 and 1. Inversely, a softmax activation functions transforms the output of the last hidden layer into probabilities for each class that sum up to 1. These probabilities are dependent of each other, as each sample must belong to one class only, making it perfect for multi-class classification of breast mammograms (each sample can only be either normal, benign or malignant, so to increase the probability of one class, it must decrease it for another).
 
-60/20/20
-early stopping (max epochs, patience)
+\begin{figure}[ht]
+\centerline{\includegraphics[width=1.1\textwidth]{figures/design/activation functions.png}}
+\caption{\label{fig:design-activation functions}Visualisation of the sigmoid and softmax activation functions.}
+\end{figure}
+% https://glassboxmedicine.com/2019/05/26/classification-sigmoid-vs-softmax/
 
-To complete:
-\begin{itemize}
-    \item Training/testing/validation split using stratified and shuffling splits (keep class balance and reorder images in directories).
-    \item CNN models with pre-trained weights on ImageNet to avoid training from scratch. However, this  forces the input images to have the same size as the images in ImageNet it was trained on.
-    \item Early stopping conditions.
-    \item Describe process of using pre-trained weights on ImageNet, freezing this layers and training fully connected layers, then unfreezing the pre-trained model and and learning with at a slower learning rate.
-\end{itemize}
+Therefore, the output layer will use a sigmoid with the CBIS-DDSM dataset, and a softmax with the mini-MIAS dataset.
 
-Classification type: Classification on the mini-MIAS dataset will be a multi-class problem as there are three possible classes (normal, benign and malignant), whereas classification on the CBIS-DDSM dataset will be a binary problem as it only contains abnormal classes (benign and malignant).
+\paragraph{Optimiser}
+
+Due to the deep nature of the model, it is important to minimise the number of hyperparameters to control. Adaptive learning rate algorithms usually generalise better than traditional optimisers like Stochastic Gradient Descent (SGD) or momentum, which are slow to converge and require more fine-tuning. The most general adaptive optimiser is adaptive moment estimation (Adam), which combines both momentum for larger steps in the direction of the steepest gradient and Root Mean Square Prop (RMSProp) for accelerating more on steep slopes than small slopes, making it the best choice for this model.
+%https://towardsdatascience.com/full-review-on-optimizing-neural-network-training-with-optimizer-9c1acc4dbe78
+
+\paragraph{Transfer learning}
+
+To best make use of the transfer learning technique with base model's weights instantiated using ImageNet weights, training is separated into two phases:
+\begin{enumerate}
+    \item All the layers from the base model are frozen, enabling only the custom MLP with fully connected layers to fit the mammogram images. The initial training phase ends once the maximum number of epochs is reached, or the early stopping condition is met.
+    \item All the layers are unfrozen, and training is resumed but with a smaller learning rate $\alpha = 0.00001$, allowing the base model to slightly alter its weights to adapt to the mammogram dataset while not forgetting the ImageNet knowledge.
+\end{enumerate}
+
+\paragraph{Validation set \& early stopping}
+
+To ensure that the model generalises well to unseen  data from the testing set, the training set is further split to form a validation set using a 75\%25\% split on training set; resulting in a 60\%/20\%/20\% of the full dataset. The validation set is used to make predictions at the end of each epoch by calculating the loss and the accuracy. These values are then monitored to stop the training before the maximum number of epochs is reached if the validation accuracy or loss do not improve after a certain number of epochs, preventing the model from overfitting the data too much.\\
+
+Due to time constrains, k-fold cross validation, which divides the training set into $K$ subsets and evaluates the model $K$ times, cannot be used as training the model on the CBIS-DDSM dataset can take anywhere from 1h15m to 8h49 (see Chapter~\ref{ch:chapter-evaluation}), which would be multiplied by a factor of $K$. Therefore, a validation set is used instead.
+
+\paragraph{Loss function}
+
+cross-entropy
+
+\subsubsection{Fine-tuning}
+
+Traditionally, a grid search approach would have been preferred to fine-tune the model's hyperparameters. However, due to the large training runtime and number of hyperparameters to fine-tune, a grid search would have been unrealistic given the time frame of the project. Instead a bag-of-tricks approach is selected, manually trying different deep learnig techniques mentioned in this chapter such as using different pre-trained CNN models, amounts of transfer learning, amounts of data augmentation, dropout values, input image sizes.
+% Bag-of-tricks approach over grid  search and randomised search and over a genetic algorithm to naturally find best hyperparameters.
 
 %%%%%%%%%%%%%%%%%%%%
 
 \subsection{Result visualisation}
 \label{sec:design-results-visualisation}
 
-These distribution of the class balance reveal that the mini-MIAS dataset is heavily unbalanced, which must be taken into account when analysing the classifiers' scores. Indeed, using an  evaluation metric such as accuracy would be misleading as it would not be representative of how well the classifier fitted the data. For instance, if a dumb classifier that always classified an image as ``normal'' was created, it would achieve 64.28\% accuracy on the mini-MIAS dataset despite  never picking up abnormal cases. Therefore, a mixture of additional metrics should be used to assess how well the model learns the mammograms data and generalises to unseen cases.
+The following terminology is used to define the metrics used below:
+\begin{itemize}
+    \item TP: True Positives (positive case correctly predicted as positive);
+    \item TN: True Negatives (negative case correctly predicted as negative);
+    \item FP: False Positives (negative case incorrectly predicted as positive);
+    \item FN: False Negatives (positive case incorrectly predicted as negative).
+\end{itemize}
+
+\subsubsection{Overall accuracy}
+
+The imbalanced class distributions (see Section~\ref{sec:design-dataset-balance}) must be taken into account when analysing the classifiers' scores. Indeed, using an evaluation metric such as overall accuracy (see Equation~\ref{eq:accuracy}, \cite{Falconi2019}) would be misleading as it would not be representative of how well the classifier fitted the data.
 
 \begin{equation}
 \label{eq:accuracy}
-    Accuracy = \frac{TP + TN}{P +N}
+    Accuracy = \frac{TP + TN}{P + N}
 \end{equation}
-% equation from falconi 2019
+
+For instance, if a dumb classifier that always classified an image as ``normal'' was created, it would achieve 64.28\% accuracy on the mini-MIAS dataset despite  never picking up abnormal cases. Therefore, a mixture of additional metrics should be used to assess how well the model learns the mammograms data and generalises to unseen cases.
+
+\subsubsection{Precision \& Recall}
+
+Precision corresponds to the number of positive predictions that are correct (see Equation~\ref{eq:precision}, CITE), showing the model's ability to avoid labelling negative instances as positive. 
+
+\begin{equation}
+\label{eq:precision}
+    Precision = \frac{TP}{TP+FP}
+\end{equation}
+
+Recall is the number of positive instances that are correctly predicted (see Equation~\ref{eq:recall}, CITE), showing how well the model can find all positive instances.
+
+\begin{equation}
+\label{eq:recall}
+    Recall = \frac{TP}{TP+FN}
+\end{equation}
 
 \subsubsection{F1 Score}
 
-\textit{Precision} corresponds to the number of positive predictions for a class, whereas \textit{recall} is the number of positive instances  that are correctly predicted. Together, they can be combined into a more concise metric, which is the \textit{F1 score} (see Equation \ref{eq:f1-score}). It corresponds to the harmonic mean of precision and recall, meaning that to achieve a high F1 score, both precision and recall must be high (unlike a regular mean). Because the precision goes down the recall goes up, and vice versa, the F1 score is a reliable metric to evaluate a classifier since a high F1 score means a balance has been found between precision and recall \citep{Geron2019}.
+Together, precision and recall can be combined into a more concise metric, which is the \textit{F1 score} (see Equation \ref{eq:f1-score}). It corresponds to the harmonic mean of precision and recall, meaning that to achieve a high F1 score, both precision and recall must be high (unlike a regular mean). Because the precision goes down the recall goes up, and vice versa, the F1 score is a reliable metric to evaluate a classifier since a high F1 score means a balance has been found between precision and recall \citep{Geron2019}.
 
 \begin{equation}
 \label{eq:f1-score}
     F_{1} = \frac{2}{\frac{1}{precision} + \frac{1}{recall}} = \frac{TP}{TP+\frac{FN + FP}{2}}
 \end{equation}
 
-\subsubsection{Confusion matrix} This metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels and each column corresponding to a prediction. It is very useful for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications and compare with other classifiers, the confusion matrix can be normalised to show a percentage rather than a count \citep{Geron2019}.
+\subsubsection{Confusion matrix} 
 
-\subsubsection{ROC curve and AUC}
-
-todo
+This metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels and each column corresponding to a prediction. It is very useful for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications and compare with other classifiers, the confusion matrix can be normalised to show a percentage rather than a count \citep{Geron2019}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
