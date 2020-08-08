@@ -1,0 +1,21 @@
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llllllll@{}}
+\toprule
+\textbf{\begin{tabular}[c]{@{}l@{}}Whole Image \\ Size (px)\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Extra Conv/\\ Spool Layers\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Overall \\ Accuracy\end{tabular}} &
+  \textbf{Precision} &
+  \textbf{Recall} &
+  \textbf{F1 Score} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Prediction \\ Runtime\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Training \\ Runtime\end{tabular}} \\ \midrule
+\textit{\textbf{224 x 224}}   & No  & 63.96\% & 65.33\% & 63.96\% & 64.28\% & 00:21:04 & 01:20:44 \\
+\textit{\textbf{512 x 512}}   & No  & 64.59\% & 64.44\% & 64.59\% & 64.51\% & 00:25:00 & 03:10:15 \\
+\textit{\textbf{1024 x 1024}} & Yes & 59.28\% & 66.94\% & 59.28\% & 58.43\% & 00:18:24 & 08:49:52 \\ \bottomrule
+\end{tabular}%
+}
+\caption{Results achieved on the test set when using different input image sizes on the CBIS-DDSM dataset using the custom VGG19 model.}
+\label{tab:evaluation-individual-image-sizes}
+\end{table}

@@ -1,0 +1,49 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+% \usepackage{graphicx}
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+\textbf{Transfer Learning} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Overall\\ Accuracy\end{tabular}} &
+  \textbf{Precision} &
+  \textbf{Recall} &
+  \textbf{F1 Score} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Prediction \\ Runtime \\ (hh:mm:ss)\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Training \\ Runtime \\ (hh:mm:ss)\end{tabular}} \\ \midrule
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}Full \\ mini-MIAS-binary \\ transfer learning\end{tabular}}} &
+  57.87\% &
+  62.41\% &
+  57.88\% &
+  57.81\% &
+  00:26:12 &
+  03:27:30 \\ \cmidrule(r){1-1}
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}Fully connected \\ layers mini-MIAS-binary \\ transfer learning\end{tabular}}} &
+  58.97\% &
+  60.43\% &
+  58.97\% &
+  59.33\% &
+  00:22:31 &
+  03:03:10 \\ \cmidrule(r){1-1}
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}VGG ImageNet \\ transfer learning\end{tabular}}} &
+  59.44\% &
+  35.33\% &
+  59.44\% &
+  44.32\% &
+  00:20:22 &
+  02:33:44 \\ \cmidrule(r){1-1}
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}No transfer learning \\ (random weights)\end{tabular}}} &
+  60.37\% &
+  61.00\% &
+  60.37\% &
+  60.60\% &
+  00:20:14 &
+  02:42:20 \\ \bottomrule
+\end{tabular}%
+}
+\caption{Results achieved on the test set when using different amounts of transfer learning on the CBIS-DDSM dataset using the custom VGG19 model.}
+\label{tab:evaluation-individual-transfer-learning}
+\end{table}
+

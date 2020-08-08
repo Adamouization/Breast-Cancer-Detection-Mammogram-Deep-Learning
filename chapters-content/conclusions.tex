@@ -27,7 +27,9 @@ More advanced image processing, as it is often an area where a large performance
 
 Data bias (dataset mainly white, different manifestations of breast cancer amongst different people)?\\
 
-GPU size limited to 6GB (can  train on larger image sizes with large GPUs) \citep{Shen2017}.
+GPU size limited to 6GB (can  train on larger image sizes with large GPUs) \citep{Shen2017}.\\
+
+When given new instances from the test dataset, the model predicts class labels. However, these do not indicate the confidence of the prediction, as it can be anywhere between the limit of  the decision boundary to the extreme opposite. Therefore, from a clinical point of view, it is hard to make a decision based on the  predictions made by the system. Ideally, a confidence metric in the form of a probability or a percentage would be coupled with the predictions  to  motivate the next  step after the diagnosis. For example, if the confidence of  a malignant tumour is high,  then a breast conserving surgery or chemotherapy can be recommended, whereas if the confidence is low, then further tests such as biopsies  can be recommended. % https://www.cancerresearchuk.org/about-cancer/breast-cancer/treatment/surgery/remove-just-area-cancer
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
