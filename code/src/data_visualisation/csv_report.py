@@ -49,7 +49,6 @@ def generate_csv_metadata(runtime) -> None:
         'batch_size': config.batch_size,
         'max_epoch_frozen': config.max_epoch_frozen,
         'max_epoch_unfrozen': config.max_epoch_unfrozen,
-        'is_grid_search': config.is_grid_search,
         'is_roi': config.is_roi,
         'experiment_name': config.name,
         'training runtime (s)': runtime

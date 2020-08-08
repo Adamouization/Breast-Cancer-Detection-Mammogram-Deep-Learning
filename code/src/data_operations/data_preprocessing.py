@@ -25,11 +25,13 @@ def import_minimias_dataset(data_dir: str, label_encoder) -> (np.ndarray, np.nda
 
     if not config.is_roi:
         # Loop over the image paths and update the data and labels lists with the pre-processed images & labels.
+        print("Loading whole images")
         for image_path in list(paths.list_images(data_dir)):
             images.append(preprocess_image(image_path))
             labels.append(image_path.split(os.path.sep)[-2])  # Extract label from path.
     else:
         # Use the CSV file to get the images and their labels, and crop the images around the specified ROI.
+        print("Loading cropped ROI images")
         images, labels = crop_roi_image(data_dir)
 
     # Convert the data and labels lists to NumPy arrays.
@@ -151,14 +153,24 @@ def dataset_stratified_split(split: float, dataset: np.ndarray, labels: np.ndarr
 def calculate_class_weights(y_train, label_encoder):
     if label_encoder.classes_.size != 2:
         y_train = label_encoder.inverse_transform(np.argmax(y_train, axis=1))
+    
+    # Balanced class weights
     weights = class_weight.compute_class_weight("balanced",
                                                 np.unique(y_train),
                                                 y_train)
-    class_weights = dict(enumerate(weights))
+    class_weights = dict(enumerate(weights))    
+    
+    # Manual class weights for CBIS-DDSM
+    #class_weights = {0: 1.0, 1:1.5}  
+    
+    # No class weights
+    class_weights = None
+    
     if config.verbose_mode:
         print("Class weights: {}".format(str(class_weights)))
-    return None
-    # return class_weights
+        
+    return class_weights
+
 
 
 def crop_roi_image(data_dir):

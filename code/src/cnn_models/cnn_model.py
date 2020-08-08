@@ -1,13 +1,20 @@
 import json
 
-from tensorflow.keras.losses import CategoricalCrossentropy, BinaryCrossentropy
-from tensorflow.keras.metrics import CategoricalAccuracy, BinaryAccuracy
+import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, log_loss, make_scorer
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras.losses import BinaryCrossentropy, CategoricalCrossentropy, SparseCategoricalCrossentropy
+from tensorflow.keras.metrics import BinaryAccuracy, CategoricalAccuracy, SparseCategoricalAccuracy
 from tensorflow.keras.optimizers import Adam
 from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 import config
 from cnn_models.basic_cnn import create_basic_cnn_model
+from cnn_models.densenet121 import create_densenet121_model
 from cnn_models.inceptionv3 import create_inceptionv3_model
+from cnn_models.mobilenet_v2 import create_mobilenet_model
+from cnn_models.resnet50 import create_resnet50_model
 from cnn_models.vgg19 import create_vgg19_model
 from cnn_models.vgg19_common import create_vgg19_model_common
 from data_visualisation.csv_report import *
@@ -36,11 +43,13 @@ class CnnModel:
         elif self.model_name == "VGG-common":
             self._model = create_vgg19_model_common(self.num_classes)
         elif self.model_name == "ResNet":
-            pass
+            self._model = create_resnet50_model(self.num_classes)
         elif self.model_name == "Inception":
             self._model = create_inceptionv3_model(self.num_classes)
-        elif self.model_name == "Xception":
-            pass
+        elif self.model_name == "DenseNet":
+            self._model = create_densenet121_model(self.num_classes)
+        elif self.model_name == "MobileNet":
+            self._model = create_mobilenet_model(self.num_classes)
         elif self.model_name == "CNN":
             self._model = create_basic_cnn_model(self.num_classes)
 
@@ -57,38 +66,47 @@ class CnnModel:
         :param class_weights: dict containing class weights
         :return: None
         """
-        # Freeze pre-trained CNN model layers: only train fully connected layers.
-        layer_name = str()
-        if self.model_name == "VGG":
-            self._model.layers[1].trainable = False
-            layer_name = self._model.layers[1].name
-        elif self.model_name == "VGG-common" or self.model_name == "Inception":
-            self._model.layers[0].trainable = False
-            layer_name = self._model.layers[0].name
-        if config.verbose_mode:
-            print("Freezing '{}' layers".format(layer_name))
+        # Training with transfer learning.
+        if not self.model_name == "CNN":
 
-        # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
-        self.compile_model(config.learning_rate)
-        self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=True)
+            # Freeze pre-trained CNN model layers: only train fully connected layers.
+            layer_name = str()
+            if self.model_name == "VGG":
+                self._model.layers[1].trainable = False
+                layer_name = self._model.layers[1].name
+            elif self.model_name == "VGG-common" or self.model_name == "Inception" or self.model_name == "ResNet":
+                self._model.layers[0].trainable = False
+                layer_name = self._model.layers[0].name
+            if config.verbose_mode:
+                print("Freezing '{}' layers".format(layer_name))
 
-        # Plot the training loss and accuracy.
-        plot_training_results(self.history, "Initial_training", is_frozen_layers=True)
+            # Train model with frozen layers (all training with early stopping dictated by loss in validation over 3 runs).
+            self.compile_model(config.learning_rate)
+            self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=True)
 
-        # Unfreeze all layers.
-        if self.model_name == "VGG":
-            self._model.layers[1].trainable = True
-        elif self.model_name == "VGG-common" or self.model_name == "Inception":
-            self._model.layers[0].trainable = True
-        if config.verbose_mode:
-            print("Unfreezing '{}' layers (all layers now unfrozen)".format(layer_name))
+            # Plot the training loss and accuracy.
+            plot_training_results(self.history, "Initial_training", is_frozen_layers=True)
 
-        # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
-        self.compile_model(1e-5)  # Very low learning rate.
-        self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=False)
+            # Unfreeze all layers.
+            if self.model_name == "VGG":
+                self._model.layers[1].trainable = True
+            elif self.model_name == "VGG-common" or self.model_name == "Inception" or self.model_name == "ResNet":
+                self._model.layers[0].trainable = True
+            if config.verbose_mode:
+                print("Unfreezing '{}' layers (all layers now unfrozen)".format(layer_name))
 
-        # Plot the training loss and accuracy.
-        plot_training_results(self.history, "Fine_tuning_training", is_frozen_layers=False)
+            # Train a second time with a smaller learning rate (train over fewer epochs to prevent over-fitting).
+            self.compile_model(1e-5)  # Very low learning rate.
+            self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=False)
+
+            # Plot the training loss and accuracy.
+            plot_training_results(self.history, "Fine_tuning_training", is_frozen_layers=False)
+        
+        # Small CNN (no transfer learning).
+        else:
+            self.compile_model(config.learning_rate)
+            self.fit_model(X_train, X_val, y_train, y_val, class_weights, is_frozen_layers=True)
+            plot_training_results(self.history, "Initial_training", is_frozen_layers=False)
 
     def compile_model(self, learning_rate) -> None:
         """
@@ -158,6 +176,7 @@ class CnnModel:
             self.history = self._model.fit(
                 x=X_train,
                 validation_data=X_val,
+                #class_weight=class_weights,
                 epochs=max_epochs,
                 callbacks=[
                     EarlyStopping(monitor='val_binary_accuracy', patience=patience, restore_best_weights=True),

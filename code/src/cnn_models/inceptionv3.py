@@ -17,11 +17,11 @@ def create_inceptionv3_model(num_classes: int):
     :return: The custom InceptionV3 model.
     """
     # Reconfigure single channel input into a greyscale 3 channel input
-    img_input = Input(shape=(config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE['WIDTH'], 1))
+    img_input = Input(shape=(config.INCEPTION_IMG_SIZE['HEIGHT'], config.INCEPTION_IMG_SIZE['WIDTH'], 1))
     img_conc = Concatenate()([img_input, img_input, img_input])
 
-    # Generate a VGG19 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.
-    model_base = InceptionV3(include_top=False, weights='imagenet', input_tensor=img_conc)
+    # Generate a InceptionV3 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.
+    model_base = InceptionV3(include_top=False, weights="imagenet", input_tensor=img_conc)
 
     # Add fully connected layers
     model = Sequential()
@@ -30,22 +30,28 @@ def create_inceptionv3_model(num_classes: int):
 
     # Flatten layer to convert each input into a 1D array (no parameters in this layer, just simple pre-processing).
     model.add(Flatten())
-    
-    # Dropout layer for regularisation
-    model.add(Dropout(0.2, name="Dropout_Regularisation"))
 
+    fully_connected = Sequential(name="Fully_Connected")
     # Fully connected layers.
-    model.add(Dense(units=512, activation='relu', name='Dense_Intermediate_1'))
-    model.add(Dense(units=32, activation='relu', name='Dense_Intermediate_2'))
+    fully_connected.add(Dropout(0.2, seed=config.RANDOM_SEED, name="Dropout_1"))
+    fully_connected.add(Dense(units=512, activation='relu', name='Dense_1'))
+    # fully_connected.add(Dropout(0.2, name="Dropout_2"))
+    fully_connected.add(Dense(units=32, activation='relu', name='Dense_2'))
 
     # Final output layer that uses softmax activation function (because the classes are exclusive).
     if num_classes == 2:
-        model.add(Dense(1, activation='sigmoid', name='Output'))
+        fully_connected.add(Dense(1, activation='sigmoid', kernel_initializer="random_uniform", name='Output'))
     else:
-        model.add(Dense(num_classes, activation='softmax', name='Output'))
+        fully_connected.add(
+            Dense(num_classes, activation='softmax', kernel_initializer="random_uniform", name='Output'))
+
+    model.add(fully_connected)
 
     # Print model details if running in debug mode.
     if config.verbose_mode:
+        print("CNN Model used:")
         print(model.summary())
+        print("Fully connected layers:")
+        print(fully_connected.summary())
 
     return model

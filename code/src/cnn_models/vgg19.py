@@ -26,10 +26,10 @@ def create_vgg19_model(num_classes: int):
     base_model.add(input_model)
 
     # Generate extra convolutional layers for model to put at the beginning
-    base_model.add(Conv2D(32, (5, 5),
+    base_model.add(Conv2D(64, (5, 5),
                           activation='relu',
                           padding='same'))
-    base_model.add(Conv2D(16, (3, 3),
+    base_model.add(Conv2D(32, (5, 5),
                           activation='relu',
                           padding='same'))
     base_model.add(MaxPooling2D((2, 2), strides=(2, 2)))
@@ -59,15 +59,15 @@ def create_vgg19_model(num_classes: int):
 
     # Add fully connected hidden layers and dropout layers between each for regularisation.
     model.add(Dropout(0.2))
-    model.add(Dense(units=512, activation='relu', name='Dense_1'))
-    model.add(Dropout(0.2))
-    model.add(Dense(units=32, activation='relu', name='Dense_2'))
+    model.add(Dense(units=512, activation='relu', kernel_initializer="random_uniform", name='Dense_1'))
+    # model.add(Dropout(0.2))
+    model.add(Dense(units=32, activation='relu', kernel_initializer="random_uniform", name='Dense_2'))
 
     # Final output layer that uses softmax activation function (because the classes are exclusive).
     if config.dataset == "CBIS-DDSM" or config.dataset == "mini-MIAS-binary":
-        model.add(Dense(1, activation='sigmoid', name='Output'))
+        model.add(Dense(1, activation='sigmoid', kernel_initializer="random_uniform", name='Output'))
     elif config.dataset == "mini-MIAS":
-        model.add(Dense(num_classes, activation='softmax', name='Output'))
+        model.add(Dense(num_classes, activation='softmax', nkernel_initializer="random_uniform", ame='Output'))
 
     # Print model details if running in debug mode.
     if config.verbose_mode:

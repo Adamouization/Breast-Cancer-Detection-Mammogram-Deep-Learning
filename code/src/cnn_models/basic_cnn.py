@@ -13,17 +13,24 @@ def create_basic_cnn_model(num_classes: int):
     """
     model = Sequential()
 
+    # Convolutional + spooling layers
     model.add(Conv2D(64, (5, 5), input_shape=(config.ROI_IMG_SIZE['HEIGHT'], config.ROI_IMG_SIZE['WIDTH'], 1)))
     model.add(MaxPooling2D((2, 2), strides=(2, 2)))
-    model.add(Dropout(0.5))
+    model.add(Conv2D(32, (5, 5), padding='same'))
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))
     model.add(Flatten())
-    model.add(Dense(256, activation='relu'))
-    model.add(Dense(64, activation='relu'))
 
+    # Dropout
+    model.add(Dropout(0.5, seed=config.RANDOM_SEED, name="Dropout_1"))
+    
+    # FC
+    model.add(Dense(1024, activation='relu', name='Dense_2'))
+
+    # Output
     if num_classes == 2:
-        model.add(Dense(1, activation='sigmoid', name='Output'))
+        model.add(Dense(1, activation='sigmoid', kernel_initializer="random_uniform", name='Output'))
     else:
-        model.add(Dense(num_classes, activation='softmax', name='Output'))
+        model.add(Dense(num_classes, activation='softmax', kernel_initializer="random_uniform", name='Output'))
 
     # Print model details if running in debug mode.
     if config.verbose_mode:

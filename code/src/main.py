@@ -1,4 +1,5 @@
 import argparse
+from collections import Counter
 import time
 
 import numpy as np
@@ -43,33 +44,33 @@ def main() -> None:
             # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_test, y_train, y_test = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
 
-            # Train CNN model.
-            if not config.is_grid_search:
-                # Create CNN model and split training/validation set (80/20% split).
-                model = CnnModel(config.model, l_e.classes_.size)
-                X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
-                                                                          dataset=X_train,
-                                                                          labels=y_train)
+            # Create CNN model and split training/validation set (80/20% split).
+            model = CnnModel(config.model, l_e.classes_.size)
+            X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
+                                                                      dataset=X_train,
+                                                                      labels=y_train)
+            
+            # Calculate class weights.
+            class_weights = calculate_class_weights(y_train, l_e)
 
-                # Calculate class weights.
-                class_weights = calculate_class_weights(y_train, l_e)
+            # Data augmentation.
+            y_train_before_data_aug = y_train
+            X_train, y_train = generate_image_transforms(X_train, y_train)
+            y_train_after_data_aug = y_train
+            np.random.shuffle(y_train)
+            
+            if config.verbose_mode:
+                print("Before data augmentation:")
+                print(Counter(list(map(str, y_train_before_data_aug))))
+                print("After data augmentation:")
+                print(Counter(list(map(str, y_train_after_data_aug))))
 
-                # Data augmentation.
-                X_train, y_train = generate_image_transforms(X_train, y_train)
-                np.random.shuffle(y_train)
-
-                # Fit model.
-                if config.verbose_mode:
-                    print("Training set size: {}".format(X_train.shape[0]))
-                    print("Validation set size: {}".format(X_val.shape[0]))
-                    print("Test set size: {}".format(X_test.shape[0]))
-                model.train_model(X_train, X_val, y_train, y_val, class_weights)
-
-            # Fine-tune hyperparameters using grid search.
-            else:
-                pass
-                # fine_tune_hyperparameters(X_train, X_val, y_train, y_val)
-                # model.grid_search(X_train, y_train)
+            # Fit model.
+            if config.verbose_mode:
+                print("Training set size: {}".format(X_train.shape[0]))
+                print("Validation set size: {}".format(X_val.shape[0]))
+                print("Test set size: {}".format(X_test.shape[0]))
+            model.train_model(X_train, X_val, y_train, y_val, class_weights)
 
         # Binary classification (binarised mini-MIAS dataset)
         elif config.dataset == "mini-MIAS-binary":
@@ -80,18 +81,16 @@ def main() -> None:
             # Split dataset into training/test/validation sets (80/20% split).
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.20, dataset=images, labels=labels)
 
-            # Train CNN model.
-            if not config.is_grid_search:
-                # Create CNN model and split training/validation set (80/20% split).
-                model = CnnModel(config.model, l_e.classes_.size)
-                # model.load_minimias_weights()
-                # model.load_minimias_fc_weights()
+            # Create CNN model and split training/validation set (80/20% split).
+            model = CnnModel(config.model, l_e.classes_.size)
+            # model.load_minimias_weights()
+            # model.load_minimias_fc_weights()
 
-                # Fit model.
-                if config.verbose_mode:
-                    print("Training set size: {}".format(X_train.shape[0]))
-                    print("Validation set size: {}".format(X_val.shape[0]))
-                model.train_model(X_train, X_val, y_train, y_val, None)
+            # Fit model.
+            if config.verbose_mode:
+                print("Training set size: {}".format(X_train.shape[0]))
+                print("Validation set size: {}".format(X_val.shape[0]))
+            model.train_model(X_train, X_val, y_train, y_val, None)
 
         # Binary classification (CBIS-DDSM dataset).
         elif config.dataset == "CBIS-DDSM":
@@ -101,6 +100,9 @@ def main() -> None:
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=images, labels=labels)
             train_dataset = create_dataset(X_train, y_train)
             validation_dataset = create_dataset(X_val, y_val)
+            
+            # Calculate class weights.
+            class_weights = calculate_class_weights(y_train, l_e)
 
             # Create and train CNN model.
             model = CnnModel(config.model, l_e.classes_.size)
@@ -111,7 +113,7 @@ def main() -> None:
             if config.verbose_mode:
                 print("Training set size: {}".format(X_train.shape[0]))
                 print("Validation set size: {}".format(X_val.shape[0]))
-            model.train_model(train_dataset, validation_dataset, None, None, None)
+            model.train_model(train_dataset, validation_dataset, None, None, class_weights)
 
         # Save training runtime.
         runtime = round(time.time() - start_time, 2)
@@ -214,12 +216,12 @@ def parse_command_line_arguments() -> None:
                         help="The maximum number of epochs in the second training phrase (with unfrozen layers). "
                              "Defaults to 50."
                         )
-    parser.add_argument("-gs", "--gridsearch",
-                        action="store_true",
-                        default=False,
-                        help="Include this flag to run the grid search algorithm to determine the optimal "
-                             "hyperparameters for the CNN model."
-                        )
+    #parser.add_argument("-gs", "--gridsearch",
+    #                    action="store_true",
+    #                    default=False,
+    #                    help="Include this flag to run the grid search algorithm to determine the optimal "
+    #                         "hyperparameters for the CNN model."
+    #                    )
     parser.add_argument("-roi", "--roi",
                         action="store_true",
                         default=False,
@@ -249,7 +251,7 @@ def parse_command_line_arguments() -> None:
         print_error_message()
     config.max_epoch_frozen = args.max_epoch_frozen
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
-    config.is_grid_search = args.gridsearch
+    #config.is_grid_search = args.gridsearch
     config.is_roi = args.roi
     config.verbose_mode = args.verbose
     config.name = args.name

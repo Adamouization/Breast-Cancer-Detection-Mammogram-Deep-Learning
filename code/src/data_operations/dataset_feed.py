@@ -38,16 +38,20 @@ def parse_function(filename, label):
         height = config.MINI_MIAS_IMG_SIZE["HEIGHT"]
         width = config.MINI_MIAS_IMG_SIZE["WIDTH"]
     elif config.model == "VGG-common":
-        # height = config.VGG_IMG_SIZE["HEIGHT"]
-        # width = config.VGG_IMG_SIZE["WIDTH"]
-        height = config.ROI_IMG_SIZE["HEIGHT"]
-        width = config.ROI_IMG_SIZE["WIDTH"]
+        height = config.VGG_IMG_SIZE["HEIGHT"]
+        width = config.VGG_IMG_SIZE["WIDTH"]
     elif config.model == "ResNet":
-        pass
+        height = config.RESNET_IMG_SIZE["HEIGHT"]
+        width = config.RESNET_IMG_SIZE["WIDTH"]
     elif config.model == "Inception":
-        pass
-    elif config.model == "Xception":
-        pass
+        height = config.INCEPTION_IMG_SIZE["HEIGHT"]
+        width = config.INCEPTION_IMG_SIZE["WIDTH"]
+    elif config.model == "DenseNet":
+        height = config.DENSE_NET_IMG_SIZE["HEIGHT"]
+        width = config.DENSE_NET_IMG_SIZE["WIDTH"]
+    elif config.model == "MobileNet":
+        height = config.MOBILE_NET_IMG_SIZE["HEIGHT"]
+        width = config.MOBILE_NET_IMG_SIZE["WIDTH"]
     elif config.model == "CNN":
         pass
     image = tf.image.resize_with_pad(decoded_png, height, width)

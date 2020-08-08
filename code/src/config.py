@@ -9,19 +9,18 @@ MINI_MIAS_IMG_SIZE = {
     "HEIGHT": 1024,
     "WIDTH": 1024
 }
-VGG_IMG_SIZE_MEDIUM = {
+VGG_IMG_SIZE = {
     "HEIGHT": 512,
     "WIDTH": 512
 }
-VGG_IMG_SIZE = {
-    "HEIGHT": 224,
-    "WIDTH": 224
-}
 RESNET_IMG_SIZE = VGG_IMG_SIZE
-INCEPTION_IMG_SIZE = {
-    "HEIGHT": 299,
-    "WIDTH": 299
-}
+INCEPTION_IMG_SIZE = VGG_IMG_SIZE
+DENSE_NET_IMG_SIZE = VGG_IMG_SIZE
+MOBILE_NET_IMG_SIZE = VGG_IMG_SIZE
+# INCEPTION_IMG_SIZE = {
+#     "HEIGHT": 299,
+#     "WIDTH": 299
+# }
 XCEPTION_IMG_SIZE = INCEPTION_IMG_SIZE
 ROI_IMG_SIZE = {
     "HEIGHT": 224,
@@ -37,7 +36,7 @@ learning_rate = 1e-3        # The learning rate with the pre-trained ImageNet la
 batch_size = 2              # Batch size.
 max_epoch_frozen = 100      # Max number of epochs when original CNN layers are frozen.
 max_epoch_unfrozen = 50     # Max number of epochs when original CNN layers are unfrozen.
-is_grid_search = False      # Run the grid search algorithm to determine the optimal hyper-parameters for the model.
 is_roi = False              # Use cropped version of the images
 verbose_mode = False        # Boolean used to print additional logs for debugging purposes.
 name = ""                   # Name of experiment.
+# is_grid_search = False      # Run the grid search algorithm to determine the optimal hyper-parameters for the model.

@@ -16,7 +16,7 @@ def generate_image_transforms(images, labels):
     :param labels: input labels
     :return: updated list of images and labels with extra transformed images and labels
     """
-    augmentation_multiplier = 1
+    augmentation_multiplier = 2
     if config.dataset == "mini-MIAS-binary":
         augmentation_multiplier = 3
 
@@ -56,6 +56,9 @@ def generate_image_transforms(images, labels):
             elif config.model == "VGG-common":
                 transformed_image = transformed_image.reshape(1, config.VGG_IMG_SIZE['HEIGHT'],
                                                               config.VGG_IMG_SIZE["WIDTH"], 1)
+            elif config.model == "ResNet":
+                transformed_image = transformed_image.reshape(1, config.RESNET_IMG_SIZE['HEIGHT'],
+                                                              config.RESNET_IMG_SIZE["WIDTH"], 1)
 
             images_with_transforms = np.append(images_with_transforms, transformed_image, axis=0)
             transformed_label = label.reshape(1, len(label))
@@ -71,16 +74,16 @@ def random_rotation(image_array: np.ndarray):
     :param image_array: input image
     :return: randomly rotated image
     """
-    random_degree = random.uniform(-180, 180)
+    random_degree = random.uniform(-20, 20)
     return sk.transform.rotate(image_array, random_degree)
 
 
 def random_noise(image_array: np.ndarray):
     """
-    Add random noise to image
+    Add a random amount of noise to the image.
     Originally written as a group for the common pipeline.
-    :param image_array: input image
-    :return: image with added random noise
+    :param image_array: input image.
+    :return: image with added random noise.
     """
     return sk.util.random_noise(image_array)
 
@@ -89,14 +92,19 @@ def horizontal_flip(image_array: np.ndarray):
     """
     Flip image horizontally.
     Originally written as a group for the common pipeline.
-    :param image_array: input image
-    :return: horizantally flipped image
+    :param image_array: input image.
+    :return: horizantally flipped image.
     """
     return image_array[:, ::-1]
 
 
 def random_shearing(image_array: np.ndarray):
-    random_degree = random.uniform(-0.1, 0.1)
+    """
+    Add random amount of shearing to image.
+    :param image_array: input image.
+    :return: sheared image.
+    """
+    random_degree = random.uniform(-0.2, 0.2)
     tf = sk.transform.AffineTransform(shear=random_degree)
     return sk.transform.warp(image_array, tf, order=1, preserve_range=True, mode='wrap')
 
