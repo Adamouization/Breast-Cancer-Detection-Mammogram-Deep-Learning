@@ -1,40 +1,15 @@
-The implementation of the breast cancer detection system was conducted in two parts. The first part corresponds to a common pipeline developed in group, and the second part to individual implementations using the common pipeline as a baseline. The distribution of work during the implementation of the common pipeline can be found in Appendix~\ref{ch:appendix-team-meeting-summaries}.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Code Design}
-
-The code is designed by splitting essential code into functions spread across multiple python modules, which are all organised into different directories based on what task they accomplish.
-
-The entry point is in the ``main.py'' module, which parses command line arguments used to execute different parts (e.g. which dataset to use). It contains the main flow of execution with calls to functions for processing the data, creating the CNN models and evaluating the results.\\
-
-Functions linked to data pre-processing, such as retrieving image paths and labels, processing images, encoding labels, loading the data into memory and transforming images for data augmentation, are all located in the \textit{data\_operations} directory. One-time scripts for parsing the images' paths and labels for each dataset are in the \textit{dataset\_processing\_scripts} directory.\\
-
-All CNN-related code, such as creating the model, compiling it, fitting, making predictions or evaluating it is placed in a custom \textit{CNN\_Model} class, which can be found in the \textit{cnn\_models.py} module. Separate models, such as VGG or InceptionV3, are individually placed the \textit{cnn\_models} directory.\\
-
-Functions handling result visualisations in the form of plots and CSV reports are all situated in the \textit{data\_visualisation} directory.\\
-
-General functions for printing information in the terminal and common operations are all located in the \textit{utils.py} module, while global command line arguments used throughout the code are all stored in the \textit{config.py} module.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Common Deep Learning Pipeline}
-
-A detailed flowchart of the deep learning pipeline implemented can be found in  Figure~\ref{fig:implementation-detailed-flowchart}.
+The implementation of the breast cancer detection system was conducted in two parts. The first part corresponds to a common pipeline developed in group, and the second part to individual implementations using the common pipeline as a baseline. An overview of the different parts of the pipeline can be found in Figure~\ref{fig:implementation-flowchart}, while meeting minutes with the work distribution during the implementation of the common pipeline can be found in Appendix~\ref{ch:appendix-team-meeting-summaries}.
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=1.25\textwidth]{figures/implementation/detailed flowchart.png}}
-\caption{\label{fig:implementation-detailed-flowchart}Flowchart. Created using draw.io.}
+\centerline{\includegraphics[width=\textwidth]{figures/implementation/implementation flowchart.png}}
+\caption{\label{fig:implementation-flowchart}Flowchart.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Data pre-processing}
+\section{Data pre-processing}
 
 \subsubsection{Initial dataset processing}
 
@@ -71,6 +46,11 @@ Class weights are calculated automatically using sklearn's \textit{class\_weight
 For the mini-MIAS dataset, images are cropped around a ROI (Region of Interest) sized 224x224 pixels if there is one, otherwise around a 224x224 region around the centre of the image.\\
 
 Data augmentation for the mini-MIAS  dataset images to balance the class distribution. Rotations, noise, shears and rotation flips are randomly added to existing images to create new images and to balance classes. These are then shuffled to ensure that newly generated images are not grouped together.
+
+\begin{figure}[ht]
+\centerline{\includegraphics[width=\textwidth]{figures/implementation/Data augmentation transforms.png}}
+\caption{\label{fig:implementation-Data augmentation transforms}Example of affine transforms applied to mini-MIAS mammograms to generate new samples. Original image retrieved from the mini-MIAS dataset \citep{Suckling1994}.}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -145,3 +125,21 @@ random seed generator fixed for numpy, TF and dropout layers. Train/test/validat
 %     \item \textit{``requirements.txt''} file: the different technologies and third-party libraries required to run the code. The file is used by the Pip\footnote{PyPi: \url{https://pypi.org/}} system to install everything in a single installation.
 %     \item \textit{``README.md''} file: the instructions on how to setup and run the program locally.
 % \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Code Design}
+
+The code is designed by splitting essential code into functions spread across multiple python modules, which are all organised into different directories based on what task they accomplish.
+
+The entry point is in the ``main.py'' module, which parses command line arguments used to execute different parts (e.g. which dataset to use). It contains the main flow of execution with calls to functions for processing the data, creating the CNN models and evaluating the results.\\
+
+Functions linked to data pre-processing, such as retrieving image paths and labels, processing images, encoding labels, loading the data into memory and transforming images for data augmentation, are all located in the \textit{data\_operations} directory. One-time scripts for parsing the images' paths and labels for each dataset are in the \textit{dataset\_processing\_scripts} directory.\\
+
+All CNN-related code, such as creating the model, compiling it, fitting, making predictions or evaluating it is placed in a custom \textit{CNN\_Model} class, which can be found in the \textit{cnn\_models.py} module. Separate models, such as VGG or InceptionV3, are individually placed the \textit{cnn\_models} directory.\\
+
+Functions handling result visualisations in the form of plots and CSV reports are all situated in the \textit{data\_visualisation} directory.\\
+
+General functions for printing information in the terminal and common operations are all located in the \textit{utils.py} module, while global command line arguments used throughout the code are all stored in the \textit{config.py} module.
