@@ -55,6 +55,7 @@ Potential future comparisons:
 %%%%%%%%
 
 \subsection{Binary mini-MIAS Transfer Learning}
+\label{sec:evaluation-transfer-learning}
 
 This experiment consisted of expanding upon the concept of transfer learning for the VGG model using weights pre-trained on ImageNet by transfering the weights of a model trained on a binarised mini-MIAS dataset. To binarise the mini-MIAS dataset, the normal cases were dropped altogether, resulting in a very small dataset of 115 abnormal images (64 benign and 51 malignant). The VGG19 model with custom fully connected layers and dropout layers was then trained with the binary mini-MIAS dataset and the final weights were saved.\\
 

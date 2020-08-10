@@ -24,7 +24,7 @@ The deep learning pipeline implemented for the task of breast cancer detection c
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{figures/design/design flowchart.png}}
-\caption{\label{fig:design-flowchart}A high-level flowchart of the breast cancer detection deep learning pipeline to implement.}
+\caption{\label{fig:design-flowchart}A high-level flowchart of the breast cancer detection deep learning pipeline to implement, separated between data pre-processing, model training, results visualisation and fine-tuning.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%
@@ -104,6 +104,7 @@ On the other hand, in the case of binary datasets like CBIS-DDSM, binary encodin
 At this stage, the training data is ready to be fed into the CNN model. The classification models will learn the processed images from the training set loaded in memory before making their predictions, which will be compared with the ground truth labels for evaluation.
 
 \subsubsection{CNN model}
+\label{sec:design-cnn-model-decision}
 
 Due to the small nature of the CBIS-DDSM and mini-MIAS datasets used, state-of-the-art CNN models pre-trained on large general datasets like ImageNet are used rather than creating a CNN from scratch, a technique known as transfer learning that is proven to work on breast cancer detection tasks \citep{Shen2017, Falconi2019}.\\
 
@@ -142,6 +143,7 @@ Due to the deep nature of the model, it is important to minimise the number of h
 %https://towardsdatascience.com/full-review-on-optimizing-neural-network-training-with-optimizer-9c1acc4dbe78
 
 \paragraph{Transfer learning}
+\label{sec:design-transfer-learning-training-phase}
 
 To best make use of the transfer learning technique with the base model's weights instantiated using ImageNet weights, training is separated into two phases:
 \begin{enumerate}
@@ -211,7 +213,7 @@ Together, precision and recall can be combined into a more concise metric, the \
 
 \subsubsection{Confusion matrix} 
 
-This visual metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels and each column corresponding to a prediction. It is beneficial for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications and compare with other classifiers, the confusion matrix can be normalised to show a percentage rather than a count \citep{Geron2019}.
+This visual metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels and each column corresponding to a prediction. It is beneficial for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications and compare predictions with other classifiers, the confusion matrices are normalised to show a percentage rather than a count \citep{Geron2019}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -223,8 +225,6 @@ This visual metric plots the number of predictions made for each class for each 
 
 % Choosing a programming language is one of the most essential aspects to take into account as it is the medium used to transform the system from design to implementation. However, choosing from over 250 different programming languages \citep{tiobe} can be tricky, which is why multiple views have to be evaluated before choosing a programming language. Four popular programming languages are considered for this project: Python, Java, R and  Javascript.\\
 % https://becominghuman.ai/best-languages-for-machine-learning-in-2020-6034732dd242
-
-%
 
 The first element to consider when choosing a programming language is the availability of third-party libraries used for implementing common machine learning functionalities, as well as data pre-processing, manipulation and visualisation techniques found in deep learning systems to avoid manually implementing them. The most commonly used machine learning libraries nowadays are all available in Python \citep{raschka2017python}, including SciKit-Learn \citep{scikit-learn}, Pandas \citep{reback2020pandas}, Matplotlib \citep{Hunter:2007}, NumPy \citep{numpy} and Seaborn \citep{seaborn}. In terms of deep learning libraries, Tensorflow (available in Python, R and Javascript) and PyTorch (available in Python) are  the most popular ones (Appendix~\ref{sec:appendix-keras_vs_pytorch}).\\
 
