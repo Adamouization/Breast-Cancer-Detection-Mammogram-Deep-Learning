@@ -1,21 +1,23 @@
 \begin{table}[h]
 \centering
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}llllllll@{}}
+\begin{tabular}{@{}llccccc@{}}
 \toprule
-\textbf{\begin{tabular}[c]{@{}l@{}}Whole Image \\ Size (px)\end{tabular}} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Extra Conv/\\ Spool Layers\end{tabular}} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Overall \\ Accuracy\end{tabular}} &
-  \textbf{Precision} &
-  \textbf{Recall} &
-  \textbf{F1 Score} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Prediction \\ Runtime\end{tabular}} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Training \\ Runtime\end{tabular}} \\ \midrule
-\textit{\textbf{224 x 224}}   & No  & 63.96\% & 65.33\% & 63.96\% & 64.28\% & 00:21:04 & 01:20:44 \\
-\textit{\textbf{512 x 512}}   & No  & 64.59\% & 64.44\% & 64.59\% & 64.51\% & 00:25:00 & 03:10:15 \\
-\textit{\textbf{1024 x 1024}} & Yes & 59.28\% & 66.94\% & 59.28\% & 58.43\% & 00:18:24 & 08:49:52 \\ \bottomrule
+\textbf{\begin{tabular}[c]{@{}l@{}}Base\\ Model\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Whole \\ Image \\ Size \\ (pixels)\end{tabular}} &
+  \multicolumn{1}{l}{\textbf{\begin{tabular}[c]{@{}l@{}}Extra \\ conv/\\ spool \\ layers\end{tabular}}} &
+  \multicolumn{1}{l}{\textbf{\begin{tabular}[c]{@{}l@{}}Overall\\ Accuracy\end{tabular}}} &
+  \multicolumn{1}{l}{\textbf{Precision}} &
+  \multicolumn{1}{l}{\textbf{Recall}} &
+  \multicolumn{1}{l}{\textbf{F1 Score}} \\ \midrule
+\multirow{3}{*}{\textbf{VGG19}}       & \textit{\textbf{224 x 224}}   & No  & 63.96\%          & 65.33\%          & 63.96\%          & 64.28\%          \\
+                                      & \textit{\textbf{512 x 512}}   & No  & 64.59\%          & 64.44\%          & 64.59\%          & 64.51\%          \\
+                                      & \textit{\textbf{1024 x 1024}} & Yes & 59.28\%          & \textbf{66.94\%} & 59.28\%          & 58.43\%          \\ \cmidrule(r){1-1}
+\multirow{3}{*}{\textbf{MobileNetV2}} & \textit{\textbf{224 x 224}}   & No  & 62.56\%          & 62.38\%          & 62.56\%          & 62.46\%          \\
+                                      & \textit{\textbf{512 x 512}}   & No  & \textbf{67.08\%} & 66.50\%          & \textbf{67.08\%} & \textbf{66.48\%} \\
+                                      & \textit{\textbf{1024 x 1024}} & Yes & OOM              & OOM              & OOM              & OOM              \\ \bottomrule
 \end{tabular}%
 }
-\caption{Results achieved on the test set when using different input image sizes on the CBIS-DDSM dataset using the custom VGG19 model.}
-\label{tab:evaluation-individual-image-sizes}
+\caption{Results achieved on the test set when using different input image sizes on the CBIS-DDSM dataset.}
+\label{tab:evaluation-image-size}
 \end{table}

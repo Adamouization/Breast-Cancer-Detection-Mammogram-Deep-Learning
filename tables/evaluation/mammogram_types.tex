@@ -1,20 +1,22 @@
 \begin{table}[h]
 \centering
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lllllll@{}}
+\begin{tabular}{@{}llcccc@{}}
 \toprule
-\textbf{\begin{tabular}[c]{@{}l@{}}Mammogram\\ type\end{tabular}} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Overall \\ Accuracy\end{tabular}} &
-  \multicolumn{1}{c}{\textbf{Precision}} &
-  \multicolumn{1}{c}{\textbf{Recall}} &
-  \multicolumn{1}{c}{\textbf{F1 Score}} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Prediction\\ Runtime\\ (hh:mm:ss)\end{tabular}} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Training\\ Runtime\\ (hh:mm:ss)\end{tabular}} \\ \midrule
-\textit{All}           & 59.44\% & 35.33\% & 59.44\% & 44.32\% & 00:20:22 & 02:33:44 \\
-\textit{Masses}        & 64.35\% & 63.70\% & 64.35\% & 63.86\% & 00:09:54 & 01:15:42 \\
-\textit{Calcifications} & 66.67\% & 67.05\% & 66.67\% & 66.80\% & 00:06:49 & 01:13:37 \\ \bottomrule
+\textbf{\begin{tabular}[c]{@{}l@{}}Base \\ Model\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Mammogram\\ type\end{tabular}} &
+  \multicolumn{1}{l}{\textbf{\begin{tabular}[c]{@{}l@{}}Overall \\ Accuracy\end{tabular}}} &
+  \multicolumn{1}{l}{\textbf{Precision}} &
+  \multicolumn{1}{l}{\textbf{Recall}} &
+  \multicolumn{1}{l}{\textbf{F1 Score}} \\ \midrule
+\multirow{3}{*}{\textbf{VGG19}}       & \textit{\textbf{All}}            & 59.44\%          & 35.33\%          & 59.44\%          & 44.32\%          \\
+                                      & \textit{\textbf{Masses}}         & 64.35\%          & 63.70\%          & 64.35\%          & 63.86\%          \\
+                                      & \textit{\textbf{Calcifications}} & \textbf{66.67\%} & \textbf{67.05\%} & \textbf{66.67\%} & \textbf{66.80\%} \\ \midrule
+\multirow{3}{*}{\textbf{MobileNetV2}} & \textit{\textbf{All}}            & \textbf{67.08\%} & \textbf{66.50\%} & \textbf{67.08\%} & \textbf{66.48\%} \\
+                                      & \textit{\textbf{Masses}}         & 63.23\%          & 63.23\%          & 63.23\%          & 63.23\%          \\
+                                      & \textit{\textbf{Calcifications}} & 63.12\%          & 64.57\%          & 63.12\%          & 63.39\%          \\ \bottomrule
 \end{tabular}%
 }
-\caption{Results achieved on the test set when using different types of mammograms from the CBIS-DDSM dataset using the custom VGG19 model.}
-\label{tab:evaluation-individual-mammogram-types}
+\caption{Results achieved on the test set when using different types of mammograms from the CBIS-DDSM dataset.}
+\label{tab:evaluation-mammogram-types}
 \end{table}
