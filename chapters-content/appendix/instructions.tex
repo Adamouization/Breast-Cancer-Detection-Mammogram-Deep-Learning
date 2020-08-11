@@ -21,7 +21,7 @@ Activate the virtual environment:
 source /Breast-Cancer-Detection-Code/tf2/venv/bin/activate
 \end{lstlisting}
 
-`cd` into the `src` directory and run the code:
+``\textit{cd}'' into the ``\textit{src}'' directory and run the code below.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -41,20 +41,13 @@ where:
     \item \textit{MAMMOGRAMTYPE} is the type of mammogram to use. Can be either \textit{calc}, \textit{mass} or \textit{all}.
     \item \textit{MODEL} is the model to use. Must be either \textit{VGG}, \textit{VGG-common}, \textit{Inception} or \textit{CNN}. Default value is \textit{VGG-common}.
     \item \textit{RUNMODE} is the learning rate used for the all the non-pre-trained ImageNet layers. Defaults to 1e-3. Must be a float.
-    \item \textit{LEARNING\_RATE} is the batch size to use when training the model. Defaults to \textit{2}. Must be a positive integer.
+    \item \textit{LEARNING\_RATE} is the optimiser's initial learning rate to use when training the model during the first phase (frozen layers). Defaults to \textit{0.001}. Must be a positive float.
     \item \textit{BATCHSIZE} is the batch size to use when training the model. Defaults to \textit{2}. Must be a positive integer.
     \item \textit{MAXEPOCHFROZEN} is the maximum number of epochs in the first training phrase (with frozen layers). Defaults to \textit{100}. Must be a positive integer.
     \item \textit{MAXEPOCHUNFROZEN} is the maximum number of epochs in the second training phrase (with unfrozen layers). Defaults to \textit{50}. Must be a positive integer.
-    \item \textit{-gs} is a flag to run the grid search algorithm to determine the optimal hyperparameters for the CNN model. Defaults to \textit{False}.
     \item \textit{-roi} is a flag to use only cropped versions of the images around the ROI. Only usable with mini-MIAS dataset. Defaults to \textit{False}.
     \item \textit{-v} is a flag controlling verbose mode, which prints additional statements for debugging purposes. Defaults to \textit{False}.
 \end{itemize}
-
-Set the \textit{PYTHONHASHSEED} environment variable to 0 before the program starts for reproducible results (e.g. when using hash-based operations):
-
-\begin{lstlisting}
-PYTHONHASHSEED=0 main.py [...]
-\end{lstlisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -125,6 +118,6 @@ python3 ../../../src/data_manipulations/mini-MIAS-initial-pre-processing.py
 
 \subsection{CBIS-DDSM dataset}
 
-These datasets are very large (exceeding 160GB) and more complex than the mini-MIAS dataset to use. They were downloaded by the University of St Andrews School of Computer Science computing officers onto \textit{BigTMP}, a 15TB filesystem that is mounted on the Centos 7 computer lab clients with NVIDIA GPUs, and that is usually used for storing large working data sets. Therefore, the download process of these datasets will not be covered in these instructions.\\
+These datasets are very large (exceeding 160GB) and more complex than the mini-MIAS dataset to use. They were downloaded by the University of St Andrews School of Computer Science computing officers onto \textit{BigTMP}, a 15TB filesystem that is mounted on the Centos 7 computer lab clients with NVIDIA GPUs usually used for storing large working data sets. Therefore, the download process of these datasets will not be covered in these instructions.\\
 
-Our generated CSV files to use these datasets can be found in the \textit{/data/CBIS-DDSM} directory, but the mammograms will have to be downloaded separately directly from the source. The CBIS-DDSM dataset can be downloaded here: \url{https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM#5e40bd1f79d64f04b40cac57ceca9272}.
+The generated CSV files to use these datasets can be found in the \textit{/data/CBIS-DDSM} directory, but the mammograms will have to be downloaded separately directly from the source. The CBIS-DDSM dataset can be downloaded here: \url{https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM#5e40bd1f79d64f04b40cac57ceca9272}.

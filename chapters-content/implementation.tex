@@ -6,7 +6,7 @@ The implementation of the breast cancer detection system was conducted in two pa
 
 \section{Code Design}
 
-The code, all stored in the \textit{src} directory is designed by splitting essential code into functions spread across multiple python modules, which are all organised into different directories based on what task they accomplish (see Appendix~\ref{ch:appendix-coding-project-structure}).\\
+The code, all stored in the \textit{src} directory is designed by splitting essential code into functions spread across multiple python modules, which are all organised into different directories based on the kind of task they are designed to carry out (see Appendix~\ref{ch:appendix-coding-project-structure}).\\
 
 \textbf{Flow of execution} \space The program entry point is in the ``main.py'' module, which parses command line arguments used to execute different parts of the program (e.g. which dataset to use) and stores them in ``config.py''. The main flow of the pipeline is controlled in ``main.py'', enclosing calls to different functions for processing the data, creating the CNN models and evaluating the results based on the CLI arguments selected.\\
 
@@ -30,7 +30,7 @@ Python's \textit{argparse} module is used to implement the CLI application, acce
 
 \subsection{Results reproducibility}
 
-To reproduce results across different runs, random number generators are seeded with an identical value set to $111$. The NumPy seed and Tensorflow seeds are both set to $111$, as well as functions that include randomness such as the dataset splits to ensure that constant shuffle indices are used (Scikit-Learn's \textit{train\_test\_split}) and the Dropout layer to ensure that the same random neurons are dropped:
+To reproduce results across different runs, random number generators are seeded with an identical value set to \textit{$111$}. The NumPy seed and Tensorflow seeds are both set to \textit{$111$}, as well as functions that include randomness such as the dataset splits to ensure that constant shuffle indices are used (Scikit-Learn's \textit{train\_test\_split}) and the Dropout layer to ensure that the same random neurons are dropped:
 
 \begin{lstlisting}[numbers=none]
 # Random number generators.
@@ -50,7 +50,7 @@ fully_connected.add(Dropout(0.2, seed=config.RANDOM_SEED))
 
 \section{Data pre-processing}
 
-\subsubsection{Initial dataset processing}
+\subsection{Initial dataset processing}
 
 When downloaded, both datasets contain nested directories with the mammogram images and CSV files mapping images to their label, along with additional information, e.g. breast densities, left or right breast, mass shape, etc. Two distinct Python scripts are written to parse these CSV files.\\
 
@@ -60,15 +60,17 @@ When downloaded, both datasets contain nested directories with the mammogram ima
 
 %%%%%%%%%%%
 
-\subsubsection{Data loading}
+\subsection{Data loading}
 
 The data is loaded by parsing the generated CSV files mentioned above, loading mammograms and their labels simultaneously. In the case of the CBIS-DDSM dataset, a Tensorflow \textit{Dataset} is used to handle its large size by loading consecutive images into batches and caching the loaded data. This process is optimised by importing the data with parallel optimisations through Keras' \textit{prefetch method} and the \textit{data.experimental.AUTOTUNE} option. No loading optimisations are used for the smaller mini-MIAS dataset.\\
 
 %%%%%%%%%%%
 
-\subsubsection{Data processing}
+\subsection{Data processing}
 
-\paragraph{Image processing} The mini-MIAS mammograms are first imported through Keras' \textit{load\_img} function in Python Imaging Library (PIL) format and resized to a target size in pixels (e.g. 224 x 224 pixels) in greyscale (single channel) before being converted to array format using the \textit{img\_to\_array} function to be compatible with the Keras CNN models expected input. Additionally, if the \textit{roi} flag is set to \textit{True}, then the images are cropped around a 224 x 224 pixels ROI (Region of Interest) if there is an abnormality, otherwise around a 224 x 224 pixels region around the centre of the image.\\
+\paragraph{Image processing} 
+
+The mini-MIAS mammograms are first imported through Keras' \textit{load\_img} function in Python Imaging Library (PIL) format and resized to a target size in pixels (e.g. 224 x 224 pixels) in greyscale (single channel) before being converted to array format using the \textit{img\_to\_array} function to be compatible with the Keras CNN models expected input. Additionally, if the \textit{roi} flag is set to \textit{True}, then the images are cropped around a 224 x 224 pixels ROI (Region of Interest) if there is an abnormality, otherwise around a 224 x 224 pixels region around the centre of the image.\\
 
 The images are then normalised by dividing their pixel intensities by 255 to fit in the range of floats between 0 and 1. Because the CBIS-DDSM mammograms being in DICOM format, they first need to be imported as raw bytes before being decoded using Tensorflow I/O's \textit{decode\_dicom\_image} function. The image is then converted to PNG before following the same process as the mini-MIAS images.
 
@@ -78,7 +80,7 @@ In the case of multi-class classification Scikit-Learn's \textit{LabelEncoder} c
 
 %%%%%%%%%%%
 
-\subsubsection{Dataset splits}
+\subsection{Dataset splits}
 
 Scikit-Learn's \textit{train\_test\_split} function is used to split the dataset into a training, validation and testing set (see Figure~\ref{fig:dataset_splits}). A 60/20/20\% shuffled stratified split is conducted to maintain class balance across the sets and avoid data bias when training the model. 
 
@@ -89,7 +91,7 @@ Scikit-Learn's \textit{train\_test\_split} function is used to split the dataset
 
 %%%%%%%%%%%
 
-\subsubsection{Data augmentation \& class balance}
+\subsection{Data augmentation \& class balance}
 
 For highly imbalanced mini-MIAS dataset, image augmentation is used to balance the class distribution. Random amounts of rotations and shears between -20 and 20 degrees, noise and horizontal flips are added to existing images of the minority classes to balance the dataset. The transformations are all achieved through the Scikit-Image library. These are then shuffled to ensure that newly generated images are not grouped together. An example of the possible transformations is shown in Figure~\ref{fig:implementation-Data augmentation transforms}.
 

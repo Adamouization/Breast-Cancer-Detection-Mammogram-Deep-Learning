@@ -50,10 +50,10 @@ As this is a classification task, it is essential to visualise the distribution 
   \caption{CBIS-DDSM class distribution.}
   \label{fig:cbis-ddsm-balance}
 \end{subfigure}
-\caption{\label{fig:design-datasets-balance}Class distribution for the mini-MIAS and the CBIS-DDSM datasets. Histograms generated in Excel.}
+\caption{\label{fig:design-datasets-balance}Class distribution for the mini-MIAS and the CBIS-DDSM datasets.}
 \end{figure}
 
-These bar charts reveal that the mini-MIAS dataset is heavily unbalanced as the distribution is not uniform, which must be taken into account to avoid training a biased CNN model. Potential solutions to counter this imbalance would be to either:
+These bar charts reveal that the mini-MIAS dataset is heavily imbalanced as the distribution is not uniform, which must be taken into account to avoid training a biased CNN model. Potential solutions to counter this imbalance would be to either:
 \begin{itemize}
     \item \textit{undersample} the dataset by dropping images altogether;
     \item \textit{oversample} the dataset, which can be achieved via data augmentation,
@@ -78,7 +78,7 @@ The mini-MIAS dataset is very small in size (339 Mb before pre-processing, 202 M
 
 \subsubsection{Data normalisation}
 
-Observing the pixel intensities of the images found in the datasets reveal that they correspond to integers ranging from 0 to 255. However, because the weights in neural networks are small, having such large input values can disrupt and slow down the training process, ultimately leading to lower accuracies. Therefore, normalising the pixel intensities to values in the range of 0 to 1 can help fight this problem by ensuring all values are small. An example of the pixel values before and after normalisation can be seen in Figure~\ref{fig:design-Normalisation example}.
+Images are resized to a target size during import to scale them down (CBIS-DDSM images are larger than 3000 x 5000 pixels)  and to avoid having inconsistent inputs. Observing the pixel intensities of the images found in the datasets reveal that they correspond to integers ranging from 0 to 255. However, because the weights in neural networks are small, having such large input values can disrupt and slow down the training process, ultimately leading to lower accuracies. Therefore, normalising the pixel intensities to values in the range of 0 to 1 can help fight this problem by ensuring all values are small. An example of the pixel values before and after normalisation can be seen in Figure~\ref{fig:design-Normalisation example}.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=0.9\textwidth]{figures/design/Normalisation example.png}}
@@ -161,7 +161,9 @@ Due to time constraints, k-fold cross-validation, which divides the training set
 \paragraph{Fine-tuning}
 \label{sec:design-fine-tuning-bagoftricks}
 
-Traditionally, a grid search approach would have been preferred to fine-tune the model's hyperparameters. However, due to the significant training runtime and the number of hyperparameters to fine-tune, a grid search would have been unrealistic given the time frame of the project. Instead, a bag-of-tricks approach is selected, manually trying different deep learning techniques mentioned in this chapter such as using different pre-trained CNN models, amounts of transfer learning, amounts of data augmentation, dropout values, input image sizes.
+Traditionally, a grid search approach would have been preferred to fine-tune the model's hyperparameters. However, due to the significant training runtime and the number of hyperparameters to fine-tune, a grid search would have been unrealistic given the time frame of the project. Additionally, two attempts at implementing grid search were unsuccessful, as a known bug on the Keras wrapper for Scikit-Learn prevented the use of the \textit{GridSearch class}, and Optuna was incompatible with the current version of Tensorflow I/O being used.\\
+
+Instead, a bag-of-tricks approach is selected, manually trying different deep learning techniques mentioned in this chapter such as using different pre-trained CNN models, amounts of transfer learning, amounts of data augmentation, dropout values, input image sizes.
 % over a genetic algorithm to naturally find best hyperparameters.
 
 %%%%%%%%%%%%%%%%%%%%
