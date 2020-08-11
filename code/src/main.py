@@ -176,9 +176,9 @@ def parse_command_line_arguments() -> None:
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--dataset",
-                        default="mini-MIAS",
+                        default="CBIS-DDSM",
                         required=True,
-                        help="The dataset to use. Must be either 'mini-MIAS' or 'CBIS-DDMS'."
+                        help="The dataset to use. Must be either 'mini-MIAS', 'mini-MIAS-binary' or 'CBIS-DDMS'."
                         )
     parser.add_argument("-mt", "--mammogramtype",
                         default="all",
@@ -186,7 +186,7 @@ def parse_command_line_arguments() -> None:
                         )
     parser.add_argument("-m", "--model",
                         required=True,
-                        help="The model to use. Must be either 'VGG' or 'ResNet'."
+                        help="The model to use. Must be either 'VGG-common', 'VGG', 'ResNet', 'Inception', 'DenseNet', 'MobileNet' or 'CNN'."
                         )
     parser.add_argument("-r", "--runmode",
                         default="train",

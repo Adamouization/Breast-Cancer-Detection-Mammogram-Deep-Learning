@@ -28,7 +28,7 @@ ROI_IMG_SIZE = {
 }
 
 # Variables set by command line arguments/flags
-dataset = "mini-MIAS"       # The dataset to use.
+dataset = "CBIS-DDSM"       # The dataset to use.
 mammogram_type = "all"      # The type of mammogram (Calc or Mass).
 model = "VGG"               # The model to use.
 run_mode = "training"       # The type of running mode, either training or testing.
