@@ -158,6 +158,7 @@ To ensure that the model generalises well to unseen  data from the testing set, 
 Due to time constraints, k-fold cross-validation, which divides the training set into $K$ subsets and evaluates the model $K$ times, cannot be used as training the model on the CBIS-DDSM dataset can take anywhere from 1h15m to 8h49 (see Chapter~\ref{ch:chapter-evaluation}), which would be multiplied by a factor of $K$. Therefore, a validation set is used instead.
 
 \paragraph{Fine-tuning}
+\label{sec:design-fine-tuning-bagoftricks}
 
 Traditionally, a grid search approach would have been preferred to fine-tune the model's hyperparameters. However, due to the significant training runtime and the number of hyperparameters to fine-tune, a grid search would have been unrealistic given the time frame of the project. Instead, a bag-of-tricks approach is selected, manually trying different deep learning techniques mentioned in this chapter such as using different pre-trained CNN models, amounts of transfer learning, amounts of data augmentation, dropout values, input image sizes.
 % over a genetic algorithm to naturally find best hyperparameters.

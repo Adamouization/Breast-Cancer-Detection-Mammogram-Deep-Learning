@@ -1,23 +1,52 @@
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-% \usepackage{graphicx}
 \begin{table}[h]
 \centering
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lllllll@{}}
+\begin{tabular}{@{}llcccc@{}}
 \toprule
-\textbf{\begin{tabular}[c]{@{}l@{}}Class \\ weights\end{tabular}} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Overall\\ Accuracy\end{tabular}} &
-  \textbf{Precision} &
-  \textbf{Recall} &
-  \textbf{F1 Score} &
-  \textbf{AUC} &
-  \textbf{\begin{tabular}[c]{@{}l@{}}Training\\ Runtime\end{tabular}} \\ \midrule
-\textit{\textbf{None}}                                                      & 62.25\% & 63.66\% & 62.25\% & 62.58\% & 0.69 & 01:41:05 \\
-\textit{\textbf{Balanced}}                                                  & 63.96\% & 63.94\% & 63.96\% & 63.95\% & 0.70 & 01:34:12 \\
-\textit{\textbf{\begin{tabular}[c]{@{}l@{}}+50\% \\ minority\end{tabular}}} & 61.15\% & 62.16\% & 61.15\% & 61.45\% & 0.69 & 01:20:58 \\ \bottomrule
+\textbf{\begin{tabular}[c]{@{}l@{}}Base \\ model\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Class\\ weights\end{tabular}} &
+  \multicolumn{1}{l}{\textbf{\begin{tabular}[c]{@{}l@{}}Overall \\ Accuracy\end{tabular}}} &
+  \multicolumn{1}{l}{\textbf{Precision}} &
+  \multicolumn{1}{l}{\textbf{Recall}} &
+  \multicolumn{1}{l}{\textbf{F1 Score}} \\ \midrule
+\multirow{3}{*}{\textit{\textbf{VGG19}}} &
+  \textit{\textbf{None}} &
+  62.25\% &
+  63.66\% &
+  62.25\% &
+  62.58\% \\
+ &
+  \textit{\textbf{Balanced}} &
+  63.96\% &
+  63.94\% &
+  63.96\% &
+  63.95\% \\
+ &
+  \textit{\textbf{\begin{tabular}[c]{@{}l@{}}+50\%\\ minority\end{tabular}}} &
+  61.15\% &
+  62.16\% &
+  61.15\% &
+  61.45\% \\ \cmidrule(r){1-1}
+\multirow{3}{*}{\textit{\textbf{MobileNetV2}}} &
+  \textit{\textbf{None}} &
+  65.83\% &
+  66.33\% &
+  65.83\% &
+  66.01\% \\
+ &
+  \textit{\textbf{Balanced}} &
+  \textbf{67.08\%} &
+  \textbf{66.50\%} &
+  \textbf{67.08\%} &
+  \textbf{66.48\%} \\
+ &
+  \textit{\textbf{\begin{tabular}[c]{@{}l@{}}+50\%\\ minority\end{tabular}}} &
+  65.05\% &
+  65.19\% &
+  65.05\% &
+  65.12\% \\ \bottomrule
 \end{tabular}%
 }
-\caption{Results achieved on the test set when using different class weights on the imbalanced CBIS-DDSM dataset using the custom VGG19 model.}
-\label{tab:evaluation-individual-class-weights}
+\caption{Results achieved on the test set when using different class weights (none, balanced and a 50\% on the minority class only) on the imbalanced CBIS-DDSM dataset with VGG19 and MobileNet architectures as base model.}
+\label{tab:evaluation-class-weights}
 \end{table}
