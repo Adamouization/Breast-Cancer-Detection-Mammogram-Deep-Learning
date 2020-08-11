@@ -47,7 +47,7 @@ Table~\ref{tab:evaluation-class-weights} reports the three class weight values t
 
 \input{tables/evaluation/class_weights}
 
-These results clearly depict how including balanced weights to the samples increases the accuracy across different base CNN models by 1.25-1.71\%. However, a manual weight increase for the minority class decreases the accuracy by 0.78-1.1\%, revealing the complexity of finding the right parameters for balancing datasets as the 50\% weight increase for malignant samples made the dataset even more unbalanced. The normalised confusion matrices found in Figures~\ref{fig:evaluation-class_weights_experiment-none} and \ref{fig:evaluation-class_weights_experiment-balanced} expose how including class weights leads to the model being more confused as many malignant samples are classified as benign.
+These results clearly depict how including balanced weights to the samples increases the accuracy across different base CNN models by 1.25-1.71\%. However, a manual weight increase for the minority class decreases the accuracy by 0.78-1.1\%, revealing the complexity of finding the right parameters for balancing datasets as the 50\% weight increase for malignant samples made the dataset even more imbalanced. The normalised confusion matrices found in Figures~\ref{fig:evaluation-class_weights_experiment-none} and \ref{fig:evaluation-class_weights_experiment-balanced} expose how including class weights leads to the model being more confused as many malignant samples are classified as benign.
 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.75\textwidth]{figures/evaluation/class_weights_experiment/none.png}}
