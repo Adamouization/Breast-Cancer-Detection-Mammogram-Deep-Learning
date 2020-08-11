@@ -15,7 +15,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 def create_vgg19_model(num_classes: int):
     """
     Creates a CNN from an existing architecture with pre-trained weights on ImageNet.
-    :return: The VGG19.
+    :return: The VGG19 model.
     """
     base_model = Sequential(name="Base_Model")
 
@@ -67,7 +67,7 @@ def create_vgg19_model(num_classes: int):
     if config.dataset == "CBIS-DDSM" or config.dataset == "mini-MIAS-binary":
         model.add(Dense(1, activation='sigmoid', kernel_initializer="random_uniform", name='Output'))
     elif config.dataset == "mini-MIAS":
-        model.add(Dense(num_classes, activation='softmax', nkernel_initializer="random_uniform", ame='Output'))
+        model.add(Dense(num_classes, activation='softmax', kernel_initializer="random_uniform", ame='Output'))
 
     # Print model details if running in debug mode.
     if config.verbose_mode:

@@ -16,7 +16,7 @@ def generate_image_transforms(images, labels):
     :param labels: input labels
     :return: updated list of images and labels with extra transformed images and labels
     """
-    augmentation_multiplier = 2
+    augmentation_multiplier = 1
     if config.dataset == "mini-MIAS-binary":
         augmentation_multiplier = 3
 

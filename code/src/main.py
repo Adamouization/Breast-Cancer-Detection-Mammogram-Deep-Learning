@@ -106,8 +106,8 @@ def main() -> None:
 
             # Create and train CNN model.
             model = CnnModel(config.model, l_e.classes_.size)
-            # model.load_minimias_fc_weights()
-            # model.load_minimias_weights()
+            #model.load_minimias_fc_weights()
+            #model.load_minimias_weights()
 
             # Fit model.
             if config.verbose_mode:

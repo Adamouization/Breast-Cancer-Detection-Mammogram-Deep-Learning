@@ -55,6 +55,7 @@ def parse_function(filename, label):
     elif config.model == "CNN":
         pass
     image = tf.image.resize_with_pad(decoded_png, height, width)
+    #image = tf.image.resize(decoded_png, [height, width])
     image /= 255
 
     return image, label

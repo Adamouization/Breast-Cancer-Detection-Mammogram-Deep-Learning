@@ -102,6 +102,8 @@ def preprocess_image(image_path: str) -> np.ndarray:
             target_size = (config.MINI_MIAS_IMG_SIZE['HEIGHT'], config.MINI_MIAS_IMG_SIZE["WIDTH"])
         elif config.model == "VGG-common":
             target_size = (config.VGG_IMG_SIZE['HEIGHT'], config.VGG_IMG_SIZE["WIDTH"])
+        elif config.model == "MobileNet":
+            target_size = (config.MOBILE_NET_IMG_SIZE['HEIGHT'], config.MOBILE_NET_IMG_SIZE["WIDTH"])
         elif config.model == "CNN":
             target_size = (config.ROI_IMG_SIZE['HEIGHT'], config.ROI_IMG_SIZE["WIDTH"])
         image = load_img(image_path, color_mode="grayscale", target_size=target_size)
@@ -151,6 +153,9 @@ def dataset_stratified_split(split: float, dataset: np.ndarray, labels: np.ndarr
 
 
 def calculate_class_weights(y_train, label_encoder):
+    """
+    Calculate class  weights for imbalanced datasets.
+    """
     if label_encoder.classes_.size != 2:
         y_train = label_encoder.inverse_transform(np.argmax(y_train, axis=1))
     
@@ -161,10 +166,10 @@ def calculate_class_weights(y_train, label_encoder):
     class_weights = dict(enumerate(weights))    
     
     # Manual class weights for CBIS-DDSM
-    #class_weights = {0: 1.0, 1:1.5}  
+    class_weights = {0: 1.0, 1:1.5}  
     
     # No class weights
-    class_weights = None
+    #class_weights = None
     
     if config.verbose_mode:
         print("Class weights: {}".format(str(class_weights)))
