@@ -152,6 +152,7 @@ To best make use of the transfer learning technique with the base model's weight
 \end{enumerate}
 
 \paragraph{Validation set \& early stopping}
+\label{sec:design-validation-early-stopping}
 
 To ensure that the model generalises well to unseen  data from the testing set, the training set is further split to form a validation set using a 75\%25\% split on training set; resulting in a 60\%/20\%/20\% of the full dataset. The validation set is used to make predictions at the end of each epoch by calculating the loss and accuracy. These values are then monitored to stop the training before the maximum number of epochs is reached if the validation accuracy or loss do not improve after a certain number of epochs, preventing the model from overfitting the data too much.\\
 
