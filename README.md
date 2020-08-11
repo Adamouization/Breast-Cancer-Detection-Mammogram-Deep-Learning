@@ -2,12 +2,6 @@
 
 Quick description.
 
-You can visit the [project] here: [text](url)
-
-## Screenshots
-
-![alt text](path)
-
 ## Usage on a GPU lab machine
 
 Clone the repository:
@@ -41,26 +35,22 @@ mkdir saved_models
 `cd` into the `src` directory and run the code:
 
 ```
-main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-gs] [-v]
+main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-lr LEARNING_RATE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-roi] [-v] [-n NAME]
 ```
 
 where:
 * `-h` is a flag for help on how to run the code.
-* `DATASET` is the dataset to use. Must be either `mini-MIAS`, `mini-MIAS-binary` or `CBIS-DDMS`.
+* `DATASET` is the dataset to use. Must be either `mini-MIAS`, `mini-MIAS-binary` or `CBIS-DDMS`. Defaults to `CBIS-DDMS`.
 * `MAMMOGRAMTYPE` is the type of mammograms to use. Can be either `calc`, `mass` or `all`. Defaults to `all`.
-* `MODEL` is the model to use. Must be either `VGG` or `ResNet`.
+* `MODEL` is the model to use. Must be either `VGG-common`, `VGG`, `ResNet`, `Inception`, `DenseNet`, `MobileNet` or `CNN`.
 * `RUNMODE` is the mode to run in (`train` or `test`). Default value is `train`.
-* `BATCHSIZE` is the batch size to use when training the model. Defaults to `2`.
+* `LEARNING_RATE` is the optimiser's initial learning rate when training the model during the first training phase (frozen layers). Defaults to `0.001`. Must be a positive float.
+* `BATCHSIZE` is the batch size to use when training the model. Defaults to `2`. Must be a positive integer.
 * `MAX_EPOCH_FROZEN` is the maximum number of epochs in the first training phrase (with frozen layers). Defaults to `100`.
 * `MAX_EPOCH_UNFROZEN`is the maximum number of epochs in the second training phrase (with unfrozen layers). Defaults to `50`.
-* `-gs` is a flag  to run the grid search algorithm to determine the optimal hyperparameters for the CNN model.
+* `-roi` is a flag to use versions of the images cropped around the ROI. Only usable with mini-MIAS dataset. Defaults to `False`.
 * `-v` is a flag controlling verbose mode, which prints additional statements for debugging purposes.
-
-Set the `PYTHONHASHSEED` environment variable to 0 before the program starts for reproducible results (e.g. when using hash-based operations):
-
-```
-PYTHONHASHSEED=0 main.py [-h] -d DATASET [-mt MAMMOGRAMTYPE] -m MODEL [-r RUNMODE] [-b BATCHSIZE] [-e1 MAX_EPOCH_FROZEN] [-e2 MAX_EPOCH_UNFROZEN] [-gs] [-v]
-```
+* `NAME` is name of the experiment being tested (used for saving plots and model weights). Defaults to an empty string.
 
 ## Dataset installation
 
@@ -108,9 +98,9 @@ python3 ../../../src/dataset_processing_scripts/mini-MIAS-initial-pre-processing
 
 #### DDSM and CBIS-DDSM datasets
 
-These datasets are very large (exceeding 160GB) and more complex than the mini-MIAS dataset to use. Downloading and pre-processing them will therefore not be covered by this README. 
+These datasets are very large (exceeding 160GB) and more complex than the mini-MIAS dataset to use. They were downloaded by the University of St Andrews School of Computer Science computing officers onto \textit{BigTMP}, a 15TB filesystem that is mounted on the Centos 7 computer lab clients with NVIDIA GPUsusually used for storing large working data sets. Therefore, the download process of these datasets will not be covered in these instructions.\\
 
-Our generated CSV files to use these datasets can be found in the `/data/CBIS-DDSM` directory, but the mammograms will have to be downloaded separately. The DDSM dataset can be downloaded [here](http://www.eng.usf.edu/cvprg/Mammography/Database.html), while the CBIS-DDSM dataset can be downloaded [here](https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM#5e40bd1f79d64f04b40cac57ceca9272).
+The generated CSV files to use these datasets can be found in the `/data/CBIS-DDSM` directory, but the mammograms will have to be downloaded separately. The DDSM dataset can be downloaded [here](http://www.eng.usf.edu/cvprg/Mammography/Database.html), while the CBIS-DDSM dataset can be downloaded [here](https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM#5e40bd1f79d64f04b40cac57ceca9272).
 
 ## To Do
 * see [TODO](path) file.
