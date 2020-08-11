@@ -104,7 +104,8 @@ A computationally-cheaper alternative consists of calculating class weights to b
 
 \section{Model training}
 
-\subsection{Sequential model} 
+\subsection{Sequential model}
+\label{sec:implementation-sequential-cnn-model}
 
 The CNN model is created in Keras through the custom \textit{Cnn\_model} class. The Keras \textit{Sequential} class is used to create the CNN model described in Section~\ref{sec:design-cnn-model-decision} by linearly stacking layers on top of one another. The input layer size is first specified to match the target size chosen in the pre-processing steps. Because a CNN pre-trained on ImageNet with RGB images (three channels) is used, the greyscale images have to be concatenated into a triple channel greyscale input:
 
