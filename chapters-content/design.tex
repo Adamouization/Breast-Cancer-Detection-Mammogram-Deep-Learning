@@ -192,14 +192,14 @@ For instance, if a dumb classifier that always classifies an image as ``normal''
 
 \subsubsection{Precision \& Recall}
 
-Precision corresponds to the number of correct positive predictions (see Equation~\ref{eq:precision}, CITE), showing the model's ability to avoid labelling negative instances as positive. 
+Precision corresponds to the number of correct positive predictions (see Equation~\ref{eq:precision}, \cite{Liu2009}), showing the model's ability to avoid labelling negative instances as positive. 
 
 \begin{equation}
 \label{eq:precision}
     Precision = \frac{TP}{TP+FP}
 \end{equation}
 
-Recall is the number of positive instances that are correctly predicted (see Equation~\ref{eq:recall}, CITE), showing how well the model can find all positive instances.
+Recall is the number of positive instances that are correctly predicted (see Equation~\ref{eq:recall}, \cite{Liu2009}), showing how well the model can find all positive instances.
 
 \begin{equation}
 \label{eq:recall}
@@ -208,7 +208,7 @@ Recall is the number of positive instances that are correctly predicted (see Equ
 
 \subsubsection{F1 Score}
 
-Together, precision and recall can be combined into a more concise metric, the \textit{F1 score}, which corresponds to the harmonic mean of precision and recall (see Equation \ref{eq:f1-score}). To achieve a high F1 score, both precision and recall must be high (unlike a regular mean) because as the precision goes down, the recall goes up, and vice versa, making the F1 score a reliable metric for evaluating a classifier since a balance between precision and recall must be found \citep{Geron2019}.
+Together, precision and recall can be combined into a more concise metric, the \textit{F1 score}, which corresponds to the harmonic mean of precision and recall (see Equation \ref{eq:f1-score}, \cite{Geron2019}). To achieve a high F1 score, both precision and recall must be high (unlike a regular mean) because as the precision goes down, the recall goes up, and vice versa, making the F1 score a reliable metric for evaluating a classifier since a balance between precision and recall must be found \citep{Geron2019}.
 
 \begin{equation}
 \label{eq:f1-score}
@@ -217,7 +217,7 @@ Together, precision and recall can be combined into a more concise metric, the \
 
 \subsubsection{Confusion matrix} 
 
-This visual metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels and each column corresponding to a prediction. It is beneficial for detecting which actual classes are being detected the most, and what predicted classes are misclassified as. To further highlight the misclassifications and compare predictions with other classifiers, the confusion matrices are normalised to show a percentage rather than a count \citep{Geron2019}.
+This visual metric plots the number of predictions made for each class for each possible class in a table, with each row corresponding to the actual labels and each column corresponding to a prediction. It is beneficial for detecting which actual classes are being detected the most, and what predicted classes are misclassified as \citep{Bhardwaj2015, Liu2009}. To further highlight the misclassifications and compare predictions with other classifiers, the confusion matrices are normalised to show a percentage rather than a count.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

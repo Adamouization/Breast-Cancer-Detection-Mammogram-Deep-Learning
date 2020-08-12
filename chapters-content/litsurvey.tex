@@ -97,7 +97,7 @@ Since the late 1990s, a rich array of supervised machine learning algorithms hav
 \subsubsection{k-Nearest Neighbours}
 \label{sec:litreview-knn}
 
-k-Nearest Neighbours (kNN) is one of the simplest machine learning algorithms and is often used as an initial benchmark when studying a dataset with no prior knowledge \citep{peterson2009k}. It is a non-parametric and lazy model, as it does not learn the data's pattern but rather classifies a test sample by looking at its $k$ nearest neighbours \citep{Yue2018}. The sample data point's nearest neighbours are determined by using distance metrics such as the Euclidian distance, defined by Equation~\ref{eq:euclidian-distance} ($n$-dimensional space between two data points $s$ and $p$) which is the most widely used metric \citep{peterson2009k}. Figure~\ref{fig:litsurvey-knn-example} depicts an example of how a kNN classifier would be used to distinguish between a benign and a malignant tumour using $k=3$.
+k-Nearest Neighbours (kNN) is one of the simplest machine learning algorithms and is often used as an initial benchmark when studying a dataset with no prior knowledge \citep{peterson2009k}. It is a non-parametric and lazy model, as it does not learn the data's pattern but rather classifies a test sample by looking at its $k$ nearest neighbours \citep{Yue2018}. The sample data point's nearest neighbours are determined by using distance metrics such as the Euclidian distance, which is the most widely used metric \citep{peterson2009k}. Equation~\ref{eq:euclidian-distance} (adapted from \cite{russell2002artificial}) calculates distance  between two data points $s$ and $p$ in $n$-dimensional space. An example of how a kNN classifier would be used to distinguish between a benign and a malignant tumour using $k=3$ is depicted in Figure~\ref{fig:litsurvey-knn-example}.
 
 \begin{equation}
 \label{eq:euclidian-distance}
@@ -106,7 +106,7 @@ k-Nearest Neighbours (kNN) is one of the simplest machine learning algorithms an
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=0.4\textwidth]{figures/litsurvey/knn.png}}
-\caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for a test data sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure retrieved online from T. Srivastava (\url{https://tinyurl.com/y3jqco49}).}
+\caption{\label{fig:litsurvey-knn-example}Example of a kNN classifier distinguishing between benign (blue square) and malignant (red triangle) tumours for a test data sample (green circle) using $k=3$. The test sample is classified as malignant as there are two red triangles and one blue square amongst the three neighbours. Figure retrieved from T. Srivastava (\url{https://tinyurl.com/y3jqco49}).}
 \end{figure}
 
 Generally used as an initial learning algorithm to experiment with new datasets, the kNN algorithm has been tested on distinctive datasets of mammograms for breast cancer detection such the ``Wisconsin Breast Cancer Wisconsin'' (WBCD) dataset, which contains ten extracted features such as clump thickness, cell size/shape, etc. \citep{Wolberg1995}. kNNs calibrated with $k=1$ and using the Euclidian distance achieved 98.25\% accuracy \citep{Sarkar2000} and 98.70\% accuracy \citep{AhmedMedjahed2013} on the WBCD dataset when compared with other values of $k$ ranging from 1 to 15 and using other distance metrics such Cityblock distance, cosine distance and correlation.\\
@@ -202,7 +202,7 @@ The structure of CNNs builds on top of the concepts of traditional ANNs (see Sec
 
 \paragraph{Convolution Layers}
 
-Neurons in the first convolutional layers are only connected to pixels in their receptive fields and not connected to every pixel in the image. Similarly, neurons in deeper convolutional layers are only connected to neurons in a small zone from the previous layer. This allows CNNs to first focus on low-level features, which are progressively assembled into high-level features as they get deeper. The more the receptive fields are spaced out (referred to as the stride), the smaller the next layer will be, thus considerably reducing the complexity of the CNN \citep{Geron2019}. Convolution is the mathematical operation that slides a moving a filter $f$ over an image $I$ to calculate a weighted sum (see Equation~\ref{eq:2d-convolution}). This 2D operation is possible in CNNs as layers are represented in 2D space and do not need to be flattened into a 1D array like with traditional neural networks, thus preserving the spatial information of images \citep{szeliski2010computer}.
+Neurons in the first convolutional layers are only connected to pixels in their receptive fields and not connected to every pixel in the image. Similarly, neurons in deeper convolutional layers are only connected to neurons in a small zone from the previous layer. This allows CNNs to first focus on low-level features, which are progressively assembled into high-level features as they get deeper. The more the receptive fields are spaced out (referred to as the stride), the smaller the next layer will be, thus considerably reducing the complexity of the CNN \citep{Geron2019}. Convolution is the mathematical operation that slides a moving a filter $f$ over an image $I$ to calculate a weighted sum (see Equation~\ref{eq:2d-convolution}, \cite{szeliski2010computer}). This 2D operation is possible in CNNs as layers are represented in 2D space and do not need to be flattened into a 1D array like with traditional neural networks, thus preserving the spatial information of images \citep{szeliski2010computer}.
 
 \begin{equation}
 \label{eq:2d-convolution}
@@ -230,7 +230,7 @@ At the end of the stack of convolutional and spooling layers, a fully connected 
 
 \subsubsection{CNN Architectures}
 
-CNN models such as AlexNet and VGG19, which have won the ImageNet challenge in 2012 and 2014, remain very popular nowadays, especially in domains like medical imagery analysis. More complex architectures such as GoogLeNet or ResNet are not worth the minor gains in terms of performance and computing resources usage as these are not important factors in medical data, only the accuracy of the predictions matters \citep{Litjens2017}.
+CNN models such as AlexNet and VGG19, which have won the ImageNet challenge in 2012 and 2014, remain very popular nowadays, especially in domains like medical imagery analysis where accuracies of 97.9\% have been reached in breast cancer detection using VGG16 \citep{Wang2016}. More complex architectures such as GoogLeNet or ResNet are not worth the minor gains in terms of performance and computing resources usage as these are not important factors in medical data, only the accuracy of the predictions matters \citep{Litjens2017}.
 
 % \begin{itemize}
 %     \item Deep Neural Networks
