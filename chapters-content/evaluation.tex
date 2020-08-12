@@ -8,6 +8,12 @@ The model described in Section~\ref{sec:design-cnn-model-decision} is used acros
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Baseline}
+
+Todo
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Base CNN Architectures}
 \label{sec:evaluation-cnn-model-experiment}
 
@@ -117,6 +123,8 @@ The ImageNet weights transfer confirmed the performance that can be gained, as w
 
 It is worth noting that training is slightly quicker when using weights from binary mini-MIAS (see Figure~\ref{fig:evaluation-transfer_learning_experiment-runtimes}) as the model converges more quickly towards a known solution. However, it is the early stopping conditions mentioned in Section~\ref{sec:design-validation-early-stopping} that dictate the training duration.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Mammogram Types}
 
 To assess how the model would adapt to samples from a single mammogram type only, the CBIS-DDSM dataset was separated into only masses samples and only calcifications samples (see Section~\ref{sec:ethics-datasets-cbisddsm} for samples). Three different experiments were tested:
@@ -138,3 +146,9 @@ However, the opposite effect is witnessed when MobileNetV2 is used a base model,
 \end{figure}
 
 In terms of runtime, training and prediction times are approximately twice as fast, since there is roughly twice less data after the dataset split (see Figure~\ref{fig:evaluation-mammogram_type_experiment-runtimes.png}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Results Summary}
+
+Todo

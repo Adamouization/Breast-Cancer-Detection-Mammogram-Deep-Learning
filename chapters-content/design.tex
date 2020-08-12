@@ -113,11 +113,11 @@ Different CNN architectures can be used as the base of a custom CNN model tailor
 If large images are used, then additional convolutional and spooling layers are added before the base model to downsample the image to smaller sizes and learn low-level features, followed by the pre-trained base model, a flatten layer to convert the output from 2D to 1D, and finally the MLP which will make the final prediction. Dropout layers are added in the MLP to avoid over-fitting.
 
 \begin{figure}[ht]
-\centerline{\includegraphics[width=1.1\textwidth]{figures/design/CNN architecture.png}}
+\centerline{\includegraphics[width=1.2\textwidth]{figures/design/CNN architecture.png}}
 \caption{\label{fig:design-CNN architecture}CNN architecture used. VGG19 image retrieved from \url{https://tinyurl.com/rpp49oc}.}
 \end{figure}
 
-\subsubsection{Model fitting}
+\subsubsection{Data fitting}
 
 \paragraph{Activation functions}
 
@@ -181,7 +181,7 @@ The following terminology is used to define the metrics used below:
 
 \subsubsection{Overall accuracy}
 
-The imbalanced class distributions (see Section~\ref{sec:design-dataset-balance}) must be taken into account when analysing the classifiers' scores. Indeed, using an evaluation metric such as overall accuracy (see Equation~\ref{eq:accuracy}, \cite{Falconi2019}) would be misleading as it would not be representative of how well the classifier fitted the data.
+The imbalanced class distributions (see Section~\ref{sec:design-dataset-balance}) must be taken into account when analysing the classifiers' scores. Indeed, using an evaluation metric such as overall accuracy (see Equation~\ref{eq:accuracy}, \cite{Falconi2019}) would be misleading as it would not be representative of how well the classifier fitted the data. Additionally, in breast cancer detection, detecting FPs and FNs is primordial to avoid interpreting malignant tumours as benign and vice versa, an interpretation which could harm the patient and eventually lead to its death.
 
 \begin{equation}
 \label{eq:accuracy}
