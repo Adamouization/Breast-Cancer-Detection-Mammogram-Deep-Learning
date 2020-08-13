@@ -19,7 +19,9 @@ Todo
 
 Five different CNN model architectures (VGG19, ResNet50, InceptionV3, DenseNet121 and MobileNetV2) are tested out as the model's base (pre-trained on ImageNet) using the model described in Section~\ref{sec:design-cnn-model-decision}. For this test, the CBIS-DDSM dataset is used with whole images resized to 512 x 512 pixels, a batch size of 2 and a learning rate of 0.0001.\\
 
-The results found in Table~\ref{tab:evaluation-cnn-models} clearly reveal that MobileNetV2 unlocks more performance than the others CNN architectures with a higher accuracy and F1 score. The original VGG19 architecture used during the development of the common pipeline is outperformed by more efficient models like DenseNet121 or MobileNetV2, but outperforms the ResNet50 and InceptionV3.
+The results found in Table~\ref{tab:evaluation-cnn-models} clearly reveal that MobileNetV2 unlocks more performance than the other CNN architectures with a higher accuracy and F1 score. The original VGG19 architecture used during the the common pipeline development is outperformed by more efficient models like DenseNet121 or MobileNetV2 but outperforms the ResNet50 and InceptionV3. These results contradicts Falconi's results on the CBIS-DDSM dataset, who finds that ResNet50 outperforms MobileNetV2 \citep{Falconi2019}. However, MobileNetV2 still outperforms InceptionV3. These results may differ due to the different pre-processing techniques being used as Falconi uses cropped images around ROIs, whereas whole images are  used in  this experiment.\\
+
+It is also worth noting  that using the model defined in Section~\ref{sec:design-cnn-model-decision} with the MobileNetV2 architecture already surpasses models that use traditional machine learning methods like SVMs with GLCM features, achieving 66.46\% accuracy against 63.03\% on the CBIS-DDSM dataset \citep{Sarosa2018}, confirming the points made in Section~\ref{sec:litsurvey-summary}. 
 
 \input{tables/evaluation/CNN_models}
 
@@ -34,7 +36,7 @@ However, observing the training and testing runtimes in Figure~\ref{fig:evaluati
 
 \section{Class Weights}
 
-Distinct variations of class weights are used on the CBIS-DDSM dataset to attempt to rectify the negative effects that can be introduced by imbalanced datasets without going through the process of data augmentation, which would considerably slow down the training time by a factor equal to the number of new images generated.\\
+Distinct variations of class weights are used on the CBIS-DDSM dataset to attempt to rectify the adverse effects that can be introduced by imbalanced datasets without going through the process of data augmentation, which would considerably slow down the training time by a factor equal to the number of new images generated.\\
 
 Table~\ref{tab:evaluation-class-weights} reports the three class weight values that were tested using the imbalanced CBIS-DDSM dataset with whole images resized to 512 x 512 pixels, a batch size of 2 and a learning rate of 0.0001:
 \begin{itemize}
@@ -53,7 +55,7 @@ Table~\ref{tab:evaluation-class-weights} reports the three class weight values t
 
 \input{tables/evaluation/class_weights}
 
-These results clearly depict how including balanced weights to the samples increases the accuracy across different base CNN models by 1.25-1.71\%. However, a manual weight increase for the minority class decreases the accuracy by 0.78-1.1\%, revealing the complexity of finding the right parameters for balancing datasets as the 50\% weight increase for malignant samples made the dataset even more imbalanced. The normalised confusion matrices found in Figures~\ref{fig:evaluation-class_weights_experiment-none} and \ref{fig:evaluation-class_weights_experiment-balanced} expose how including class weights leads to the model being more confused as many malignant samples are classified as benign.
+These results clearly depict how including balanced weights to the samples increases the accuracy across different base CNN models by 1.25-1.71\%, thus helping against the imbalanced dataset issue without resorting to techniques like data augmentation. However, a manual weight increase for the minority class decreases the accuracy by 0.78-1.1\%, revealing the complexity of finding the right parameters for balancing datasets as the 50\% weight increase for malignant samples made the dataset even more imbalanced. The normalised confusion matrices found in Figures~\ref{fig:evaluation-class_weights_experiment-none} and \ref{fig:evaluation-class_weights_experiment-balanced} expose how including class weights leads to the model being more confused as many malignant samples are classified as benign.
 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.75\textwidth]{figures/evaluation/class_weights_experiment/none.png}}
@@ -70,11 +72,11 @@ These results clearly depict how including balanced weights to the samples incre
 \section{Input Image Size}
 \label{sec:evaluation-input-image-size}
 
-Different image sizes are explored to determine their effect on the model's performance on the CBIS-DDSM dataset. For the smaller image sizes, larger batch sizes are used, whereas for the larger image sizes, smaller batch numbers are defined along with the extra convolutional and spooling layers mentioned in Section~\ref{sec:implementation-sequential-cnn-model} to make use of the larger image size as an attempt to learn lower-level features. The following image sizes are used:
+Different image sizes are explored to determine their effect on the model's performance on the CBIS-DDSM dataset. For the smaller image sizes, larger batch sizes are used, whereas for the larger image sizes, smaller batch numbers are defined along with the extra convolutional and pooling layers mentioned in Section~\ref{sec:implementation-sequential-cnn-model} to make use of the larger image size as an attempt to learn lower-level features. The following image sizes are used:
 \begin{itemize}
-    \item 224 x 224 pixels (chosen as most CNNs pre-trained on ImageNet use this size) with batch size of 8;
-    \item 512 x 512 pixels with batch size of 2;
-    \item 1024 x 1024 pixels (with additional convolutional/spooling layers) with batch size of 2.
+    \item 224 x 224 pixels (chosen as most CNNs pre-trained on ImageNet use this size) with a batch size of 8;
+    \item 512 x 512 pixels with a batch size of 2;
+    \item 1024 x 1024 pixels (with additional convolutional/pooling layers) with a batch size of 2.
 \end{itemize}
 
 \input{tables/evaluation/image_size}
@@ -102,7 +104,7 @@ Nevertheless, the accuracy/ training runtime trade-off is not primordial in brea
 \section{Varying Amounts of Transfer Learning}
 \label{sec:evaluation-transfer-learning}
 
-This experiment consists of expanding upon the concept of transfer learning. Instead of using a CNN pre-trained on ImageNet, weights of a model trained on a \textit{binarised} mini-MIAS dataset are transferred to the CBIS-DDSM dataset. To binarise the mini-MIAS dataset, the normal cases are dropped altogether, resulting in a very small dataset of 115 abnormal images (64 benign and 51 malignant). The model is then trained on the binary mini-MIAS dataset and its final weights are saved. Four different experiments using an identical CNN architecture are tested to assess the effect of transfer learning from the binarised mini-MIAS dataset to the larger CBIS-DDSM dataset:
+This experiment consists of expanding upon the concept of transfer learning. Instead of using a CNN pre-trained on ImageNet, weights of a model trained on a \textit{binarised} mini-MIAS dataset are transferred to the CBIS-DDSM dataset (see Section~\ref{sec:implementation-model-saving-minimiasbinary}). Four different experiments using an identical CNN architecture are tested to assess the effect of transfer learning from the binarised mini-MIAS dataset and ImageNet to the CBIS-DDSM dataset:
 \begin{itemize}
     \item Transfer learning of all layer weights (MobileNetV2 and MLP layers instantiated with binary mini-MIAS weights);
     \item Transfer learning of fully connected layer weights (MLP layers instantiated with binary mini-MIAS weights, MobileNetV2 layers instantiated with ImageNet weights);
@@ -114,7 +116,7 @@ This experiment consists of expanding upon the concept of transfer learning. Ins
 
 The results in Table~\ref{tab:evaluation-transfer-learning} clearly indicate that any form of transfer learning is better than random weight initialisation with such a small dataset. On the other hand, too much transfer learning by using all the weights from the model trained on the binary mini-MIAS dataset does generalise well to the CBIS-DDSM dataset. The best performance came from initialising MobileNetV2 with ImageNet weights and the MLP layers with the MLP layer weights trained on the binary mini-MIAS, achieving an F1 score of 67.17\%. This was closely followed by again using ImageNet weights for MobileNetV2 and random weights for the MLP layers which reached the same overall accuracy but a lower F1 score (66.48\%).\\
 
-The ImageNet weights transfer confirmed the performance that can be gained, as well the adaptive nature of CNNs, when using knowledge learned from larger general datasets for a more specific task like breast cancer detection.
+The ImageNet weights transfer confirmed the performance that can be gained, as well the adaptive nature of CNNs when using knowledge learned from large general datasets for a more specific task like breast cancer detection.
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=\textwidth]{figures/evaluation/transfer_learning_experiment/runtimes.png}}
@@ -136,7 +138,7 @@ To assess how the model would adapt to samples from a single mammogram type only
 
 \input{tables/evaluation/mammogram_types}
 
-These results show that the model using VGG19 as a base model learns the data much better when masses and calcifications are separated, reaching 64.35\% and 66.67\% accuracy respectively on the test set, but only managing 59.44\% when using the full CBIS-DDSM dataset. Indeed, the normalised confusion matrix on the full CBIS-DDSM dataset indicates that all instances are classified as ``benign'', indicating that the model gets confused when dealing with multiple views and cannot tell benign and malignant cases from each other. This outcome is in line with Hepsag's results, who achieves higher accuracies when classifying either masses or calcifications on another dataset \citep{Hepsag2017}, and confirms Elter's claim that masses are harder to detect than calcifications \citep{Elter2009}.\\
+These results show that the model using VGG19 as a base model learns the data much better when masses and calcifications are separated, reaching 64.35\% and 66.67\% accuracy respectively on the test set, but only managing 59.44\% when using the full CBIS-DDSM dataset. Indeed, the normalised confusion matrix on the full CBIS-DDSM dataset indicates that all instances are classified as ``benign'', indicating that the model gets confused when dealing with multiple views and cannot tell benign and malignant cases from each other. This outcome is in line with Hepsag's results, which achieve higher accuracies when classifying either masses or calcifications on another dataset \citep{Hepsag2017}, and confirms Elter's claim that masses are harder to detect than calcifications \citep{Elter2009}.\\
 
 However, the opposite effect is witnessed when MobileNetV2 is used a base model, with an accuracy of 67.08\% reached when the full dataset is used and only 63.12\% and 63.23\% accuracy for calcifications and masses respectively, contradicting the previous results.
 

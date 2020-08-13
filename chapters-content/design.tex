@@ -110,7 +110,7 @@ Due to the small nature of the CBIS-DDSM and mini-MIAS datasets used, state-of-t
 
 Different CNN architectures can be used as the base of a custom CNN model tailored for breast cancer detection. This is achieved by using popular CNN architectures available with Keras such as VGG19, ResNet50, InceptionV3, DenseNet121 and MobileNetV2 as the base of the CNN \citep{kerasApplications}. The fully connected layers of these models, which are designed for general classification of natural images into 1,000 different categories \citep{Krizhevsky2012}, are dropped from the model and replaced with a custom MLP. The fully-connected MLP contains hidden layers and an output layer with different activation functions based on the dataset used.\\
 
-If large images are used, then additional convolutional and spooling layers are added before the base model to downsample the image to smaller sizes and learn low-level features, followed by the pre-trained base model, a flatten layer to convert the output from 2D to 1D, and finally the MLP which will make the final prediction. Dropout layers are added in the MLP to avoid over-fitting.
+If large images are used, then additional convolutional and pooling layers are added before the base model to downsample the image to smaller sizes and learn low-level features, followed by the pre-trained base model, a flatten layer to convert the output from 2D to 1D, and finally the MLP which will make the final prediction. Dropout layers are added in the MLP to avoid over-fitting.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=1.2\textwidth]{figures/design/CNN architecture.png}}
@@ -121,7 +121,7 @@ If large images are used, then additional convolutional and spooling layers are 
 
 \paragraph{Activation functions}
 
-Different activation functions can be used in the output layer of the CNN (see Figure~\ref{fig:design-activation functions}). Typically, a single neuron with a sigmoid activation function is used for binary problems as it outputs an independent value between 0 and 1 that can be interpreted as a probability of the positive class. Inversely, a softmax activation function transforms the output of the last hidden layer into probabilities for each class that sum up to 1. These probabilities are dependent of each other, as each sample must belong to one class only, making it perfect for multi-class classification of breast mammograms (each sample can only be either normal, benign or malignant, so to increase the probability of one class, it must decrease it for another).
+Different activation functions can be used in the output layer of the CNN (see Figure~\ref{fig:design-activation functions}). Typically, a single neuron with a sigmoid activation function is used for binary problems as it outputs an independent value between 0 and 1 that can be interpreted as a probability of the positive class. Inversely, a softmax activation function transforms the output of the last hidden layer into probabilities for each class that sum up to 1 \citep{Litjens2017}. These probabilities are dependent of each other, as each sample must belong to one class only, making it perfect for multi-class classification of breast mammograms (each sample can only be either normal, benign or malignant, so to increase the probability of one class, it must decrease it for another).
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=1.1\textwidth]{figures/design/activation functions.png}}
