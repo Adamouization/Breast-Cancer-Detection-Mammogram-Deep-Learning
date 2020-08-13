@@ -166,10 +166,10 @@ def calculate_class_weights(y_train, label_encoder):
     class_weights = dict(enumerate(weights))    
     
     # Manual class weights for CBIS-DDSM
-    class_weights = {0: 1.0, 1:1.5}  
+    #class_weights = {0: 1.0, 1:1.5}  
     
     # No class weights
-    #class_weights = None
+    class_weights = None
     
     if config.verbose_mode:
         print("Class weights: {}".format(str(class_weights)))

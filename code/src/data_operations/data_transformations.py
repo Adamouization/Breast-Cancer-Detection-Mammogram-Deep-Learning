@@ -59,6 +59,15 @@ def generate_image_transforms(images, labels):
             elif config.model == "ResNet":
                 transformed_image = transformed_image.reshape(1, config.RESNET_IMG_SIZE['HEIGHT'],
                                                               config.RESNET_IMG_SIZE["WIDTH"], 1)
+            elif config.model == "MobileNet":
+                transformed_image = transformed_image.reshape(1, config.MOBILE_NET_IMG_SIZE['HEIGHT'],
+                                                              config.MOBILE_NET_IMG_SIZE["WIDTH"], 1)
+            elif config.model == "Inception":
+                transformed_image = transformed_image.reshape(1, config.INCEPTION_IMG_SIZE['HEIGHT'],
+                                                              config.INCEPTION_IMG_SIZE["WIDTH"], 1)
+            elif config.model == "DenseNet":
+                transformed_image = transformed_image.reshape(1, config.DENSE_NET_IMG_SIZE['HEIGHT'],
+                                                              config.DENSE_NET_IMG_SIZE["WIDTH"], 1)
 
             images_with_transforms = np.append(images_with_transforms, transformed_image, axis=0)
             transformed_label = label.reshape(1, len(label))
