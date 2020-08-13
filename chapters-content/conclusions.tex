@@ -1,24 +1,18 @@
-To complete.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Achievements}
 
-To complete.
-    
+The main goal of this project was to design and implement a deep learning pipeline capable of detecting cases of breast cancer in mammograms through various deep learning techniques. After investigating a wide array of techniques using a bag-of-tricks approach, a fully-functional pipeline with data pre-processing steps, a CNN model for learning the data and prediction visualisations was created.\\
+
+This deep learning pipeline exposed the effect of the different techniques used, achieving  positive results on the CBIS-DDSM dataset while revealing that some deep learning techniques offered more improvements than others, and that not all deep learning techniques behaved as expected.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Future Work}
+\section{Code Availability}
 
-Artefact removal (e.g. tags on the mammogram images).\\
+Digital Object Identifiers (DOI) have been generated for the open-sourced code repositories to ensure that the code can be permanently identified and referenced on the web, as URLs can easily change over time while DOIs remain immutable.\\
 
-More advanced image processing, as it is often an area where a large performance gains can be found \citep{Litjens2017}, by using techniques such as global contrast normalisation (GCN), local contrast normalisation, and Otsu’s threshold segmentation.\\
-
-A lot of overfitting, better model training.
+The code developed for this dissertation can be found online at the following URL: \url{https://github.com/Adamouization/Breast-Cancer-Detection-and-Segmentation}, while the code developed in common as a group at the beginning of the dissertation can be found online at the following URL: \url{https://doi.org/10.5281/zenodo.3975093} \citep{adam_jaamour_2020_3975093}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -27,18 +21,31 @@ A lot of overfitting, better model training.
 \section{Limitations}
 \label{sec:conclusions-limitations}
 
-Data bias (dataset mainly white, different manifestations of breast cancer amongst different people)?\\
+A known limitation concerning all breast cancer detection systems lies with the data. Indeed, the most widely used datasets of mammograms (e.g. DDSM) contain mammography data that mainly originates from white females located in North America (see Table~\ref{tab:conclusion-ddsm-patient-population}), which naturally introduces bias to the model learning this data \citep{Yala2019}.
 
-GPU size limited to 6GB (can  train on larger image sizes with large GPUs) \citep{Shen2017}.\\
+\input{tables/ddsm-patient-population-race}
 
-When given new instances from the test dataset, the model predicts class labels. However, these do not indicate the confidence of the prediction, as it can be anywhere between the limit of  the decision boundary to the extreme opposite. Therefore, from a clinical point of view, it is hard to make a decision based on the  predictions made by the system. Ideally, a confidence metric in the form of a probability or a percentage would be coupled with the predictions  to  motivate the next  step after the diagnosis. For example, if the confidence of  a malignant tumour is high,  then a breast conserving surgery or chemotherapy can be recommended, whereas if the confidence is low, then further tests such as biopsies  can be recommended. % https://www.cancerresearchuk.org/about-cancer/breast-cancer/treatment/surgery/remove-just-area-cancer
+Different body types linked to the geographic location of the patients used to create these databases can have a direct impact on the mammograms themselves and not generalise to females from other cultures. For example, a recent study with 53,000 North American females showed how diets that include dairy milk consumption might increase the risk of breast cancer by a maximum of 80\% based on the consumption \citep{Fraser2020}. This means that if these deep learning algorithms were implemented in clinics outside western countries, they might not generalise well to other body morphologies (e.g. due to different diets based on the geolocation's culture). This limitation could be resolved by collecting more varied data from multiple locations around the world, not just a single region, which would also help deep learning algorithms as more data is always welcomed.\\
+
+Another limitation in terms of the detection system's usability is the confidence of the predictions. Indeed, when given new test samples, the model predicts a class label, e.g. benign or malignant. However, these do not indicate the prediction's confidence, as it can be anywhere between the decision boundary's limit (not confident) and far from the decision boundary (confident). Therefore, from a clinical point of view, it is hard to make a decision based on the predictions made by a system similar to this one. Ideally, a probability-based confidence metric would be coupled with the predictions to motivate the next step after the diagnosis. For example, if the confidence of  a malignant tumour is high (e.g. 99\%),  then breast-conserving surgery or chemotherapy can be recommended, whereas if the confidence is low (e.g. 54\%), then further screening tests can be recommended instead.\\
+% https://www.cancerresearchuk.org/about-cancer/breast-cancer/treatment/surgery/remove-just-area-cancer
+
+Finally, the time frame of this project was a limiting factor in the final performance achieved as an extensive fine-tuning method like grid search would not have had the time to try different combinations of configurations and could not be implemented due to the issues mentioned in Section~\ref{sec:design-fine-tuning-bagoftricks}.
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Project Summary \& Reflections}
+\section{Future Work}
 
-To complete.
+The main area of work that requires improvements is the mammogram pre-processing as it is often an area where significant performance gains can be found \citep{Litjens2017} by using techniques such as global contrast normalisation (GCN), local contrast normalisation, and Otsu’s threshold segmentation. Artefacts such as tags on the x-rays and black backgrounds should all be removed using computer vision techniques to avoid having the CNN model irrelevant features.\\
 
-The individual code developed for this dissertation can be found online at the following URL: \url{https://github.com/Adamouization/Breast-Cancer-Detection-and-Segmentation}. The code developed in common as a group at the beginning of the dissertation can be found online at the following URL: \url{https://github.com/Adamouization/Breast-Cancer-Detection-Code}.
+Another area where improvements can be made is the fine-tuning to extract better performance on the datasets and avoid overfitting. With the data-preprocessing mentioned above, images would be smaller (e.g. no redundant dark background), which would allow for quicker runtimes (the results in Section~\ref{sec:evaluation-input-image-size} revealed that smaller images lower the training runtime), which would allow fine-tuning algorithms like grid search to explore more combinations of configurations in order to unlock better solutions.
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Reflections}
+
+This project was an exciting challenge from my point of view as it encompassed all the classical challenges that need to be faced when building deep learning algorithms, clearly showing that creating a solution with high performance is not as easy as it sounds. Having first-hand experienced a family member going through cancer, having the opportunity to use my knowledge to contribute to the field of cancer detection was motivating.
