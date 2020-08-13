@@ -191,7 +191,7 @@ CNNs are a type of neural network inspired by the human visual cortex, where neu
 
 CNNs differ from traditional ``shallow'' ANNs as they are not fully connected. Indeed, CNNs are partially connected, with neurons in one layer only connected to a few neurons from the previous layer, meaning that they can work with large images \citep{Geron2019}. In a fully-connected neural network with only 100 neurons in the first layer, a 1,000 x 1,000-pixel image would already have 100,000,000 connections\footnote{$1000 \cdot 1,000 = 1,000,000$ px; $1,000,000$px $\cdot 100$ neurons $= 100,000,000$ connections.} in that first layer alone. CNNs nowadays can work with images thousands of pixel large, including the ones found in mammogram datasets described in Chapter~\ref{ch:chapter-ethics-datasets}, processing them much faster than traditional machine learning methods.
 
-\subsubsection{CNN Structure}
+\subsubsection{CNN structure}
 
 The structure of CNNs builds on top of the concepts of traditional ANNs (see Section~\ref{sec:litsurvey-anns}) by piling stacks of convolutional layers and pooling layers that are followed by a fully connected network for classification (see Figure~\ref{fig:litsurvey-CNN-example}). The goal of the convolutional and pooling layers is to reduce the input images into a form that simple enough to be processed by other algorithms (the fully connected layers), retaining only useful information from the original image \citep{Shen2017}.
 
@@ -242,11 +242,12 @@ CNN models such as AlexNet and VGG19, which have won the ImageNet challenge in 2
 
 \subsection{Deep Learning Applications in Breast Cancer Detection}
 
-\subsubsection{Main Challenges}
+\subsubsection{Main challenges}
 
 Implementing deep learning models requires lots of data to achieve acceptable performance levels. However, labelled datasets are not always abundantly available as they require large amounts of time and computing resources to engineer large datasets with millions of images \citep{Krizhevsky2012} like ImageNet, which contains over 15 million high definition images from 15,000 different classes \citep{Deng2010}. With databases of mammograms barely exceeding 10,000 images, one of the challenges of implementing a deep learning CAD system is to gain access to the computing resources needed to process the data and implement the model, as well as overcoming the problem of small amounts of data while avoiding overfitting it. Overfitting occurs when the model learns the data too well (e.g. detail and noise) and does not generalise well to new cases as it only recognises cases it has seen \citep{dietterich1995overfitting}.
 
-\subsubsection{Transfer Learning}
+\subsubsection{Transfer learning}
+\label{sec:litreview-transfer-learning}
 
 A commonly used deep learning technique when only a little amount of data is available is transfer learning, which makes use of CNN models pre-trained on large general datasets. The knowledge gathered by high-performing CNNs in other general domains that have larger datasets can be transferred to a related domain such as medical imagery \citep{Falconi2019}.\\
 
@@ -254,11 +255,11 @@ These models are designed to classify millions of images across thousands of dif
 
 Shen et al. showed how using common CNN architectures such as VGG or ResNet pre-trained on ImageNet resulted in small accuracy increases. For instance, the accuracy improves by 2-27\% based on the number of patches used \citep{Shen2017}, while Diaz et al. demonstrated how two ResNet-50 models were tested with different weight initialisation: one on ImageNet weights and the other with random weights using the CBIS-DDSM dataset. The model using transfer learning achieved  84\% accuracy compared to 75\% accuracy \citep{Diaz2018}, clearly depicting the advantage of using CNNs with pre-trained weights. 
 
-\subsubsection{Regularisation Techniques}
+\subsubsection{Regularisation techniques}
 
 The drawback of the power showcased by deep neural networks such as CNNs is their tendency to overfit the data. To this end, new regularisation techniques were introduced to prevent overfitting.
 
-\paragraph{Data Augmentation}
+\paragraph{Data augmentation}
 \label{sec:litsurvey-data-augmentation}
 
 Another technique to counter small datasets is data augmentation, often used when attempting to learn a small dataset using complex deep learning models that have a large number of parameters, which may naturally lead to overfitting \citep{Jadoon2017}. The data is ``augmented'' by artificially creating similar realistic variants of the images found in the training set, considerably increasing the training set size. A varying amount of affine transformations can be applied to each image such as translation (shifting), rotation, scaling, shear, horizontal/vertical flips, brightness and contrast increases, etc. \citep{Hepsag2017}. Chen et al. show how applying data augmentation using affine transformations increases the accuracy from 83.6\% to 88.14\% using a ResNet-50 model \citep{Chen2019}.
@@ -279,7 +280,7 @@ Dropout works by randomly ignoring neurons in any layer (except the output layer
 \caption{\label{fig:litsurvey-dropout}Example of standard neural network (left) and a neural network with dropout applied (right). Figure retrieved from Srivastava et al. (2014).}
 \end{figure}
 
-\subsubsection{Technological Advances}
+\subsubsection{Technological advances}
 
 The main contributor to the rise of deep learning is linked to the large scale spread and availability of  Graphical Processing Units (GPU) in recent years. GPUs are much more powerful than the general-purpose Central Processing Units (CPU), as they can process large amounts of data in parallel. Initially designed for computer graphics in video games, GPUs are extremely efficient for large-matrix operations, rendering them vital in the field of deep learning \citep{Caulfield2009}. GPU-computing libraries such as CUDA or OpenCL make it possible to use the processing power of GPUs, leading to computing times that are 10 to 30 times faster than CPUs \citep{Litjens2017}.\\
 

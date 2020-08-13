@@ -81,14 +81,14 @@ Different image sizes are explored to determine their effect on the model's perf
 
 \input{tables/evaluation/image_size}
 
-The results in Table~\ref{tab:evaluation-image-size} clearly expose the accuracy increase by using 512 pixels-wide input size rather than 224, with a 0.63\% increase on VGG19 and 4.52\% increase on MobileNetV2. However, further increasing the input size to 1024 pixels has no positive effect as the accuracy drops by 4.52\% on VGG19 and leads to an Out Of Memory (OOM) error on MobileNetV2 despite lowering the batch size to 1.\\
+The results in Table~\ref{tab:evaluation-image-size} clearly expose the accuracy increase by using 512 pixels-wide input size rather than 224, with a 0.63\% increase on VGG19 and 4.52\% increase on MobileNetV2. However, further increasing the input size to 1024 pixels has no positive effect as the accuracy drops by 4.52\% on VGG19 and leads to an Out Of Memory (OOM) error on MobileNetV2, despite lowering the batch size to 1.\\
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=1.2\textwidth]{figures/evaluation/image_size_experiment/training_summary.png}}
 \caption{\label{fig:evaluation-image_size_experiment-training_summary}Evolution of the accuracy and loss during both training phases when testing 1024x1024 input size on VGG19.}
 \end{figure}
 
-Observing the evolution of the training accuracy and loss when using 1024 x 1024 pixels input size on VGG19 (see Figure~\ref{fig:evaluation-image_size_experiment-training_summary}), it can be seen that the validation loss increases while the training loss decreases and that both sets' training accuracies are increasing as well; which is a typical pattern of a model overfitting the data. Because the model is overfitting the data, a very high precision (66.94\%) but low recall (59.28\%) is witnessed in Table~\ref{tab:evaluation-image-size} for 1024x1024 input size, which is extremely bad as a BCD system that detects malignant cases as benign could lead to the death of the patient.\\
+Observing the evolution of the training accuracy and loss when using 1024 x 1024 pixels input size on VGG19 (see Figure~\ref{fig:evaluation-image_size_experiment-training_summary}), it can be seen that the validation loss increases while the training loss decreases and that both sets' training accuracies are increasing as well; which is a typical pattern of a model overfitting the data. Because the model is overfitting the data, a very high precision (66.94\%) but low recall (59.28\%) is witnessed in Table~\ref{tab:evaluation-image-size} for 1024x1024 input size, which is extremely detrimental as a BCD system that detects malignant cases as benign could lead to the death of the patient.\\
 
 As expected, increasing the image size also increases the training runtime (see Figure~\ref{fig:evaluation-image_size_experiment-runtimes}), which is boosted by a factor of 2.4 when increasing from 224 to 512 pixels, and a factor of 2.8 from 512 to 1024 pixels on VGG19. However, another advantage of MobileNetV2 over VGG19 is that it scales better to larger input sizes as increasing the input from 224 to 512 pixels only raises the runtime by a factor of 1.54, and prediction times are quicker than VGG19 predictions (13.5 minutes on average for MobileNetV2 compared to 21.3 minutes for VGG19).
 
@@ -97,7 +97,7 @@ As expected, increasing the image size also increases the training runtime (see 
 \caption{\label{fig:evaluation-image_size_experiment-runtimes}Training and prediction runtimes when using different input image sizes.}
 \end{figure}
 
-Nevertheless, the accuracy/ training runtime trade-off is not primordial in breast cancer detection as the goal is to develop a system that can correctly diagnose early forms of cancers in mammograms as accurately as possible, regardless of the runtime. Ultimately, prediction runtimes will matter when used in clinics.
+Nevertheless, the accuracy/training runtime trade-off is not primordial in breast cancer detection as the primary goal is to develop a system that can correctly diagnose early forms of cancers in mammograms as accurately as possible, regardless of the runtime. Ultimately, prediction runtimes will matter when used in clinics.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -114,9 +114,9 @@ This experiment consists of expanding upon the concept of transfer learning. Ins
 
 \input{tables/evaluation/transfer_learning}
 
-The results in Table~\ref{tab:evaluation-transfer-learning} clearly indicate that any form of transfer learning is better than random weight initialisation with such a small dataset. On the other hand, too much transfer learning by using all the weights from the model trained on the binary mini-MIAS dataset does generalise well to the CBIS-DDSM dataset. The best performance came from initialising MobileNetV2 with ImageNet weights and the MLP layers with the MLP layer weights trained on the binary mini-MIAS, achieving an F1 score of 67.17\%. This was closely followed by again using ImageNet weights for MobileNetV2 and random weights for the MLP layers which reached the same overall accuracy but a lower F1 score (66.48\%).\\
+The results in Table~\ref{tab:evaluation-transfer-learning} clearly indicate that any form of transfer learning is better than random weight initialisation with such a small dataset. On the other hand, too much transfer learning by using all the weights from the model trained on the binary mini-MIAS dataset does not generalise well to the CBIS-DDSM dataset. The best performance came from initialising MobileNetV2 with ImageNet weights and the MLP layers with the MLP layer weights trained on the binary mini-MIAS, achieving an F1 score of 67.17\%. This was closely followed by again using ImageNet weights for MobileNetV2 and random weights for the MLP layers which reached the same overall accuracy but a lower F1 score (66.48\%).\\
 
-The ImageNet weights transfer confirmed the performance that can be gained, as well the adaptive nature of CNNs when using knowledge learned from large general datasets for a more specific task like breast cancer detection.
+The ImageNet weights transfer confirmed the performance that can be gained, as well the adaptive nature of CNNs when using knowledge learned from large general datasets for a more specific task like breast cancer detection.\\
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=\textwidth]{figures/evaluation/transfer_learning_experiment/runtimes.png}}
@@ -140,7 +140,7 @@ To assess how the model would adapt to samples from a single mammogram type only
 
 These results show that the model using VGG19 as a base model learns the data much better when masses and calcifications are separated, reaching 64.35\% and 66.67\% accuracy respectively on the test set, but only managing 59.44\% when using the full CBIS-DDSM dataset. Indeed, the normalised confusion matrix on the full CBIS-DDSM dataset indicates that all instances are classified as ``benign'', indicating that the model gets confused when dealing with multiple views and cannot tell benign and malignant cases from each other. This outcome is in line with Hepsag's results, which achieve higher accuracies when classifying either masses or calcifications on another dataset \citep{Hepsag2017}, and confirms Elter's claim that masses are harder to detect than calcifications \citep{Elter2009}.\\
 
-However, the opposite effect is witnessed when MobileNetV2 is used a base model, with an accuracy of 67.08\% reached when the full dataset is used and only 63.12\% and 63.23\% accuracy for calcifications and masses respectively, contradicting the previous results.
+However, the opposite effect is witnessed when MobileNetV2 is used as a base model, with an accuracy of 67.08\% reached when the full dataset is used and only 63.12\% and 63.23\% accuracy for calcifications and masses respectively, contradicting the previous results.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=\textwidth]{figures/evaluation/mammogram_type_experiment/runtimes.png}}
