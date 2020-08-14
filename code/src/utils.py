@@ -100,7 +100,11 @@ def save_output_figure(title: str) -> None:
             title))  # bbox_inches='tight'
 
 
-def load_trained_model():
+def load_trained_model() -> None:
+    """
+    Load the model previously trained for the final evaluation using the test set.
+    :return: None
+    """
     print("Loading trained model")
     return load_model(
         "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_saved-model.h5".format(

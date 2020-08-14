@@ -22,7 +22,7 @@ def create_basic_cnn_model(num_classes: int):
 
     # Dropout
     model.add(Dropout(0.5, seed=config.RANDOM_SEED, name="Dropout_1"))
-    
+
     # FC
     model.add(Dense(1024, activation='relu', name='Dense_2'))
 

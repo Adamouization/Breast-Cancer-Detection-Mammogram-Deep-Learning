@@ -17,10 +17,6 @@ RESNET_IMG_SIZE = VGG_IMG_SIZE
 INCEPTION_IMG_SIZE = VGG_IMG_SIZE
 DENSE_NET_IMG_SIZE = VGG_IMG_SIZE
 MOBILE_NET_IMG_SIZE = VGG_IMG_SIZE
-# INCEPTION_IMG_SIZE = {
-#     "HEIGHT": 299,
-#     "WIDTH": 299
-# }
 XCEPTION_IMG_SIZE = INCEPTION_IMG_SIZE
 ROI_IMG_SIZE = {
     "HEIGHT": 224,
@@ -39,4 +35,4 @@ max_epoch_unfrozen = 50     # Max number of epochs when original CNN layers are 
 is_roi = False              # Use cropped version of the images
 verbose_mode = False        # Boolean used to print additional logs for debugging purposes.
 name = ""                   # Name of experiment.
-# is_grid_search = False      # Run the grid search algorithm to determine the optimal hyper-parameters for the model.
+# is_grid_search = False    # Run the grid search algorithm to determine the optimal hyper-parameters for the model.

@@ -1,6 +1,6 @@
 import ssl
 
-from tensorflow.keras.applications import ResNet50, ResNet152V2
+from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from tensorflow.python.keras import Sequential
 
@@ -22,9 +22,9 @@ def create_resnet50_model(num_classes: int):
     img_input = Input(shape=(config.RESNET_IMG_SIZE['HEIGHT'], config.RESNET_IMG_SIZE['WIDTH'], 1))
     img_conc = Concatenate()([img_input, img_input, img_input])
 
-    # Generate a ResNet50 model with pre-trained ImageNet weights, input as given above, excluded fully connected layers.
-    #model_base = ResNet50(include_top=False, weights="imagenet", input_tensor=img_conc)
-    model_base = ResNet152V2(include_top=False, weights="imagenet", input_tensor=img_conc)
+    # Generate a ResNet50 model with pre-trained ImageNet weights, input as given above, excluding fully connected
+    # layers.
+    model_base = ResNet50(include_top=False, weights="imagenet", input_tensor=img_conc)
 
     # Add fully connected layers
     model = Sequential()

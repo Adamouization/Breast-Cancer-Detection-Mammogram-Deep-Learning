@@ -49,7 +49,7 @@ def main() -> None:
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25,
                                                                       dataset=X_train,
                                                                       labels=y_train)
-            
+
             # Calculate class weights.
             class_weights = calculate_class_weights(y_train, l_e)
 
@@ -58,7 +58,7 @@ def main() -> None:
             X_train, y_train = generate_image_transforms(X_train, y_train)
             y_train_after_data_aug = y_train
             np.random.shuffle(y_train)
-            
+
             if config.verbose_mode:
                 print("Before data augmentation:")
                 print(Counter(list(map(str, y_train_before_data_aug))))
@@ -100,14 +100,14 @@ def main() -> None:
             X_train, X_val, y_train, y_val = dataset_stratified_split(split=0.25, dataset=images, labels=labels)
             train_dataset = create_dataset(X_train, y_train)
             validation_dataset = create_dataset(X_val, y_val)
-            
+
             # Calculate class weights.
             class_weights = calculate_class_weights(y_train, l_e)
 
             # Create and train CNN model.
             model = CnnModel(config.model, l_e.classes_.size)
-            #model.load_minimias_fc_weights()
-            #model.load_minimias_weights()
+            # model.load_minimias_fc_weights()
+            # model.load_minimias_weights()
 
             # Fit model.
             if config.verbose_mode:
@@ -216,7 +216,7 @@ def parse_command_line_arguments() -> None:
                         help="The maximum number of epochs in the second training phrase (with unfrozen layers). "
                              "Defaults to 50."
                         )
-    #parser.add_argument("-gs", "--gridsearch",
+    # parser.add_argument("-gs", "--gridsearch",
     #                    action="store_true",
     #                    default=False,
     #                    help="Include this flag to run the grid search algorithm to determine the optimal "
@@ -251,7 +251,7 @@ def parse_command_line_arguments() -> None:
         print_error_message()
     config.max_epoch_frozen = args.max_epoch_frozen
     config.max_epoch_unfrozen = args.max_epoch_unfrozen
-    #config.is_grid_search = args.gridsearch
+    # config.is_grid_search = args.gridsearch
     config.is_roi = args.roi
     config.verbose_mode = args.verbose
     config.name = args.name

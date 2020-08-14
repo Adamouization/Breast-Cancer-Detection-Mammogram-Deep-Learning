@@ -158,28 +158,28 @@ def calculate_class_weights(y_train, label_encoder):
     """
     if label_encoder.classes_.size != 2:
         y_train = label_encoder.inverse_transform(np.argmax(y_train, axis=1))
-    
+
     # Balanced class weights
     weights = class_weight.compute_class_weight("balanced",
                                                 np.unique(y_train),
                                                 y_train)
-    class_weights = dict(enumerate(weights))    
-    
+    class_weights = dict(enumerate(weights))
+
     # Manual class weights for CBIS-DDSM
-    #class_weights = {0: 1.0, 1:1.5}  
-    
+    #class_weights = {0: 1.0, 1:1.5}
+
     # No class weights
-    class_weights = None
-    
+    #class_weights = None
+
     if config.verbose_mode:
         print("Class weights: {}".format(str(class_weights)))
-        
-    return class_weights
 
+    return class_weights
 
 
 def crop_roi_image(data_dir):
     """
+    Crops the images from the mini-MIAS dataset.
     Function originally written by Shuen-Jen and amended by Adam Jaamour.
     """
     images = list()

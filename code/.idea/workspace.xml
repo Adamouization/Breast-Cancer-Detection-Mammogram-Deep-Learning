@@ -5,14 +5,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cnn_models/basic_cnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/basic_cnn.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cnn_models/cnn_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/cnn_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cnn_models/vgg19_common.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/vgg19_common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cnn_models/resnet50.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cnn_models/resnet50.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_operations/data_preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/data_preprocessing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_operations/data_transformations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/data_transformations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_operations/dataset_feed.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_operations/dataset_feed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_visualisation/csv_report.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_visualisation/csv_report.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_visualisation/plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_visualisation/plots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/grid_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/other/grid_search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.py" afterDir="false" />
     </list>
@@ -107,7 +104,10 @@
       <workItem from="1594746667599" duration="2048000" />
       <workItem from="1594975209866" duration="249000" />
       <workItem from="1595328765528" duration="3770000" />
-      <workItem from="1596658503099" duration="1140000" />
+      <workItem from="1596658503099" duration="1265000" />
+      <workItem from="1596711281366" duration="3000" />
+      <workItem from="1597186246893" duration="243000" />
+      <workItem from="1597399376392" duration="529000" />
     </task>
     <servers />
   </component>
@@ -144,11 +144,11 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="1638" height="295" key="GridCell.Tab.0.right/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594722750739" />
-    <state x="341" y="132" key="SettingsEditor" timestamp="1596658524845">
+    <state x="341" y="132" key="SettingsEditor" timestamp="1597399411102">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="341" y="145" key="SettingsEditor/-136.-1057.1920.1057/0.23.1680.967@0.23.1680.967" timestamp="1594401724434" />
-    <state x="341" y="132" key="SettingsEditor/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1594746684573" />
+    <state x="341" y="132" key="SettingsEditor/-136.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1597399411102" />
     <state x="341" y="132" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1596658524845" />
     <state x="628" y="446" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594482471233">
       <screen x="0" y="0" width="1680" height="1050" />

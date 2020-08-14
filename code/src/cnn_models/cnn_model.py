@@ -101,7 +101,7 @@ class CnnModel:
 
             # Plot the training loss and accuracy.
             plot_training_results(self.history, "Fine_tuning_training", is_frozen_layers=False)
-        
+
         # Small CNN (no transfer learning).
         else:
             self.compile_model(config.learning_rate)
@@ -179,7 +179,7 @@ class CnnModel:
                 class_weight=class_weights,
                 epochs=max_epochs,
                 callbacks=[
-                    EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True), # val_binary_accuracy
+                    EarlyStopping(monitor='val_loss', patience=patience, restore_best_weights=True),
                     ReduceLROnPlateau(patience=int(patience / 2))
                 ]
             )
@@ -309,28 +309,34 @@ class CnnModel:
                     config.name),
                 weights_and_biases
             )
-        # Local save: ../output/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
-        # BigTMP save: /cs/scratch/agj6/saved_models/dataset-{}_model-{}_b-{}_e1-{}_e2-{}
 
     def load_minimias_weights(self) -> None:
+        """
+        Load the weights from all the layers pre-trained on the binary mini-MIAS dataset.
+        :return: None.
+        """
         print("Loading all layers mini-MIAS-binary weights from h5 file.")
         self._model.load_weights(
             "/cs/scratch/agj6/saved_models/dataset-mini-MIAS-binary_mammogramtype-all_model-MobileNet_lr-0.0001_b-2_e1-150_e2-50_roi-False__all_weights.h5"
         )
-#         self._model.load_weights(
-#             "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_all_weights.h5".format(
-#                 config.dataset,
-#                 config.mammogram_type,
-#                 config.model,
-#                 config.learning_rate,
-#                 config.batch_size,
-#                 config.max_epoch_frozen,
-#                 config.max_epoch_unfrozen,
-#                 config.is_roi,
-#                 config.name)
-#         )
+        # self._model.load_weights(
+        #     "/cs/scratch/agj6/saved_models/dataset-{}_mammogramtype-{}_model-{}_lr-{}_b-{}_e1-{}_e2-{}_roi-{}_{}_all_weights.h5".format(
+        #         config.dataset,
+        #         config.mammogram_type,
+        #         config.model,
+        #         config.learning_rate,
+        #         config.batch_size,
+        #         config.max_epoch_frozen,
+        #         config.max_epoch_unfrozen,
+        #         config.is_roi,
+        #         config.name)
+        # )
 
     def load_minimias_fc_weights(self) -> None:
+        """
+        Load and set the weights from the fully connected layers pre-trained on the binary mini-MIAS dataset.
+        :return: None.
+        """
         print("Loading only FC layers mini-MIAS-binary weights from npy file.")
         weights = np.load(
             "/cs/scratch/agj6/saved_models/dataset-mini-MIAS-binary_mammogramtype-all_model-MobileNet_lr-0.0001_b-2_e1-150_e2-50_roi-False__fc_weights.npy"
@@ -347,8 +353,6 @@ class CnnModel:
         #         config.is_roi,
         #     config.name)
         # )
-        # weights = loaded_weights_and_biases[0]
-        # biases = loaded_weights_and_biases[1]
         self._model.layers[2].set_weights(weights)
 
 
