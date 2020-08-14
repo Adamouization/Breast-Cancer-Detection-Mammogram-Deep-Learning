@@ -1,4 +1,4 @@
-# Breast Cancer Detection in Mammograms Using Deep Learning Techniques [![GitHub license](https://img.shields.io/github/license/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/LICENSE)
+# Breast Cancer Detection in Mammograms Using Deep Learning Techniques [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3985051.svg)](https://doi.org/10.5281/zenodo.3985051) [![GitHub license](https://img.shields.io/github/license/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/LICENSE)
 
 Dissertation for the MSc Artificial Intelligence at the University of St Andrews (2020).
 
