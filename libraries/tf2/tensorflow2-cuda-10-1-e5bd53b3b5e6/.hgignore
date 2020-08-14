@@ -1,6 +1,0 @@
-syntax: glob
-
-*~
-venv/*
-venv-*/*
-pip_cache/*
