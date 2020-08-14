@@ -1,6 +1,16 @@
 # Breast Cancer Detection in Mammograms Using Deep Learning Techniques
 
-Quick description.
+Dissertation for the MSc Artificial Intelligence at the University of St Andrews (2020).
+
+## Abstract
+
+The objective of this dissertation is to explore various deep learning techniques that can be used to implement a system which learns how to detect instances of breast cancer in mammograms. Nowadays, breast cancer claims 11,400 lives on average every year in the UK, making it one of the deadliest diseases. Mammography is the gold standard for detecting early signs of breast cancer, which can help cure the disease during its early stages. However, incorrect mammography diagnoses are common and may harm patients through unnecessary treatments and operations (or a lack of treatments). Therefore, systems that can learn to detect breast cancer on their own could help reduce the number of incorrect interpretations and missed cases.
+
+Convolution Neural Networks (CNNs) are used as part of a deep learning pipeline initially developed in a group and further extended individually. A bag-of-tricks approach is followed to analyse the effects on performance and efficiency using diverse deep learning techniques such as different architectures (VGG19, ResNet50, InceptionV3, DenseNet121, MobileNetV2), class weights, input sizes, amounts of transfer learning, and types of mammograms.
+
+![image](https://raw.githubusercontent.com/Adamouization/Breast-Cancer-Detection-and-Segmentation/master/src/cnn_models/model.png?token=AEI7XLF4NI6QYRJTN3MKEHC7H6SHO)
+
+Ultimately, 67.08\% accuracy is achieved on the CBIS-DDSM dataset by transfer learning pre-trained ImagetNet weights to a MobileNetV2 architecture and pre-trained weights from a binary version of the mini-MIAS dataset to the fully connected layers of the model. Furthermore, using class weights to fight the problem of imbalanced datasets and splitting CBIS-DDSM samples between masses and calcifications also increases the overall accuracy. Other techniques tested such as data  augmentation and larger image sizes do not  yield increased accuracies, while the mini-MIAS dataset proves to be too small for any meaningful results using deep learning techniques. These results are compared with other papers using the CBIS-DDSM and mini-MIAS datasets, and with the baseline set during the implementation of a deep learning pipeline developed as a group.
 
 ## Usage on a GPU lab machine
 
@@ -102,14 +112,18 @@ These datasets are very large (exceeding 160GB) and more complex than the mini-M
 
 The generated CSV files to use these datasets can be found in the `/data/CBIS-DDSM` directory, but the mammograms will have to be downloaded separately. The DDSM dataset can be downloaded [here](http://www.eng.usf.edu/cvprg/Mammography/Database.html), while the CBIS-DDSM dataset can be downloaded [here](https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM#5e40bd1f79d64f04b40cac57ceca9272).
 
-## To Do
-* see [TODO](path) file.
-
 ## License 
-* see [LICENSE](path) file.
+* see [LICENSE](https://github.com/Adamouization/Breast-Cancer-Detection-and-Segmentation/blob/master/LICENSE) file.
+
+## Code Authors
+
+* Adam Jaamour
+* Ashay Patel
+* Shuen-Jen Chen
+
+The common pipeline can be found at [DOI 10.5281/zenodo.3975092](https://zenodo.org/record/3975093)
 
 ## Contact
 * Email: adam@jaamour.com
 * Website: www.adam.jaamour.com
 * LinkedIn: [linkedin.com/in/adamjaamour](https://www.linkedin.com/in/adamjaamour/)
-* Twitter: [@Adamouization](https://twitter.com/Adamouization)
