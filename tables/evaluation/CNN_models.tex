@@ -1,0 +1,18 @@
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{CNN Architecture} &
+  \multicolumn{1}{l}{\textbf{Overall Accuracy}} &
+  \multicolumn{1}{l}{\textbf{Precision}} &
+  \multicolumn{1}{l}{\textbf{Recall}} &
+  \multicolumn{1}{l}{\textbf{F1 Score}} \\ \midrule
+\textit{\textbf{VGG19}}       & 63.96\%          & 63.73\%          & 63.96\%          & 63.83\%          \\
+\textit{\textbf{ResNet50}}    & 61.00\%          & 64.23\%          & 61.00\%          & 61.23\%          \\
+\textit{\textbf{InceptionV3}} & 62.71\%          & 62.52\%          & 62.71\%          & 62.60\%          \\
+\textit{\textbf{DenseNet121}} & 64.74\%          & 65.81\%          & 64.74\%          & 65.03\%          \\
+\textit{\textbf{MobileNetV2}} & \textbf{66.46\%} & \textbf{66.25\%} & \textbf{66.46\%} & \textbf{66.33\%} \\ \bottomrule
+\end{tabular}
+\caption{Results achieved on the test set when using different CNN architectures as the base model pre-trained on ImageNet weights.}
+\label{tab:evaluation-cnn-models}
+\end{table}

@@ -1,0 +1,88 @@
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Transfer Learning} &
+  \multicolumn{1}{l}{\textbf{Overall Accuracy}} &
+  \multicolumn{1}{l}{\textbf{Precision}} &
+  \multicolumn{1}{l}{\textbf{Recall}} &
+  \multicolumn{1}{l}{\textbf{F1 Score}} \\ \midrule
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}Full\\ mini-MIAS-binary\\ transfer learning\end{tabular}}}     & 63.18\% & 64.07\% & 63.18\% & 63.45\% \\ \cmidrule(r){1-1}
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}MLP layers\\ mini-MIAS-binary \\ transfer learning\end{tabular}}} &
+  \textbf{67.08\%} &
+  \textbf{67.28\%} &
+  \textbf{67.08\%} &
+  \textbf{67.17\%} \\ \cmidrule(r){1-1}
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}MobileNet layers\\ ImageNet\\ transfer learning\end{tabular}}} & 67.08\% & 66.50\% & 67.08\% & 66.48\% \\ \cmidrule(r){1-1}
+\textit{\textbf{\begin{tabular}[c]{@{}l@{}}No transfer learning \\ (random weights)\end{tabular}}}        & 61.62\% & 61.00\% & 61.62\% & 61.17\% \\ \bottomrule
+\end{tabular}%
+}
+\caption{Results achieved on the test set when using different amounts of transfer learning on the CBIS-DDSM dataset with the MobileNetV2 base model.}
+\label{tab:evaluation-transfer-learning}
+\end{table}
+
+% \begin{table}[h]
+% \centering
+% \resizebox{\textwidth}{!}{%
+% \begin{tabular}{@{}llcccc@{}}
+% \toprule
+% \textbf{\begin{tabular}[c]{@{}l@{}}Base\\ Model\end{tabular}} &
+%   \textbf{\begin{tabular}[c]{@{}l@{}}Transfer\\ Learning\end{tabular}} &
+%   \multicolumn{1}{l}{\textbf{\begin{tabular}[c]{@{}l@{}}Overall \\ Accuracy\end{tabular}}} &
+%   \multicolumn{1}{l}{\textbf{Precision}} &
+%   \multicolumn{1}{l}{\textbf{Recall}} &
+%   \multicolumn{1}{l}{\textbf{F1 Score}} \\ \midrule
+% \multirow{4}{*}{\textbf{VGG19 Common}} &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}Full \\ mini-MIAS-binary \\ transfer learning\end{tabular}}} &
+%   57.87\% &
+%   62.41\% &
+%   57.88\% &
+%   57.81\% \\ \cmidrule(lr){2-2}
+%  &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}Fully \\ connected layers \\ mini-MIAS-binary \\ transfer learning\end{tabular}}} &
+%   58.97\% &
+%   60.43\% &
+%   58.97\% &
+%   59.33\% \\ \cmidrule(lr){2-2}
+%  &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}ImageNet \\ transfer learning\end{tabular}}} &
+%   59.44\% &
+%   35.33\% &
+%   59.44\% &
+%   44.32\% \\ \cmidrule(lr){2-2}
+%  &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}No transfer learning\\ (random weights)\end{tabular}}} &
+%   60.37\% &
+%   61.00\% &
+%   60.37\% &
+%   60.60\% \\ \cmidrule(r){1-2}
+% \multirow{4}{*}{\textbf{MobileNetV2}} &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}Full \\ mini-MIAS-binary \\ transfer learning\end{tabular}}} &
+%   63.18\% &
+%   64.07\% &
+%   63.18\% &
+%   63.45\% \\ \cmidrule(lr){2-2}
+%  &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}Fully \\ connected layers \\ mini-MIAS-binary \\ transfer learning\end{tabular}}} &
+%   \textbf{67.08\%} &
+%   \textbf{67.28\%} &
+%   \textbf{67.08\%} &
+%   \textbf{67.17\%} \\ \cmidrule(lr){2-2}
+%  &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}ImageNet \\ transfer learning\end{tabular}}} &
+%   \textbf{67.08\%} &
+%   66.50\% &
+%   \textbf{67.08\%} &
+%   66.48\% \\ \cmidrule(lr){2-2}
+%  &
+%   \textit{\textbf{\begin{tabular}[c]{@{}l@{}}No transfer learning\\ (random weights)\end{tabular}}} &
+%   61.62\% &
+%   61.00\% &
+%   61.62\% &
+%   61.17\% \\ \cmidrule(r){1-2}
+% \end{tabular}%
+% }
+% \caption{Results achieved on the test set when using different amounts of transfer learning on the CBIS-DDSM dataset using the custom MobileNetV2 and VGG19 models.}
+% \label{tab:evaluation-transfer-learning}
+% \end{table}

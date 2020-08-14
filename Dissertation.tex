@@ -1,0 +1,105 @@
+\documentclass[11pt,oneside,a4paper]{report} % electronic version (no blank pages)
+% \documentclass[11pt,openright,twoside,a4paper]{report}  % print version (start on right side)
+\include{DissertationDefs}
+
+% title page
+\title{Breast Cancer Detection in Mammograms using Deep Learning Techniques}
+\titlepic{\includegraphics[width=0.45\linewidth]{figures/st-andrews-logo.jpeg}}
+\author{Adam Jaamour}
+\date{Masters of Science in Artificial Intelligence\\The University of St Andrews\\August 2020}
+
+\begin{document}
+
+\setcounter{page}{0}
+\pagenumbering{roman}
+
+\maketitle
+\newpage
+
+\declaration{Breast Cancer Detection in Mammograms using Deep Learning Techniques}{Adam Jaamour}
+\newpage
+
+% Abstract
+\abstract
+\input{chapters-content/abstract.tex}
+\newpage
+
+% Tables of Content/Figures/Tables
+\setcounter{tocdepth}{3}
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+\input{acronyms}
+\printnomenclature 
+\newpage
+
+% Acknowledgements
+\chapter*{Acknowledgements}
+\input{chapters-content/acknowledgments.tex}
+\newpage
+
+% Begin main body
+
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\label{ch:chapter-intro}
+\input{chapters-content/introduction.tex}
+
+\chapter{Context Survey}
+\label{ch:chapter-litsurvey}
+\input{chapters-content/litsurvey.tex}
+
+\chapter{Ethics \& Datasets}
+\label{ch:chapter-ethics-datasets}
+\input{chapters-content/ethics-datasets}
+
+\chapter{Design}
+\label{ch:chapter-design}
+\input{chapters-content/design.tex}
+
+\chapter{Implementation}
+\label{ch:chapter-implementation}
+\input{chapters-content/implementation.tex}
+
+\chapter{Results \& Evaluation}
+\label{ch:chapter-evaluation}
+\input{chapters-content/evaluation.tex}
+
+\chapter{Conclusions}
+\label{ch:chapter-conclusions}
+\input{chapters-content/conclusions.tex}
+
+\bibliography{Bibliography}
+
+% \let\cleardoublepage\clearpage % don't automatically start appendix chapters on odd pages
+\appendix
+
+\chapter{Ethical Application Approval Letter}
+\label{ch:appendix-ethical-approval-letter}
+\input{chapters-content/appendix/ethical-approval-letter.tex}
+
+\chapter{Languages \& Frameworks Comparison}
+\input{chapters-content/appendix/programming_languages_comparison}
+
+\chapter{Usage Instructions}
+\label{ch:appendix-usage-instructions}
+\input{chapters-content/appendix/instructions.tex}
+
+\chapter{Remote Work Environment}
+\label{ch:appendix-remote-work-environment}
+\input{chapters-content/appendix/remote-work-setup.tex}
+
+\chapter{Team Meeting Summaries}
+\label{ch:appendix-team-meeting-summaries}
+\input{chapters-content/appendix/team_meetings.tex}
+
+\chapter{Coding Project Structure}
+\label{ch:appendix-coding-project-structure}
+\input{chapters-content/appendix/project_structure.tex}
+
+\end{document}
