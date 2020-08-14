@@ -1,4 +1,4 @@
-# Breast Cancer Detection in Mammograms Using Deep Learning Techniques
+# Breast Cancer Detection in Mammograms Using Deep Learning Techniques [![GitHub license](https://img.shields.io/github/license/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/LICENSE) [![HitCount](http://hits.dwyl.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning.svg)](http://hits.dwyl.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning)
 
 Dissertation for the MSc Artificial Intelligence at the University of St Andrews (2020).
 
