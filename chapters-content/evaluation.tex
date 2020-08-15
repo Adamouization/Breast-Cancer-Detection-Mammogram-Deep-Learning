@@ -2,43 +2,101 @@ This section covers the bag-of-tricks approach mentioned in Section~\ref{sec:des
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Model Used}
+\section{Test Data}
 
-The model described in Section~\ref{sec:design-cnn-model-decision} is used across all the experiments in this chapter, using both VGG19 and MobileNetV2 as the base model (except for the first experiment in Section~\ref{sec:evaluation-cnn-model-experiment}), a fully connected MLP with [512, 32, 2] neurons, a dropout layer using $p=0.2$, the Adam optimiser and whole images. Only the dataset, batch size, learning rate (0.001 or 0.0001), class weights, input size, weight initialisation and type of mammograms vary across the following experiments.
+CBIS-DDSM dataset contains the following number of test samples:
+\begin{itemize}
+    \item Total: 641
+    \begin{itemize}
+        \item Benign: 381
+        \item Malignant: 260
+    \end{itemize}
+\end{itemize}
+
+The mini-MIAS dataset contains the following number of test samples:
+\begin{itemize}
+    \item Total: 65
+    \begin{itemize}
+        \item Normal: 42
+        \item Benign: 13
+        \item Malignant: 10
+    \end{itemize}
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Baseline}
+\section{Model Used}
 
-Todo
+The model described in Section~\ref{sec:design-cnn-model-decision} is used across all the experiments in this chapter. Only the dataset, base CNN architecture, batch size, class weights, data augmentation factor, input size, weight initialisation and type of mammograms vary across the following experiments. The following remain constant across the experiments:
+\begin{itemize}
+    \item fully connected MLP with 512 and 32 hidden neurons and 2/3 output neurons;
+    \item dropout layer using $p=0.2$;
+    \item Adam optimiser with a learning rate of 0.001 for VGG19 and 0.0001 for MobileNetV2;
+    \item whole images.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Baseline Results}
+
+An overall accuracy of 63.96\% is achieved using the deep learning pipeline developed as a group \citep{adam_jaamour_2020_3975093}, and is used as a benchmark to compare the results obtained through the different bag-of-tricks techniques.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Base CNN Architectures}
 \label{sec:evaluation-cnn-model-experiment}
 
-Five different CNN model architectures (VGG19, ResNet50, InceptionV3, DenseNet121 and MobileNetV2) are tested out as the model's base (pre-trained on ImageNet) using the model described in Section~\ref{sec:design-cnn-model-decision}. For this test, the CBIS-DDSM dataset is used with whole images resized to 512 x 512 pixels, a batch size of 2 and a learning rate of 0.0001.\\
-
-The results found in Table~\ref{tab:evaluation-cnn-models} clearly reveal that MobileNetV2 unlocks more performance than the other CNN architectures with a higher accuracy and F1 score. The original VGG19 architecture used during the the common pipeline development is outperformed by more efficient models like DenseNet121 or MobileNetV2 but outperforms the ResNet50 and InceptionV3. These results contradicts Falconi's results on the CBIS-DDSM dataset, who finds that ResNet50 outperforms MobileNetV2 \citep{Falconi2019}. However, MobileNetV2 still outperforms InceptionV3. These results may differ due to the different pre-processing techniques being used as Falconi uses cropped images around ROIs, whereas whole images are  used in  this experiment.\\
-
-It is also worth noting  that using the model defined in Section~\ref{sec:design-cnn-model-decision} with the MobileNetV2 architecture already surpasses models that use traditional machine learning methods like SVMs with GLCM features, achieving 66.46\% accuracy against 63.03\% on the CBIS-DDSM dataset \citep{Sarosa2018}, confirming the points made in Section~\ref{sec:litsurvey-summary}. 
+Five different CNN model architectures pre-trained on ImageNet (VGG19, ResNet50, InceptionV3, DenseNet121 and MobileNetV2) are tested out as the model's base. For this test, the CBIS-DDSM dataset is used with whole images resized to 512 x 512 pixels, a batch size of 2 and a learning rate of 0.0001.
 
 \input{tables/evaluation/CNN_models}
 
-However, observing the training and testing runtimes in Figure~\ref{fig:evaluation-CNN_models_experiment-runtimes} reveals that VGG19 takes the longest time to train with 3h50m, whereas the more efficient MobileNetV2 architecture takes 2h46. Additionally, prediction runtime is 2.3 times faster with MobileNetV2 compared to VGG19, which is more useful for clinics as mammogram diagnosis results can be returned faster.
+The results found in Table~\ref{tab:evaluation-cnn-models} clearly reveal that MobileNetV2 unlocks more performance than the other CNN architectures with a higher accuracy and F1 score. The original VGG19 architecture used during the common pipeline development is outperformed by more efficient models like DenseNet121 or MobileNetV2 but outperforms ResNet50 and InceptionV3. These results contradict Falconi's results on the CBIS-DDSM dataset, who finds that ResNet50 outperforms MobileNetV2 \citep{Falconi2019}. However, MobileNetV2 still outperforms InceptionV3. These results may differ due to the different pre-processing techniques being used as Falconi uses cropped images around ROIs, whereas whole images are  used in  this experiment.\\
+
+It is also worth noting that using MobileNetV2 a base architecture (66.46\% accuracy) already surpasses the baseline (63.96\% accuracy), as  well as models that use traditional machine learning methods like SVMs with GLCM features (63.03\% accuracy) on the CBIS-DDSM dataset \citep{Sarosa2018}, confirming the points made in Section~\ref{sec:litsurvey-summary}.\\
+
+However, observing the training and testing runtimes in Figure~\ref{fig:evaluation-CNN_models_experiment-runtimes} reveals that VGG19 takes the longest time to train with 3h50m, whereas the more efficient MobileNetV2 architecture takes 2h46m. Additionally, prediction runtime is 2.3 times faster with MobileNetV2 compared to VGG19, which is more useful for clinics as mammogram diagnosis results can be returned faster.
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=\textwidth]{figures/evaluation/CNN_models_experiment/runtimes.png}}
-\caption{\label{fig:evaluation-CNN_models_experiment-runtimes}Training and prediction runtimes when using different CNN architectures as the base model pre-trained on ImageNet.}
+\caption{\label{fig:evaluation-CNN_models_experiment-runtimes}Training (2445 samples) and prediction (641 samples) runtimes on the CBIS-DDSM dataset when using different CNN architectures as the base model pre-trained on ImageNet .}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Class Weights}
+\section{Class Imbalance}
 
-Distinct variations of class weights are used on the CBIS-DDSM dataset to attempt to rectify the adverse effects that can be introduced by imbalanced datasets without going through the process of data augmentation, which would considerably slow down the training time by a factor equal to the number of new images generated.\\
+\subsection{Data Augmentation}
 
-Table~\ref{tab:evaluation-class-weights} reports the three class weight values that were tested using the imbalanced CBIS-DDSM dataset with whole images resized to 512 x 512 pixels, a batch size of 2 and a learning rate of 0.0001:
+Varying amounts of data augmentation are carried out on the mini-MIAS dataset (due to time constraints, this experiment could not be tested on the CBIS-DDSM dataset):
+\begin{itemize}
+    \item No data augmentation;
+    \item Data augmentation to balance class (create artificial benign and malignant samples to  reach the number of normal samples);
+    \item Double data augmentation.
+\end{itemize}
+
+\input{tables/evaluation/data_augmentation}
+
+Table~\ref{tab:evaluation-data-augmentation} betrays the inefficiency of data augmentation on small datasets like mini-MIAS. Even doubling the amount of data maintains the same accuracy (64.62\%) as no data augmentation, confirmed by the identical accuracy and recall, which indicates that the model is overfitting. Indeed, the confusion matrix in Figure~\ref{fig:evaluation-data_augmentation_experiment/confusion_matrix} confirms that all test samples are classified as normal despite the data augmentation.
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=0.8\textwidth]{figures/evaluation/data_augmentation_experiment/confusion_matrix_mobilenetv2_double.png}}
+\caption{\label{fig:evaluation-data_augmentation_experiment/confusion_matrix}Confusion matrix when double data augmentation is applied on the mini-MIAS test dataset with MobileNetV2 as the base model.}
+\end{figure}
+
+Only when a few artificial samples are created for minority classes can the model make predictions other than ``normal'', but not well enough as the accuracy tumbles to 36.92-41.54\% depending on the base model used. This model performs worse than other papers on the mini-MIAS dataset, which can be due to the lack of image pre-processing used as Hepsag crops the images around  the ROI rather than using whole images, achieving 68\% accuracy \citep{Hepsag2017}.\\
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=\textwidth]{figures/evaluation/data_augmentation_experiment/runtimes.png}}
+\caption{\label{fig:evaluation-data_augmentation_experiment-runtimes.png}Training runtimes when using no data augmentation, augmentation to fix class balance and to double the training set  size (744, 372 and 192 samples respectively) on the mini-MIAS dataset.}
+\end{figure}
+
+In terms of the training runtime witnessed in Figure~\ref{fig:evaluation-data_augmentation_experiment-runtimes.png}, the more data augmentation is applied, the longer the runtime is, which is expected as there is more data to process.
+
+%%%%%%%%%
+
+\subsection{Class Weights}
+
+Distinct variations of class weights are used on the CBIS-DDSM dataset to attempt to rectify the adverse effects that can be introduced by imbalanced datasets without going through the unsuccessful process of data augmentation, which considerably slows down the training time. Table~\ref{tab:evaluation-class-weights} reports the three class weight values that were tested using the imbalanced CBIS-DDSM dataset with whole images resized to 512 x 512 pixels, a batch size of 2 and a learning rate of 0.0001:
 \begin{itemize}
     \item No class weights (dataset remains imbalanced);
     \item Balanced class weights:
@@ -57,12 +115,12 @@ Table~\ref{tab:evaluation-class-weights} reports the three class weight values t
 
 These results clearly depict how including balanced weights to the samples increases the accuracy across different base CNN models by 1.25-1.71\%, thus helping against the imbalanced dataset issue without resorting to techniques like data augmentation. However, a manual weight increase for the minority class decreases the accuracy by 0.78-1.1\%, revealing the complexity of finding the right parameters for balancing datasets as the 50\% weight increase for malignant samples made the dataset even more imbalanced. The normalised confusion matrices found in Figures~\ref{fig:evaluation-class_weights_experiment-none} and \ref{fig:evaluation-class_weights_experiment-balanced} expose how including class weights leads to the model being more confused as many malignant samples are classified as benign.
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{\includegraphics[width=0.75\textwidth]{figures/evaluation/class_weights_experiment/none.png}}
 \caption{\label{fig:evaluation-class_weights_experiment-none}Normalised confusion matrix when no class weights are used with MobileNetV2 as the base model on the CBIS-DDSM dataset.}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centerline{\includegraphics[width=0.75\textwidth]{figures/evaluation/class_weights_experiment/balanced.png}}
 \caption{\label{fig:evaluation-class_weights_experiment-balanced}Normalised confusion matrix when balanced class weights are used with MobileNetV2 as the base model on the CBIS-DDSM dataset.}
 \end{figure}
@@ -72,29 +130,29 @@ These results clearly depict how including balanced weights to the samples incre
 \section{Input Image Size}
 \label{sec:evaluation-input-image-size}
 
-Different image sizes are explored to determine their effect on the model's performance on the CBIS-DDSM dataset. For the smaller image sizes, larger batch sizes are used, whereas for the larger image sizes, smaller batch numbers are defined along with the extra convolutional and pooling layers mentioned in Section~\ref{sec:implementation-sequential-cnn-model} to make use of the larger image size as an attempt to learn lower-level features. The following image sizes are used:
+Different image sizes are explored to determine their effect on the model's performance on the CBIS-DDSM dataset. For the smaller image sizes, larger batch sizes are used, whereas for the larger image sizes, smaller batch numbers are defined along with the extra convolutional and pooling layers mentioned in Section~\ref{sec:implementation-sequential-cnn-model} to accommodate the larger image size:
 \begin{itemize}
     \item 224 x 224 pixels (chosen as most CNNs pre-trained on ImageNet use this size) with a batch size of 8;
     \item 512 x 512 pixels with a batch size of 2;
     \item 1024 x 1024 pixels (with additional convolutional/pooling layers) with a batch size of 2.
 \end{itemize}
 
-\input{tables/evaluation/image_size}
+The results in Table~\ref{tab:evaluation-image-size} clearly expose the accuracy increase when using 512 pixels-wide input size rather than 224, with a 0.63\% increase on VGG19 and 4.52\% increase on MobileNetV2. However, further increasing the input size to 1024 pixels has no positive effect as the accuracy drops by 4.52\% on VGG19 and leads to an Out Of Memory (OOM) error on MobileNetV2, despite lowering the batch size to 1.
 
-The results in Table~\ref{tab:evaluation-image-size} clearly expose the accuracy increase by using 512 pixels-wide input size rather than 224, with a 0.63\% increase on VGG19 and 4.52\% increase on MobileNetV2. However, further increasing the input size to 1024 pixels has no positive effect as the accuracy drops by 4.52\% on VGG19 and leads to an Out Of Memory (OOM) error on MobileNetV2, despite lowering the batch size to 1.\\
+\input{tables/evaluation/image_size}
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=1.2\textwidth]{figures/evaluation/image_size_experiment/training_summary.png}}
 \caption{\label{fig:evaluation-image_size_experiment-training_summary}Evolution of the accuracy and loss during both training phases when testing 1024x1024 input size on VGG19.}
 \end{figure}
 
-Observing the evolution of the training accuracy and loss when using 1024 x 1024 pixels input size on VGG19 (see Figure~\ref{fig:evaluation-image_size_experiment-training_summary}), it can be seen that the validation loss increases while the training loss decreases and that both sets' training accuracies are increasing as well; which is a typical pattern of a model overfitting the data. Because the model is overfitting the data, a very high precision (66.94\%) but low recall (59.28\%) is witnessed in Table~\ref{tab:evaluation-image-size} for 1024x1024 input size, which is extremely detrimental as a BCD system that detects malignant cases as benign could lead to the death of the patient.\\
+Observing the evolution of the training accuracy and loss when using 1024 x 1024 pixels input size on VGG19 (see Figure~\ref{fig:evaluation-image_size_experiment-training_summary}), it can be seen that the validation loss increases while the training loss decreases and that both sets' training accuracies are increasing as well; which is a typical pattern of a model overfitting the data. Because the model is overfitting the data, a very high precision (66.94\%) but low recall (59.28\%) is witnessed in Table~\ref{tab:evaluation-image-size} for 1024x1024 input size, which is hugely detrimental as a BCD system that detects malignant cases as benign could lead to the death of the patient.\\
 
 As expected, increasing the image size also increases the training runtime (see Figure~\ref{fig:evaluation-image_size_experiment-runtimes}), which is boosted by a factor of 2.4 when increasing from 224 to 512 pixels, and a factor of 2.8 from 512 to 1024 pixels on VGG19. However, another advantage of MobileNetV2 over VGG19 is that it scales better to larger input sizes as increasing the input from 224 to 512 pixels only raises the runtime by a factor of 1.54, and prediction times are quicker than VGG19 predictions (13.5 minutes on average for MobileNetV2 compared to 21.3 minutes for VGG19).
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{\includegraphics[width=\textwidth]{figures/evaluation/image_size_experiment/runtimes.png}}
-\caption{\label{fig:evaluation-image_size_experiment-runtimes}Training and prediction runtimes when using different input image sizes.}
+\caption{\label{fig:evaluation-image_size_experiment-runtimes}Training (2445 samples) and prediction (641 samples) runtimes on the CBIS-DDSM dataset when using different input image sizes (224, 512 and 1024 pixels).}
 \end{figure}
 
 Nevertheless, the accuracy/training runtime trade-off is not primordial in breast cancer detection as the primary goal is to develop a system that can correctly diagnose early forms of cancers in mammograms as accurately as possible, regardless of the runtime. Ultimately, prediction runtimes will matter when used in clinics.
@@ -120,7 +178,7 @@ The ImageNet weights transfer confirmed the performance that can be gained, as w
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=\textwidth]{figures/evaluation/transfer_learning_experiment/runtimes.png}}
-\caption{\label{fig:evaluation-transfer_learning_experiment-runtimes}Training and prediction runtimes when using different amounts of transfer learning with MobileNetV2 as a base model.}
+\caption{\label{fig:evaluation-transfer_learning_experiment-runtimes}Training (2445 samples) and prediction (641 samples) runtimes on the CBIS-DDSM dataset when using different amounts of transfer learning through the binary mini-MIAS and ImageNet datasets with MobileNetV2 as a base model.}
 \end{figure}
 
 It is worth noting that training is slightly quicker when using weights from binary mini-MIAS (see Figure~\ref{fig:evaluation-transfer_learning_experiment-runtimes}) as the model converges more quickly towards a known solution. However, it is the early stopping conditions mentioned in Section~\ref{sec:design-validation-early-stopping} that dictate the training duration.
@@ -129,7 +187,7 @@ It is worth noting that training is slightly quicker when using weights from bin
 
 \section{Mammogram Types}
 
-To assess how the model would adapt to samples from a single mammogram type only, the CBIS-DDSM dataset was separated into only masses samples and only calcifications samples (see Section~\ref{sec:ethics-datasets-cbisddsm} for samples). Three different experiments were tested:
+To assess how the model would adapt to samples from a single mammogram type, the CBIS-DDSM dataset was separated into only masses samples and only calcifications samples (see Section~\ref{sec:ethics-datasets-cbisddsm} for samples). Three different experiments were tested:
 \begin{itemize}
     \item All types of mammograms (masses + calcifications);
     \item Mass mammograms only;
@@ -140,11 +198,11 @@ To assess how the model would adapt to samples from a single mammogram type only
 
 These results show that the model using VGG19 as a base model learns the data much better when masses and calcifications are separated, reaching 64.35\% and 66.67\% accuracy respectively on the test set, but only managing 59.44\% when using the full CBIS-DDSM dataset. Indeed, the normalised confusion matrix on the full CBIS-DDSM dataset indicates that all instances are classified as ``benign'', indicating that the model gets confused when dealing with multiple views and cannot tell benign and malignant cases from each other. This outcome is in line with Hepsag's results, which achieve higher accuracies when classifying either masses or calcifications on another dataset \citep{Hepsag2017}, and confirms Elter's claim that masses are harder to detect than calcifications \citep{Elter2009}.\\
 
-However, the opposite effect is witnessed when MobileNetV2 is used as a base model, with an accuracy of 67.08\% reached when the full dataset is used and only 63.12\% and 63.23\% accuracy for calcifications and masses respectively, contradicting the previous results.
+However, the opposite effect is witnessed when MobileNetV2 is used as a base model, reaching an accuracy of 67.08\% when the full dataset is used and only 63.12\% and 63.23\% accuracy for calcifications and masses respectively, contradicting the previous results. Because CNNs automatically learn features, it can be hard to know  exactly what goes on underneath the hood of these models, especially when using architectures like VGG19 and MobileNetV2. Visualising heatmaps of the feature maps for each convolution layer could help understand why these models react differently when using all images or only specific types of mammograms, but is out of the scope of this project given the time frame.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centerline{\includegraphics[width=\textwidth]{figures/evaluation/mammogram_type_experiment/runtimes.png}}
-\caption{\label{fig:evaluation-mammogram_type_experiment-runtimes.png}Training and prediction runtimes when using different mammogram types.}
+\caption{\label{fig:evaluation-mammogram_type_experiment-runtimes.png}Training and prediction runtimes on the CBIS-DDSM dataset when using different mammogram types (all, masses and calcifications).}
 \end{figure}
 
 In terms of runtime, training and prediction times are approximately twice as fast, since there is roughly twice less data after the dataset split (see Figure~\ref{fig:evaluation-mammogram_type_experiment-runtimes.png}).
@@ -153,4 +211,9 @@ In terms of runtime, training and prediction times are approximately twice as fa
 
 \section{Results Summary}
 
-Todo
+The most interesting results from the bag-of-tricks approached are summarised in Figure~\ref{fig:evaluation-result_comparison}, depicting each technique's accuracy relative to the benchmark. 
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=\textwidth]{figures/evaluation/result_comparison.png}}
+\caption{\label{fig:evaluation-result_comparison}Bar chart summarising the relative accuracies achieved for each experiment compared to the baseline developed as group on the CBIS-DDSM dataset.}
+\end{figure}

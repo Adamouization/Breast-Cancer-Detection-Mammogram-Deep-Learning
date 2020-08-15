@@ -1,12 +1,11 @@
-Based on the machine learning and deep learning applications for the task of breast cancer detection established in Chapter~\ref{ch:chapter-litsurvey}, and the datasets available for this project, design decisions specific to the deep learning pipeline implemention will be covered, along with the reasoning behind the choice of datasets to use and general considerations.
+Based on the machine learning and deep learning applications for the task of breast cancer detection established in Chapter~\ref{ch:chapter-litsurvey}, and the datasets available for this project, design decisions specific to the deep learning pipeline implementation will be covered, along with the reasoning behind the choice of datasets to use and general considerations.
 
 \section{Datasets Decision}
+\label{sec:design-dataset-decision}
 
-An early design decision taken as a group consisted of electing which datasets to use, as Chapter~\ref{ch:chapter-ethics-datasets} revealed that each dataset has different characteristics. Despite being widely used in existing literature (see Chapter~\ref{ch:chapter-litsurvey}), popular feature-based datasets containing extracted mammogram data such as the WBCD dataset \citep{Wolberg1995} will not be used, as the objective of using deep learning models such as CNNs is to learn which features to extract by using the raw image in 2D space rather than data flattened into 1D arrays. If extracted features such as the ones from WBCD were used, then already successful machine learning algorithms such as SVMs or DTs could be used instead of deep learning techniques.\\
+An early design decision taken as a group consisted of electing which datasets to use. Despite being widely used in existing literature, popular feature-based datasets containing extracted mammogram data such as the WBCD dataset \citep{Wolberg1995} will not be used, as the objective of using deep learning models such as CNNs is to learn which features to extract by using the raw image in 2D space rather than data flattened into 1D arrays. If extracted features such as the ones from WBCD were used, then already successful machine learning algorithms such as SVMs or DTs could be used instead of deep learning techniques.\\
 
-From a clinical point of view, the mini-MIAS dataset is interesting as it contains both abnormal cases and normal cases, resulting in three classes (normal, benign and malignant cases). Its smaller size makes it useful for initial prototyping but has the downside of requiring more image processing techniques such as data augmentation to generate enough data to feed into the deep learning model. The different types of breast backgrounds (see Section~\ref{sec:ethics-mini-MIAS-dataset-description}) is not considered during training to avoid further splitting the dataset.\\
-
-The CBIS-DDSM dataset was chosen over the DDSM dataset as it is an updated version of the older DDSM dataset, and is curated by a trained mammographer. Additionally, it uses uncompressed images in DICOM format rather than LJPEG format, which is a deprecated format nowadays, resulting in much higher quality imagery.  Indeed, the large uncompressed format offered by DICOM means that the mammograms can be fed into the CNN with larger sizes, allowing the model to potentially learn more low-level features. Another plus is that the dataset is already split into training/testing sets, allowing for accurate performance comparisons with other papers using the same dataset. Despite the CBIS-DDSM dataset containing two different views (CC and MLO), the mammograms in each case are treated as separate individual images due to the limited number of samples available.\\
+From a clinical point of view, the mini-MIAS dataset is interesting as it contains both abnormal cases and normal cases, resulting in three classes (normal, benign and malignant cases). Its smaller size makes it useful for initial prototyping but has the downside of requiring more image processing techniques such as data augmentation to generate enough data to feed into the deep learning model. Additionally, the CBIS-DDSM dataset was chosen over the DDSM dataset as it is an updated version of the older DDSM dataset, and is curated by a trained mammographer. Additionally, it uses uncompressed images in DICOM format rather than LJPEG format, which is a deprecated format nowadays, resulting in much higher quality imagery.  Indeed, the large uncompressed format offered by DICOM means that the mammograms can be fed into the CNN with larger sizes, allowing the model to potentially learn more low-level features. Another plus is that the dataset is already split into training/testing sets, allowing for accurate performance comparisons with other papers using the same dataset.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,7 +19,7 @@ The deep learning pipeline implemented for the task of breast cancer detection c
     \item \textbf{Data pre-processing}: loading a dataset in memory and processing it to gather image-label pairs for the classification task.
     \item \textbf{Model training}: creating a CNN model that can fit the data to learn the training set samples. Predictions are carried out once the model finishes training on the validation and test sets.
     \item \textbf{Result visualisation}: the model's performance is evaluated by calculating various metrics and plotting predictions.
-    \item \textbf{Fine tuning}: a bag-of-tricks approach is used, experimenting various deep learning techniques.
+    \item \textbf{Fine tuning}: a bag-of-tricks approach is used, experimenting with various deep learning techniques.
 \end{itemize}
 
 \begin{figure}[ht]
@@ -35,7 +34,7 @@ The deep learning pipeline implemented for the task of breast cancer detection c
 \subsubsection{Dataset balance}
 \label{sec:design-dataset-balance}
 
-As this is a classification task, it is essential to visualise the distribution of classes in the datasets to determine whether the dataset balance is skewed or not (whether some classes are much more frequent than other classes \citep{Geron2019}). The class distributions are plotted in Figure~\ref{fig:design-datasets-balance}.
+As this is a classification task, it is essential to visualise the datasets' class distribution to determine whether  some classes are much more frequent than other classes (skewed datasets) \citep{Geron2019}.
 
 \begin{figure}[h]
 \centering
@@ -54,7 +53,7 @@ As this is a classification task, it is essential to visualise the distribution 
 \caption{\label{fig:design-datasets-balance}Class distribution for the mini-MIAS and the CBIS-DDSM datasets.}
 \end{figure}
 
-These bar charts reveal that the mini-MIAS dataset is heavily imbalanced as the distribution is not uniform, which must be taken into account to avoid training a biased CNN model. Potential solutions to counter this imbalance would be to either:
+The class distributions plotted in Figure~\ref{fig:design-datasets-balance} reveal that the mini-MIAS dataset is heavily imbalanced as the distribution is not uniform, which must be taken into account to avoid training a biased CNN model. Potential solutions to counter this imbalance would be to either:
 \begin{itemize}
     \item \textit{undersample} the dataset by dropping images altogether;
     \item \textit{oversample} the dataset, which can be achieved via data augmentation,
@@ -63,15 +62,15 @@ These bar charts reveal that the mini-MIAS dataset is heavily imbalanced as the 
     %https://www.tensorflow.org/tutorials/structured_data/imbalanced_data#class_weights
 \end{itemize}
 
-Undersampling the dataset can be considered inefficient as it will diminish the number of samples the model could learn from by dropping samples from the majority class \citep{Liu2009}. As the datasets are already very small (maximum of 10,239 images in CBIS-DDSM), undersampling would be a poor strategy as it may discard useful features that could be learned. Consequently, oversampling by creating new artificial images resembling the original data is a viable solution as it was proven to increase accuracies (see Section~\ref{sec:litsurvey-data-augmentation}). Alternatively, a cheaper option in terms of computing power that does not require the dataset to be touched would be to add class weights, which will cause the loss to become a weighted average giving more importance to less frequent classes \citep{Zhu2018}.
+Undersampling the dataset can be considered inefficient as it will diminish the number of samples the model could learn from by dropping samples from the majority class \citep{Liu2009}. As the datasets are already very small, undersampling them would be a poor strategy as it may discard useful features that could be learned. Consequently, oversampling by creating new artificial images resembling the original data is a viable solution as it was proven to increase accuracies. Alternatively, a cheaper option in terms of computing power that does not require the dataset to be touched would be to add class weights, which will cause the loss to become a weighted average giving more importance to less frequent classes \citep{Zhu2018}.
 
 \subsubsection{Dataset split}
 
-The dataset is immediately split between a training set and a testing set to avoid any form of data snooping, which corresponds to the poor practice of making design decisions (either voluntary or involuntary) after having viewed the data and detecting patterns that could lead to favouring certain models or hyperparameters above others. Due to the small size of the datasets used and to avoid causing further imbalance to the datasets, the splits are not randomly sampled. Instead, stratified sampling is used, which consists of maintaining representative samples from the data in both the training and the testing sets to avoid introducing sampling bias.\\
+The dataset is immediately split between a training set and a testing set to avoid any form of data snooping, which corresponds to the poor practice of making design decisions (either voluntary or involuntary) after having viewed the data and detecting patterns that could lead to favouring certain models or hyperparameters above others. Due to the small size of the datasets used and to avoid causing further imbalance to the datasets, the splits are stratified to maintain representative samples from the data in both the training and the testing sets to avoid introducing sampling bias.\\
 
 An 80\%/20\% split, often used in machine learning and seen in breast cancer detection papers \citep{Yue2018}, is used to split the mini-MIAS dataset. The CBIS-DDSM does not need to be manually divided as it was already split with the appropriate stratification when it was designed \citep{Lee2017}. After this step, only the training set is utilised until the final results evaluations. The testing set is placed aside and forgotten about to avoid any form of cheating.\\
 
-The assumption that the data never changes during the development of the project is made through fixed random number generator seeds (see Section~\ref{sec:implementation-results-reproducibility}). Not using a random generator with a fixed seed would cause different samples to be extracted into the training and testing sets every time the code is executed, thus neglecting the results. 
+The assumption that the data never changes during the development of the project is made through a fixed random number generator seeds (see Section~\ref{sec:implementation-results-reproducibility}). Not using a random generator with a fixed seed would cause different samples to be extracted into the training and testing sets every time the code is executed, thus neglecting the results. 
 
 \subsubsection{Data loading}
 
@@ -79,9 +78,9 @@ The mini-MIAS dataset is very small in size (339 Mb before pre-processing, 202 M
 
 \subsubsection{Data normalisation}
 
-Images are resized to a target size during import to scale them down (CBIS-DDSM images are larger than 3000 x 5000 pixels)  and to avoid having inconsistent inputs. Observing the pixel intensities of the images found in the datasets reveal that they correspond to integers ranging from 0 to 255. However, because the weights in neural networks are small, having such large input values can disrupt and slow down the training process, ultimately leading to lower accuracies. Therefore, normalising the pixel intensities to values in the range of 0 to 1 can help fight this problem by ensuring all values are small. An example of the pixel values before and after normalisation can be seen in Figure~\ref{fig:design-Normalisation example}.
+Images are resized to a target size during import to scale them down (CBIS-DDSM images are larger than 3000 x 5000 pixels)  and to avoid having inconsistent input sizes. Observing the pixel intensities of the images found in the datasets reveal that they correspond to integers ranging from 0 to 255. However, because the weights in neural networks are small, having such large input values can disrupt and slow down the training process, ultimately leading to lower accuracies. Therefore, normalising the pixel intensities to values in the range of 0 to 1 can help fight this problem by ensuring all values are small. An example of the pixel values before and after normalisation can be seen in Figure~\ref{fig:design-Normalisation example}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centerline{\includegraphics[width=0.9\textwidth]{figures/design/Normalisation example.png}}
 \caption{\label{fig:design-Normalisation example}Example of the pixels values that make up a mammogram before and after normalisation.}
 \end{figure}
@@ -89,8 +88,6 @@ Images are resized to a target size during import to scale them down (CBIS-DDSM 
 \subsubsection{Label encoding}
 
 As the labels for each mammogram are in categorical string format, they must be encoded into a numerical format. On the one hand, due to the sparse nature of the labels (only three categories), one-hot encoding is chosen for the mini-MIAS dataset, where a single digit may have the value 1 while the others remain at value 0 to tell apart the different labels. The one-hot encodings of the labels can be seen in Table~\ref{tab:one-hot-encoding-example}.
-
-% The data must be fed to the neural network in binary form. One-hot encoding is therefore chosen as it suits the sparse representation of the data, which is made up of only five target categories. Only a single digit may have the value 1 in one-hot encoding, while the others remain at value 0 \cite{lec16}. The one-hot encodings of the target categories can be seen in Figure \ref{fig:one_hot_encoding}.
 
 \input{tables/one-hot-encoding-example}
 
@@ -109,9 +106,9 @@ At this stage, the training data is ready to be fed into the CNN model. The clas
 
 Due to the small nature of the CBIS-DDSM and mini-MIAS datasets used, state-of-the-art CNN models pre-trained on large general datasets like ImageNet are used rather than creating a CNN from scratch, a technique known as transfer learning (see Section~\ref{sec:litreview-transfer-learning}) that is proven to work on breast cancer detection tasks \citep{Shen2017, Falconi2019}.\\
 
-Different CNN architectures can be used as the base of a custom CNN model tailored for breast cancer detection. This is achieved by using popular CNN architectures available with Keras such as VGG19, ResNet50, InceptionV3, DenseNet121 and MobileNetV2 as the base of the CNN \citep{kerasApplications}. The fully connected layers of these models, which are designed for general classification of natural images into 1,000 different categories \citep{Krizhevsky2012}, are dropped from the model and replaced with a custom MLP. The fully-connected MLP contains hidden layers and an output layer with different activation functions based on the dataset used.\\
+Different CNN architectures can be used as the base of a custom CNN model tailored for breast cancer detection. This is achieved by using popular CNN architectures available with Keras such as VGG19, ResNet50, InceptionV3, DenseNet121 and MobileNetV2 as the base of the CNN \citep{kerasApplications}. The fully connected layers of these models, originally designed for general classification of 1,000 different categories, are dropped from the model and replaced with a custom MLP \citep{Krizhevsky2012}. The fully-connected MLP contains hidden layers and an output layer with different activation functions based on the dataset used.\\
 
-If large images are used, then additional convolutional and pooling layers are added before the base model to downsample the image to smaller sizes and learn low-level features, followed by the pre-trained base model, a flatten layer to convert the output from 2D to 1D, and finally the MLP which will make the final prediction. Dropout layers are added in the MLP to avoid overfitting.
+If large images are used, then additional convolutional and pooling layers are added before the base model to downsample the image to smaller sizes and learn low-level features, followed by the pre-trained base model, a flatten layer to convert the output from 2D to 1D, and finally the MLP which will make the final prediction. Dropout layers are added in the MLP to avoid overfitting. The full model can be visualised in Figure~\ref{fig:design-CNN architecture}.
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=1.2\textwidth]{figures/design/CNN architecture.png}}
@@ -140,24 +137,24 @@ Cross entropy is one of the most commonly used loss functions as it can be used 
 
 \paragraph{Optimiser}
 
-Due to the deep nature of the model, it is important to minimise the number of hyperparameters to control. Adaptive learning rate algorithms usually generalise better than traditional optimisers like Stochastic Gradient Descent (SGD) or momentum, which are slow to converge and require more fine-tuning. The most general adaptive optimiser is \textit{adaptive moment estimation} (Adam), which combines both momentum for more significant steps in the direction of the steepest gradient and Root Mean Square Prop (RMSProp) for accelerating more on steep slopes than small slopes, making it the best choice for this model.
+Due to the deep nature of the model, it is important to minimise the number of hyperparameters to control. Adaptive learning rate algorithms usually generalise better than traditional optimisers like SGD or momentum, which are slow to converge and require more fine-tuning. The most general adaptive optimiser is \textit{adaptive moment estimation} (Adam), which combines both momentum for more significant steps in the direction of the steepest gradient and Root Mean Square Prop (RMSProp) for more accelerating on steep slopes than small slopes, making it the best choice for this model.
 %https://towardsdatascience.com/full-review-on-optimizing-neural-network-training-with-optimizer-9c1acc4dbe78
 
-\paragraph{Transfer learning}
+\paragraph{Transfer learning training}
 \label{sec:design-transfer-learning-training-phase}
 
 To best make use of the transfer learning technique with the base model's weights instantiated using ImageNet weights, training is separated into two phases:
 \begin{enumerate}
     \item All the layers from the base model are frozen, enabling only the custom MLP with fully connected layers to fit the mammogram images. The initial training phase ends once the maximum number of epochs is reached, or the early stopping condition is met.
-    \item All the layers are unfrozen, and training is resumed with a smaller learning rate $\alpha = 0.00001$, allowing the base model to slightly alter its weights to adapt to the mammogram dataset while not forgetting the ImageNet knowledge.
+    \item All the layers are unfrozen, and training is resumed with a lower learning rate $0.00001$, allowing the base model to slightly alter its weights to adapt to the mammogram dataset while not forgetting the ImageNet knowledge.
 \end{enumerate}
 
 \paragraph{Validation set \& early stopping}
 \label{sec:design-validation-early-stopping}
 
-To ensure that the model generalises well to unseen  data from the testing set, the training set is further split to form a validation set using a 75\%25\% split on training set; resulting in a 60\%/20\%/20\% of the full dataset. The validation set is used to make predictions at the end of each epoch by calculating the loss and accuracy. These values are then monitored to stop the training before the maximum number of epochs is reached if the validation accuracy or loss do not improve after a certain number of epochs, preventing the model from overfitting the data too much.\\
+To ensure that the model generalises well to unseen  data from the testing set, the training set is further split to form a validation set using a 75\%25\% split on training set; resulting in a 60\%/20\%/20\% of the full dataset. The validation set is used to make predictions at the end of each epoch by calculating the loss and accuracy. The validation loss is then monitored to stop the training before the maximum number of epochs is reached if the loss does not improve after a certain number of epochs, preventing the model from overfitting the data too much.\\
 
-Due to time constraints, k-fold cross-validation, which divides the training set into $K$ subsets and evaluates the model $K$ times, cannot be used as training the model on the CBIS-DDSM dataset can take anywhere from 1h15m to 8h49 (see Chapter~\ref{ch:chapter-evaluation}), which would be multiplied by a factor of $K$. Therefore, a validation set is used instead.
+Due to time constraints, k-fold cross-validation, which divides the training set into $K$ subsets and evaluates the model $K$ times, cannot be used as training the model on the CBIS-DDSM dataset already takes between 1h15m-8h49 (see Chapter~\ref{ch:chapter-evaluation}), which would be multiplied by a factor of $K$ using cross-validation. Therefore, a validation set is used instead.
 
 \paragraph{Fine-tuning}
 \label{sec:design-fine-tuning-bagoftricks}
@@ -228,12 +225,7 @@ This visual metric plots the number of predictions made for each class for each 
 
 \subsection{Programming Language}
 
-% Choosing a programming language is one of the most essential aspects to take into account as it is the medium used to transform the system from design to implementation. However, choosing from over 250 different programming languages \citep{tiobe} can be tricky, which is why multiple views have to be evaluated before choosing a programming language. Four popular programming languages are considered for this project: Python, Java, R and  Javascript.\\
-% https://becominghuman.ai/best-languages-for-machine-learning-in-2020-6034732dd242
-
-The first element to consider when choosing a programming language is the availability of third-party libraries used for implementing common machine learning functionalities, as well as data pre-processing, manipulation and visualisation techniques found in deep learning systems to avoid manually implementing them. The most commonly used machine learning libraries nowadays are all available in Python \citep{raschka2017python}, including SciKit-Learn \citep{scikit-learn}, Pandas \citep{reback2020pandas}, Matplotlib \citep{Hunter:2007}, NumPy \citep{numpy} and Seaborn \citep{seaborn}. In terms of deep learning libraries, Tensorflow (available in Python, R and Javascript) and PyTorch (available in Python) are  the most popular ones (Appendix~\ref{sec:appendix-keras_vs_pytorch}).\\
-
-In terms of speed, compiled languages are quicker than interpreted languages, but because the main bottleneck in a deep learning system is the training phase of the model, which mainly relies on the library used rather than the language itself, speed is not taken into account. Finally, Python is the favoured language in terms of personal preference, familiarity, and experience, especially when applied to machine learning projects, making it the apparent programming language candidate for this project. For a complete review of the main pros and cons considered between when deciding between Python, Java, R and Javascript, refer to Appendix~\ref{sec:appendix-programming-languages-comparison}.
+Multiple languages, including Python, Java, R and Javascript, are considered for this project. Ultimately, Python is chosen for this project due to the familiarity and experience with the language; and the availability of open-source libraries for implementing common machine learning functionalities, as well as data pre-processing, manipulation and visualisation techniques found in deep learning systems to avoid manually implementing them \citep{raschka2017python}, such as Tensorflow \citep{tensorflow2015-whitepaper}, Keras \citep{chollet2015keras}, SciKit-Learn \citep{scikit-learn}, Pandas \citep{reback2020pandas}, Matplotlib \citep{Hunter:2007}, NumPy \citep{numpy} and Seaborn \citep{seaborn}. Refer to Appendix~\ref{sec:appendix-programming-languages-comparison} for a deeper review of the main pros and cons considered.
 
 \subsection{Deep Learning Framework}
 

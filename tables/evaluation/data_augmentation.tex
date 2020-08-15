@@ -1,0 +1,22 @@
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+\textbf{\begin{tabular}[c]{@{}l@{}}Base\\ Model\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}l@{}}Data\\ Augmentation\end{tabular}} &
+  \multicolumn{1}{l}{\textbf{\begin{tabular}[c]{@{}l@{}}Overall\\ Accuracy\end{tabular}}} &
+  \multicolumn{1}{l}{\textbf{Precision}} &
+  \multicolumn{1}{l}{\textbf{Recall}} &
+  \multicolumn{1}{l}{\textbf{F1 Score}} \\ \midrule
+\multirow{3}{*}{\textbf{VGG19}}       & \textit{\textbf{None}}          & \textbf{64.62\%} & \textbf{41.75\%} & \textbf{64.62\%} & \textbf{50.73\%} \\
+                                      & \textit{\textbf{Class Balance}} & 36.92\%          & 48.89\%          & 36.92\%          & 40.45\%          \\
+                                      & \textit{\textbf{Double}}        & \textbf{64.62\%} & \textbf{41.75\%} & \textbf{64.62\%} & \textbf{50.73\%} \\ \cmidrule(r){1-1}
+\multirow{3}{*}{\textbf{MobileNetV2}} & \textit{\textbf{None}}          & \textbf{64.62\%} & \textbf{41.75\%} & \textbf{64.62\%} & \textbf{50.73\%} \\
+                                      & \textit{\textbf{Class Balance}} & 41.54\%          & 40.70\%          & 41.54\%          & 40.96\%          \\
+                                      & \textit{\textbf{Double}}        & \textbf{64.62\%} & \textbf{41.75\%} & \textbf{64.62\%} & \textbf{50.73\%} \\ \bottomrule
+\end{tabular}%
+}
+\caption{Results achieved on the mini-MIAS test set when using different amounts of data augmentation (none, balanced and double).}
+\label{tab:evaluation-data-augmentation}
+\end{table}

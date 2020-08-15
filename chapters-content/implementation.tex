@@ -1,4 +1,4 @@
-The implementation of the breast cancer detection system was conducted in two parts. The first part corresponds to a common pipeline developed in group \citep{adam_jaamour_2020_3975093}, and the second part to individual implementations using the common pipeline as a baseline (CITE). An overview of the different pipeline parts can be found in Section~\ref{sec:implementation-detailed-flowchart}, while meeting minutes with the work distribution during the implementation of the common pipeline can be found in Appendix~\ref{ch:appendix-team-meeting-summaries}.
+The implementation of the breast cancer detection system was conducted in two parts. The first part corresponds to a common pipeline developed in group \citep{adam_jaamour_2020_3975093}, and the second part to individual extensions and implementations \citep{adam_jaamour_2020_src}. An overview of the different pipeline parts can be found in Section~\ref{sec:implementation-detailed-flowchart}, while meeting minutes with the work distribution during the implementation of the common pipeline can be found in Appendix~\ref{ch:appendix-team-meeting-summaries}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6,11 +6,11 @@ The implementation of the breast cancer detection system was conducted in two pa
 
 \section{Code Design}
 
-The code, all stored in the \textit{src} directory is designed by splitting essential code into functions spread across multiple python modules, which are all organised into different directories based on the kind of task they are designed to carry out (see Appendix~\ref{ch:appendix-coding-project-structure}).\\
+The code, stored in the \textit{src} directory, is designed by being split into functions spread across multiple python modules, which are all organised into different directories based on the kind of task they are designed to carry out (see Appendix~\ref{ch:appendix-coding-project-structure}).\\
 
 \textbf{Flow of execution} \space The program entry point is in the ``main.py'' module, which parses command-line arguments used to execute different parts of the program (e.g. which dataset to use) and stores them in ``config.py''. The main flow of the pipeline is controlled in ``main.py'', enclosing calls to different functions for processing the data, creating the CNN models and evaluating the results based on the CLI arguments selected.\\
 
-\textbf{Data pre-processing} \space Functions linked to data pre-processing, such as retrieving image paths and labels, processing images, encoding labels, loading the data into memory and applying transformations for data augmentation, are all located in the \textit{data\_operations} directory. The single-run scripts for initially parsing the images' paths and labels for each dataset are in the \textit{dataset\_processing\_scripts} directory.\\
+\textbf{Data pre-processing} \space Functions linked to data pre-processing, such as retrieving image paths and labels, processing images, encoding labels, loading the data into memory and applying transformations for data augmentation, are all located in the \textit{data\_operations} directory. The one-time scripts for initially parsing the images' paths and labels for each dataset are in the \textit{dataset\_processing\_scripts} directory.\\
 
 \textbf{CNN Model} \space All CNN-related code, from creating the Keras model to compiling it, fitting it, making predictions or evaluating it is placed in a custom \textit{CNN\_Model} class, which can be found in the \textit{cnn\_models.py} module. Each model is then placed in individual modules in the \textit{cnn\_models} directory.\\
 
@@ -31,7 +31,7 @@ Python's \textit{argparse} module is used to implement the CLI application, acce
 \subsection{Results reproducibility}
 \label{sec:implementation-results-reproducibility}
 
-To reproduce results across different runs, random number generators are seeded with an identical value set to \textit{$111$}. The NumPy seed and Tensorflow seeds are both set to \textit{$111$}, as well as functions that include randomness such as the dataset splits to ensure that constant shuffle indices are used (Scikit-Learn's \textit{train\_test\_split}) and the dropout layer to ensure that the same random neurons are dropped:
+To reproduce results across different runs, random number generators are seeded with an identical value. The NumPy and Tensorflow seeds are both set to \textit{$111$}, as well as functions that include randomness such as the dataset splits to ensure that constant shuffle indices are used (Scikit-Learn's \textit{train\_test\_split}) and the dropout layer to ensure that the same random neurons are dropped:
 
 \begin{lstlisting}[numbers=none]
 # Random number generators.
@@ -53,7 +53,7 @@ fully_connected.add(Dropout(0.2, seed=config.RANDOM_SEED))
 
 \subsection{Initial Dataset Processing}
 
-When downloaded, both datasets contain nested directories with the mammogram images and CSV files mapping images to their label, along with additional information, e.g. breast densities, left or right breast, mass shape, etc. Two distinct Python scripts are written to parse these CSV files.\\
+When downloaded, both datasets contain nested directories with the mammogram images and CSV files mapping images to their label, along with additional unrequired information (e.g. breast densities or mass shape). Two distinct Python scripts are written to parse these CSV files.\\
 
 \textbf{mini-MIAS} \space The data is first cleaned by replacing empty cells with the ``N'' character for normal cases (only benign and malignant cases are specified initially), and each image is converted from PGM to PNG format before being saved in labelled directories rather than one vast directory.\\
 
@@ -63,7 +63,7 @@ When downloaded, both datasets contain nested directories with the mammogram ima
 
 \subsection{Data Loading}
 
-The data is loaded by parsing the generated CSV files mentioned above, loading mammograms and their labels simultaneously. In the case of the CBIS-DDSM dataset, a Tensorflow \textit{Dataset} is used to handle its large size by loading consecutive images into batches and caching the loaded data. This process is optimised by importing the data with parallel optimisations through Keras' \textit{prefetch method} and the \textit{data.experimental.AUTOTUNE} option. No loading optimisations are used for the smaller mini-MIAS dataset.\\
+The data is loaded by parsing the generated CSV files mentioned above, loading mammogram-label pairs simultaneously. In the case of the CBIS-DDSM dataset, a Tensorflow \textit{Dataset} is used to handle its large size by loading consecutive images into batches and caching the loaded data. This process is optimised by importing the data with parallel optimisations through Keras' \textit{prefetch method} and the \textit{data.experimental.AUTOTUNE} option.\\
 
 %%%%%%%%%%%
 
@@ -71,9 +71,9 @@ The data is loaded by parsing the generated CSV files mentioned above, loading m
 
 \paragraph{Image processing} 
 
-The mini-MIAS mammograms are first imported through Keras' \textit{load\_img} function in Python Imaging Library (PIL) format and resized to a target size in pixels (e.g. 224 x 224 pixels) in greyscale (single channel) before being converted to array format using the \textit{img\_to\_array} function to be compatible with the Keras CNN models expected input. Additionally, if the \textit{roi} flag is \textit{True}, then the images are cropped around a 224 x 224 ROI (Region of Interest) in the presence of an abnormality; otherwise around a 224 x 224 region in the centre of the image.\\
+The mini-MIAS mammograms are first imported through Keras' \textit{load\_img} function in Python Imaging Library (PIL) format and resized to a target size (e.g. 224 x 224 pixels) in greyscale (single channel) before being converted to array format using the \textit{img\_to\_array} function to be compatible with the Keras CNN models expected input. Additionally, if the \textit{roi} flag is \textit{True}, then the images are cropped around a 224 x 224 ROI (Region of Interest) in the presence of an abnormality; otherwise around a 224 x 224 region in the centre of the image.\\
 
-The images are then normalised by dividing their pixel intensities by 255 to fit in the range of floats between 0 and 1. Because the CBIS-DDSM mammograms being in DICOM format, they first need to be imported as raw bytes before being decoded using Tensorflow I/O's \textit{decode\_dicom\_image} function. The image is then converted to PNG before following the same process as the mini-MIAS images.
+The images are then normalised by dividing their pixel intensities by 255. Because the CBIS-DDSM mammograms are in DICOM format, they first need to be imported as raw bytes before being decoded using Tensorflow I/O's \textit{decode\_dicom\_image} function. The image is then converted to PNG before following the same process as the mini-MIAS images.
 
 \paragraph{Label encoding}
 
@@ -83,7 +83,7 @@ In the case of multi-class classification, Scikit-Learn's \textit{LabelEncoder} 
 
 \subsection{Dataset Splits}
 
-Scikit-Learn's \textit{train\_test\_split} function is used to split the dataset into a training, validation and testing set (see Figure~\ref{fig:dataset_splits}). A 60/20/20\% shuffled stratified split is conducted to maintain class balance across the sets and avoid data bias when training the model. 
+Scikit-Learn's \textit{train\_test\_split} function is used to split the dataset into training, validation and testing sets with 60/20/20\% shuffled stratified splits (see Figure~\ref{fig:dataset_splits}).
 
 \begin{figure}[ht]
 \centerline{\includegraphics[width=0.55\textwidth]{figures/implementation/dataset_splits.png}}
@@ -93,8 +93,9 @@ Scikit-Learn's \textit{train\_test\_split} function is used to split the dataset
 %%%%%%%%%%%
 
 \subsection{Data Augmentation \& Class Balance}
+\label{sec:implementation-data-augmentation-class-balance}
 
-For the highly imbalanced mini-MIAS dataset, image augmentation is used to balance the class distribution. Random amounts of rotations and shears between -20 and 20 degrees, noise and horizontal flips are added to existing images of the minority classes to balance the dataset. The transformations are all achieved through the Scikit-Image library. These are then shuffled to ensure that newly generated images are not grouped together. An example of the possible transformations is shown in Figure~\ref{fig:implementation-Data augmentation transforms}.\\
+For the highly imbalanced mini-MIAS dataset, image augmentation is used to balance the class distribution. Random amounts of rotations and shears between -20 and 20 degrees, noise and horizontal flips are added through the Scikit-Image library to existing images of the minority classes to balance the dataset. An integer variable is used to control the augmentation factor. These are then shuffled to ensure that newly generated images are not grouped together. An example of the possible transformations is shown in Figure~\ref{fig:implementation-Data augmentation transforms}.\\
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=\textwidth]{figures/implementation/Data augmentation transforms.png}}
@@ -126,17 +127,11 @@ ssl._create_default_https_context = ssl._create_unverified_context
 model_base = MobileNetV2(include_top=False, weights="imagenet", input_tensor=img_conc)
 \end{lstlisting}
 
-Next, a \textit{Flatten} layer is added to convert the data from 2D to 1D, making it compatible with a fully-connected MLP. In this MLP, a dropout layer with a rate of 0.2 is added, followed by two dense hidden layers (one with 512 neurons, the other with 32 neurons). Finally, the output layer is appended at the end of the sequential model, with either a sigmoid activation function if the CBIS-DDSM dataset is used or a softmax activation function if the mini-MIAS dataset is used.
-
-TODO: ADD SUMMARY PIC
-
-% Additional convolution and pooling layers are added before the pre-trained model to accommodate larger images. These are slowly reduced in size as they go through the pooling layers, allowing lower-level features to be learned before passing through the VGG19 model.\\
-
-% Image sizes of 1024x1024px large used and downscaled using convolutional layers. This size was chosen as it is the size of the mini-MIAS dataset images, which will be used to initially train the CNN before training on the large CBIS-DDSM dataset.\\
+Next, a \textit{Flatten} layer is added to convert the data from 2D to 1D, making it compatible with a fully-connected MLP. In this MLP, a dropout layer with a rate of 0.2 is added, followed by two dense hidden layers (one with 512 neurons, the other with 32 neurons). Finally, the output layer is appended at the end of the sequential model, with either a sigmoid activation function if the CBIS-DDSM dataset is used or a softmax activation function if the mini-MIAS dataset is used. If large images are used (e.g. 1024 x 1024 pixels or larger), then additional convolution and pooling layers are added before the pre-trained model using Keras' \textit{Conv2D} and \textit{MaxPooling2D} classes.
 
 \subsection{Training Steps} 
 
-The training phase is separated in two steps, as mentioned in Section~\ref{sec:design-transfer-learning-training-phase}. To freeze the pre-trained base model's layers, the \textit{trainable} attribute is set to \textit{False}, allowing only the MLP's fully connected layers to learn (weights are not updated). During this step, the learning rate and the maximum number of epochs are set by the CLI arguments, which default to $0.001$ and $150$ respectively. Once training converges, all layers are unfrozen by setting \textit{trainable} attribute to \textit{True} and a second training phase is launched with a lower learning rate set to $0.00001$.\\
+The training phase is separated in two steps, as mentioned in Section~\ref{sec:design-transfer-learning-training-phase}. To freeze the pre-trained base model's layers, the \textit{trainable} attribute is set to \textit{False}, allowing only the MLP's fully connected layers to learn. During this step, the learning rate and the maximum number of epochs are set by the CLI arguments, which default to $0.001$ and $150$ respectively. Once training converges, all layers are unfrozen by setting \textit{trainable} attribute to \textit{True} and a second training phase is launched with a lower learning rate set to $0.00001$.\\
 
 Tensorflow \textit{Callbacks} are used to enable early stopping conditions, which are set to halt training when the validation loss does not improve after the maximum number epochs specified divided by 10 (e.g. $150/10=15$). Additionally, an option to reduce the learning rate on plateaus is used to avoid increasing the validation loss when the learning stagnates, which is set at half the previously mentioned patience.\\
 
@@ -145,7 +140,7 @@ For the CBIS-DDSM dataset, the \textit{BinaryCrossentropy} loss and \textit{Bina
 \subsection{Model \& Weights Saving}
 \label{sec:implementation-model-saving-minimiasbinary}
 
-Once the CNN is finished training, the full model, including the model's configuration, the layer hyperparameters, the optimiser, the training results (losses and metrics), and the model's state (layer weights) are saved in HDF5 format (``.h5'' file extension) to be re-used in the future, especially for the model's final evaluation on the test set. Additionally, specific layer weights are saved for transfer learning experiments, such as the entire model's weights or the fully connected layers' weights only, to test different levels of transfer learning (see Section~\ref{sec:evaluation-transfer-learning}).\\
+Once the CNN is finished training, the full model, including the model's configuration, the layer hyperparameters, the optimiser, the training results (losses and metrics), and the model's state (layer weights) are saved in HDF5 format (``.h5'' file extension) to be re-used  for the model's final evaluation on the test set. Additionally, specific layer weights are saved for transfer learning experiments, such as the entire model's weights or the fully connected layers' weights only, to test different levels of transfer learning (see Section~\ref{sec:evaluation-transfer-learning}).\\
 
 To perform transfer learning from the mini-MIAS dataset to the CBIS-DDSM dataset, the mini-MIAS dataset is binarised by dropping normal cases altogether, creating a tiny dataset of 115 abnormal images (64 benign and 51 malignant). The model is then trained on the binary mini-MIAS dataset and its final weights are saved in NumPy format. These weights can be loaded when instantiating a new model for fitting the CBIS-DDSM dataset.
 
