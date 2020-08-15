@@ -2,13 +2,15 @@
 
 Dissertation for the MSc Artificial Intelligence at the University of St Andrews (2020).
 
+The final report can be read here: [Breast Cancer Detection in Mammograms using Deep Learning Techniques, Adam Jaamour (2020)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/Breast%20Cancer%20Detection%20in%20Mammograms%20using%20Deep%20Learning%20Techniques%20-%20Adam%20Jaamour%2C%202020.pdf)
+
 ## Abstract
 
 The objective of this dissertation is to explore various deep learning techniques that can be used to implement a system which learns how to detect instances of breast cancer in mammograms. Nowadays, breast cancer claims 11,400 lives on average every year in the UK, making it one of the deadliest diseases. Mammography is the gold standard for detecting early signs of breast cancer, which can help cure the disease during its early stages. However, incorrect mammography diagnoses are common and may harm patients through unnecessary treatments and operations (or a lack of treatments). Therefore, systems that can learn to detect breast cancer on their own could help reduce the number of incorrect interpretations and missed cases.
 
 Convolution Neural Networks (CNNs) are used as part of a deep learning pipeline initially developed in a group and further extended individually. A bag-of-tricks approach is followed to analyse the effects on performance and efficiency using diverse deep learning techniques such as different architectures (VGG19, ResNet50, InceptionV3, DenseNet121, MobileNetV2), class weights, input sizes, amounts of transfer learning, and types of mammograms.
 
-![image](https://raw.githubusercontent.com/Adamouization/Breast-Cancer-Detection-and-Segmentation/master/src/cnn_models/model.png?token=AEI7XLF4NI6QYRJTN3MKEHC7H6SHO)
+![CNN Model](https://i.postimg.cc/wxWB8CTP/CNN-architecture.png)
 
 Ultimately, 67.08\% accuracy is achieved on the CBIS-DDSM dataset by transfer learning pre-trained ImagetNet weights to a MobileNetV2 architecture and pre-trained weights from a binary version of the mini-MIAS dataset to the fully connected layers of the model. Furthermore, using class weights to fight the problem of imbalanced datasets and splitting CBIS-DDSM samples between masses and calcifications also increases the overall accuracy. Other techniques tested such as data  augmentation and larger image sizes do not  yield increased accuracies, while the mini-MIAS dataset proves to be too small for any meaningful results using deep learning techniques. These results are compared with other papers using the CBIS-DDSM and mini-MIAS datasets, and with the baseline set during the implementation of a deep learning pipeline developed as a group.
 
