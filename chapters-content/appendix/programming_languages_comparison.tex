@@ -1,5 +1,8 @@
+%%TC:ignore
 \section{Programming Languages}
 \label{sec:appendix-programming-languages-comparison}
+
+In terms of speed, compiled languages are quicker than interpreted languages, but because the main bottleneck in a deep learning system is the training phase of the model, which mainly relies on the library used rather than the language itself, speed is not taken into account. 
 
 \input{tables/programming_languages_comparison}
 
@@ -17,3 +20,4 @@ Figures source: \url{https://keras.io/why_keras/}.
 \centerline{\includegraphics[width=1.1\textwidth]{figures/appendix/keras_vs_pytorch_downloads.jpg}}
 \caption{Chart depicting the number of PyPI downloads for Keras and PyTorch. Figure downloaded from Keras website.}
 \end{figure}
+%%TC:endignore

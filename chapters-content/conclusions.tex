@@ -2,7 +2,7 @@
 
 The main goal of this project was to design and implement a deep learning pipeline capable of detecting cases of breast cancer in mammograms through various deep learning techniques. After investigating a wide array of techniques using a bag-of-tricks approach, a fully-functional pipeline with data pre-processing steps, a CNN model for learning the data and prediction visualisations was created.\\
 
-This deep learning pipeline exposed the effect of the different techniques used, achieving  positive results on the CBIS-DDSM dataset while revealing that some deep learning techniques offered more improvements than others, and that not all deep learning techniques behaved as expected.
+This deep learning pipeline exposed the effects of the different techniques used. The most positive result (67.08\%) on CBIS-DDSM came from transfer learning techniques, using ImageNet weights with MobileNetV2 and binary mini-MIAS weights for the custom MLP layers, coupled with class weight techniques for balancing the dataset. Separating CBIS-DDSM samples between masses and calcifications also yielded increased accuracies compared to the benchmark (64.35\% and 66.67\% respectively) when using VGG19 as a base model. However, other techniques did not behave as expected and resulted in poor accuracies, such as using data augmentation on a small dataset (mini-MIAS), separating CBIS-DDSM samples between masses and calcifications with MobileNetV2 instead of VGG19 and using larger input images with extra convolutional and pooling layers to learn lower-level features.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -12,7 +12,7 @@ This deep learning pipeline exposed the effect of the different techniques used,
 
 Digital Object Identifiers (DOI) have been generated for the open-sourced code repositories to ensure that the code can be permanently identified and referenced on the web, as URLs can easily change over time while DOIs remain immutable.\\
 
-The code developed for this dissertation can be found online at the following URL: \url{https://github.com/Adamouization/Breast-Cancer-Detection-and-Segmentation}, while the code developed in common as a group at the beginning of the dissertation can be found online at the following URL: \url{https://doi.org/10.5281/zenodo.3975093} \citep{adam_jaamour_2020_3975093}.
+The code developed for this dissertation can be found online at the following URL: \url{https://doi.org/10.5281/zenodo.3985051} \citep{adam_jaamour_2020_src}, while the code developed in common as a group at the beginning of the dissertation can be found online at the following URL: \url{https://doi.org/10.5281/zenodo.3975093} \citep{adam_jaamour_2020_3975093}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,7 +38,7 @@ Finally, the time frame of this project was a limiting factor in the final perfo
 
 \section{Future Work}
 
-The main area of work that requires improvements is the mammogram pre-processing as it is often an area where significant performance gains can be found \citep{Litjens2017} by using techniques such as global contrast normalisation (GCN), local contrast normalisation, and Otsu’s threshold segmentation. Artefacts such as tags on the x-rays and black backgrounds should all be removed using computer vision techniques to avoid having the CNN model irrelevant features.\\
+The main area of work that requires improvements is the mammogram pre-processing as it is often an area where significant performance gains can be found \citep{Litjens2017} by using techniques such as global contrast normalisation (GCN), local contrast normalisation, and Otsu’s threshold segmentation. Artefacts such as tags on the x-rays and black backgrounds should all be removed using computer vision techniques to avoid having the CNN learn irrelevant features.\\
 
 Another area where improvements can be made is the fine-tuning to extract better performance on the datasets and avoid overfitting. With the data-preprocessing mentioned above, images would be smaller (e.g. no redundant dark background), which would allow for quicker runtimes (the results in Section~\ref{sec:evaluation-input-image-size} revealed that smaller images lower the training runtime), which would allow fine-tuning algorithms like grid search to explore more combinations of configurations in order to unlock better solutions.
     
