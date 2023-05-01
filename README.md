@@ -161,7 +161,11 @@ The generated CSV files to use these datasets can be found in the `/data/CBIS-DD
 
 The common pipeline can be found at [DOI 10.5281/zenodo.3975092](https://zenodo.org/record/3975093)
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning&type=Date)](https://star-history.com/#Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning&Date)
+
 ## Contact
-* Email: adam@jaamour.com
+* Email: adam[at]jaamour[dot]com
 * Website: www.adam.jaamour.com
 * LinkedIn: [linkedin.com/in/adamjaamour](https://www.linkedin.com/in/adamjaamour/)
