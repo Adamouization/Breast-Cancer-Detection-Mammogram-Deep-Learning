@@ -1,13 +1,19 @@
 # Breast Cancer Detection in Mammograms Using Deep Learning Techniques [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3985051.svg)](https://doi.org/10.5281/zenodo.3985051) [![GitHub license](https://img.shields.io/github/license/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/LICENSE)
 
-## Updates
+## Publication Updates
 
-I have been working since the end of my Master's in 2020 to publish this dissertation in a renown journal. Here are the latest updates of this project:
+I have been working since the end of my Master's in 2020 to publish this dissertation in journal. As of May 2023, this research is published in PLOS ONE, and can be read and cited here: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0280841. Here are the latest updates of this project:
 
-### 2023
+### 2020
 
-* The paper, entitled "*A divide and conquer approach to maximise deep learning mammography classification accuracies*", was formally accepted for publication in January 2023.
-* The paper is in the publication pipeline and will soon be published.
+* Completed my Master's degree and submitted my dissertation. Final results: 90%.
+* Began discussions with my supervisors to consider publishing the dissertation in a renown journal.
+
+### 2021
+
+* Elected a journal to aim to publish in: PLOS ONE.
+* Began transforming the project from a dissertation report to a paper (choice of language, trimming down, changing narrative, updating figures).
+* After multiple iterations and feedback from both my supervisors, a first draft was created.
 
 ### 2022
 
@@ -19,26 +25,25 @@ I have been working since the end of my Master's in 2020 to publish this dissert
 * Reviewers got back to us in September 2022 with amendments for the paper to be considered for publication. These amendments included revamping the narrative to highlight the main contribution of the paper, add additional sections underlining the processes and decision-making process, and general amendments for the paper's flow and style to remain consistent throughout.
 * The amended version was sent in October.
 
-### 2021
+### 2023
 
-* Elected a journal to aim to publish in: PLOS ONE.
-* Began transforming the project from a dissertation report to a paper (choice of language, trimming down, changing narrative, updating figures).
-* After multiple iterations and feedback from both my supervisors, a first draft was created.
+* The paper, entitled "*A divide and conquer approach to maximise deep learning mammography classification accuracies*", was formally accepted for publication in January 2023.
+* In May 2023, the paper was finally published in PLOS ONE. It can be read and cited here: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0280841
 
-### 2020
-
-* Completed my Master's degree and submitted my dissertation. Final results: 90%.
-* Began discussions with my supervisors to consider publishing the dissertation in a renown journal.
 
 ## What can I find in this repository?
 
 You can find the full dissertation project (code + report) for the MSc Artificial Intelligence at the University of St Andrews (2020).
 
-The final report can be read here: [Breast Cancer Detection in Mammograms using Deep Learning Techniques, Adam Jaamour (2020)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/Breast%20Cancer%20Detection%20in%20Mammograms%20using%20Deep%20Learning%20Techniques%20-%20Adam%20Jaamour%2C%202020.pdf)
-
 The publication of this project can be found here:
-* Paper published in PLOS ONE: *[soon]*
+* Paper published in PLOS ONE: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0280841
 * Peer-reviewed code: https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning-Publication
+
+The original dissertation report can be read here: [Breast Cancer Detection in Mammograms using Deep Learning Techniques, Adam Jaamour (2020)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/Breast%20Cancer%20Detection%20in%20Mammograms%20using%20Deep%20Learning%20Techniques%20-%20Adam%20Jaamour%2C%202020.pdf)
+
+If you have any questions, issues or message, please either:
+* Post a comment on PLOS ONE: https://journals.plos.org/plosone/article/comments?id=10.1371/journal.pone.0280841
+* Open a new issue in this repository: https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/issues/new
 
 ## Abstract
 
@@ -164,6 +169,43 @@ The common pipeline can be found at [DOI 10.5281/zenodo.3975092](https://zenodo.
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning&type=Date)](https://star-history.com/#Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning&Date)
+
+## Citation
+
+#### Published article citation
+
+```
+@article{10.1371/journal.pone.0280841,
+    doi = {10.1371/journal.pone.0280841},
+    author = {Jaamour, Adam AND Myles, Craig AND Patel, Ashay AND Chen, Shuen-Jen AND McMillan, Lewis AND Harris-Birtill, David},
+    journal = {PLOS ONE},
+    publisher = {Public Library of Science},
+    title = {A divide and conquer approach to maximise deep learning mammography classification accuracies},
+    year = {2023},
+    month = {05},
+    volume = {18},
+    url = {https://doi.org/10.1371/journal.pone.0280841},
+    pages = {1-24},
+    number = {5},
+}
+```
+
+#### Code citation
+```
+@software{adam_jaamour_2020_3985051,
+  author       = {Adam Jaamour and
+                  Ashay Patel and
+                  Shuen-Jen Chen},
+  title        = {{Breast Cancer Detection in Mammograms using Deep 
+                   Learning Techniques: Source Code}},
+  month        = aug,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v1.0},
+  doi          = {10.5281/zenodo.3985051},
+  url          = {https://doi.org/10.5281/zenodo.3985051}
+}
+```
 
 ## Contact
 * Email: adam[at]jaamour[dot]com
