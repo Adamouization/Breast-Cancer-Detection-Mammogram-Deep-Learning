@@ -1,4 +1,26 @@
-# Breast Cancer Detection in Mammograms Using Deep Learning Techniques [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3985051.svg)](https://doi.org/10.5281/zenodo.3985051) [![GitHub license](https://img.shields.io/github/license/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/LICENSE)
+# Breast Cancer Detection in Mammograms Using Deep Learning Techniques [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3985051.svg)](https://doi.org/10.5281/zenodo.3985051?style=for-the-badge) [![GitHub license](https://img.shields.io/github/license/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning?style=for-the-badge)](https://github.com/Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning/blob/master/LICENSE) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Jupyter Notebook](https://img.shields.io/badge/jupyter-%23FA0F00.svg?style=for-the-badge&logo=jupyter&logoColor=white)
+
+**Table of Contents**
+
+- [Publication Updates](#publication-updates)
+  - [2020](#2020)
+  - [2021](#2021)
+  - [2022](#2022)
+  - [2023](#2023)
+- [What can I find in this repository?](#what-can-i-find-in-this-repository)
+- [Abstract](#abstract)
+- [Usage on a GPU lab machine](#usage-on-a-gpu-lab-machine)
+- [Dataset installation](#dataset-installation)
+    - [mini-MIAS dataset](#mini-mias-dataset)
+    - [DDSM and CBIS-DDSM datasets](#ddsm-and-cbis-ddsm-datasets)
+- [Citation](#citation)
+  - [Published article citation](#published-article-citation)
+  - [Code citation](#code-citation)
+- [License](#license)
+- [Code Authors](#code-authors)
+- [Star History](#star-history)
+- [Contact](#contact)
+
 
 ## Publication Updates
 
@@ -155,24 +177,9 @@ These datasets are very large (exceeding 160GB) and more complex than the mini-M
 
 The generated CSV files to use these datasets can be found in the `/data/CBIS-DDSM` directory, but the mammograms will have to be downloaded separately. The DDSM dataset can be downloaded [here](http://www.eng.usf.edu/cvprg/Mammography/Database.html), while the CBIS-DDSM dataset can be downloaded [here](https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM#5e40bd1f79d64f04b40cac57ceca9272).
 
-## License 
-* see [LICENSE](https://github.com/Adamouization/Breast-Cancer-Detection-and-Segmentation/blob/master/LICENSE) file.
-
-## Code Authors
-
-* Adam Jaamour
-* Ashay Patel
-* Shuen-Jen Chen
-
-The common pipeline can be found at [DOI 10.5281/zenodo.3975092](https://zenodo.org/record/3975093)
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning&type=Date)](https://star-history.com/#Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning&Date)
-
 ## Citation
 
-#### Published article citation
+### Published article citation
 
 ```
 @article{10.1371/journal.pone.0280841,
@@ -190,7 +197,7 @@ The common pipeline can be found at [DOI 10.5281/zenodo.3975092](https://zenodo.
 }
 ```
 
-#### Code citation
+### Code citation
 ```
 @software{adam_jaamour_2020_3985051,
   author       = {Adam Jaamour and
@@ -206,6 +213,21 @@ The common pipeline can be found at [DOI 10.5281/zenodo.3975092](https://zenodo.
   url          = {https://doi.org/10.5281/zenodo.3985051}
 }
 ```
+
+## License 
+* see [LICENSE](https://github.com/Adamouization/Breast-Cancer-Detection-and-Segmentation/blob/master/LICENSE) file.
+
+## Code Authors
+
+* Adam Jaamour
+* Ashay Patel
+* Shuen-Jen Chen
+
+The common pipeline can be found at [DOI 10.5281/zenodo.3975092](https://zenodo.org/record/3975093)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning,Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning-Publication&type=Date)](https://star-history.com/#Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning&Adamouization/Breast-Cancer-Detection-Mammogram-Deep-Learning-Publication&Date)
 
 ## Contact
 * Email: adam[at]jaamour[dot]com
